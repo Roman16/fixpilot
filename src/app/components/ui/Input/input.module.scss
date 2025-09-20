@@ -1,0 +1,44 @@
+@use '@/styles/variables' as *;
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.label {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background-color: #303030;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+
+  &:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  &::placeholder {
+    color: var(--color-muted);
+  }
+
+  &:disabled {
+    background-color: #2a2735;
+    cursor: not-allowed;
+    color: var(--color-muted);
+  }
+}
+
+.textarea {
+  resize: none;
+  height: 50px;
+}

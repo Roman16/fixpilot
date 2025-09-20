@@ -1,0 +1,39 @@
+import {Modal} from "@/app/components/ui/Modal/Modal";
+import styles from "./сlientModal.module.scss";
+import {ClientForm} from "@/app/components/forms/ClientForm/ClientForm";
+import {useModalStore} from "@/store/modalStore";
+import {IClient} from "@/types/client";
+import {useClients} from "@/hooks/useClients";
+
+export const ClientModal = () => {
+    const closeModal = useModalStore(state => state.closeModal)
+    const client = useModalStore(state => state.modalProps)
+    const {createClient, updateClient} = useClients();
+
+    const submitHandler = async (data: IClient) => {
+        try {
+            if (client?.id) {
+                await updateClient.mutateAsync({...data, id: client.id});
+            } else {
+                await createClient.mutateAsync(data);
+            }
+
+            closeHandler()
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const closeHandler = () => {
+        closeModal()
+    }
+
+    return (<Modal headerText={client?.id ? client.name : 'Новий клієнт'} className={styles.modal}>
+        <ClientForm
+            onSubmit={submitHandler}
+            onClose={closeHandler}
+            client={client}
+            loading={createClient.isPending}
+        />
+    </Modal>)
+}

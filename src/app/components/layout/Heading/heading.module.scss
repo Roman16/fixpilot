@@ -1,0 +1,13 @@
+.title {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  &:after {
+    flex: 1;
+    content: '';
+    height: 1px;
+    background: var(--color-border);
+  }
+}
