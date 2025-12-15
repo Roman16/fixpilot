@@ -1,9 +1,15 @@
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Order from "@/models/Order";
 
-export async function DELETE(req: Request, {params}: { params: { id: string } }) {
+type RouteContext = {
+    params: {
+        id: string;
+    };
+};
+
+export async function DELETE(request: NextRequest, context: RouteContext) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -12,7 +18,7 @@ export async function DELETE(req: Request, {params}: { params: { id: string } })
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const id = params.id;
+        const { id } = context.params;
 
         if (!id) {
             return NextResponse.json({message: "ID замовлення обов’язкове"}, {status: 400});

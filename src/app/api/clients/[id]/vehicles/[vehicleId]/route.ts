@@ -1,9 +1,19 @@
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import Vehicle from "@/models/Vehicle";
 
-export async function DELETE(req: Request, {params}: { params: { id: string, vehicleId: string } }) {
+type RouteContext = {
+    params: {
+        id: string;
+        vehicleId: string
+    };
+};
+
+export async function DELETE(
+    request: NextRequest,
+    context: RouteContext
+) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -12,7 +22,7 @@ export async function DELETE(req: Request, {params}: { params: { id: string, veh
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const deleted = await Vehicle.findOneAndDelete({_id: params.vehicleId, userId: session.id})
+        const deleted = await Vehicle.findOneAndDelete({_id: context.params.vehicleId, userId: session.id})
 
         if (!deleted) {
             return NextResponse.json({message: "ТЗ не знайдено або вже видалено"}, {status: 404});
