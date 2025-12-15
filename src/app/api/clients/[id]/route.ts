@@ -3,7 +3,8 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Client from "@/models/Client";
 
-export async function DELETE(req: NextRequest, {params}: { params: { id: string } }) {
+
+export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -12,7 +13,7 @@ export async function DELETE(req: NextRequest, {params}: { params: { id: string 
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const {id} = params;
+        const {id} = await params;
 
         if (!id) {
             return NextResponse.json({message: "ID клієнта обов’язкове"}, {status: 400});
