@@ -3,13 +3,7 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Client from "@/models/Client";
 
-type RouteContext = {
-    params: {
-        id: string;
-    };
-};
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
+export async function DELETE(req: NextRequest, {params}: { params: { id: string } }) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -18,7 +12,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const { id } = context.params;
+        const {id} = params;
 
         if (!id) {
             return NextResponse.json({message: "ID клієнта обов’язкове"}, {status: 400});
@@ -49,17 +43,17 @@ export async function PATCH(req: Request, context: any) {
         const session = await getSession();
 
         if (!session || !session.id) {
-            return NextResponse.json({ message: "Неавторизовано" }, { status: 401 });
+            return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
         const body = await req.json();
 
         if (!id || !body) {
-            return NextResponse.json({ message: "ID і дані обов’язкові" }, { status: 400 });
+            return NextResponse.json({message: "ID і дані обов’язкові"}, {status: 400});
         }
 
         const updatedClient = await Client.findOneAndUpdate(
-            { _id: id, userId: session.id },
+            {_id: id, userId: session.id},
             {
                 $set: {
                     name: body.client.name,
@@ -67,22 +61,22 @@ export async function PATCH(req: Request, context: any) {
                     comment: body.client.comment,
                 }
             },
-            { new: true }
+            {new: true}
         );
 
         if (!updatedClient) {
             return NextResponse.json(
-                { message: "Клієнта не знайдено або оновлення не вдалося" },
-                { status: 404 }
+                {message: "Клієнта не знайдено або оновлення не вдалося"},
+                {status: 404}
             );
         }
 
-        return NextResponse.json(updatedClient, { status: 200 });
+        return NextResponse.json(updatedClient, {status: 200});
     } catch (error) {
         console.error("Update client error:", error);
         return NextResponse.json(
-            { message: "Сталась помилка при оновленні клієнта" },
-            { status: 500 }
+            {message: "Сталась помилка при оновленні клієнта"},
+            {status: 500}
         );
     }
 }
