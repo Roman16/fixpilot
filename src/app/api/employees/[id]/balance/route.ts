@@ -1,10 +1,10 @@
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import Order from "@/models/Order";
 import mongoose from "mongoose";
 
-export async function GET(req: Request, {params}: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -12,7 +12,9 @@ export async function GET(req: Request, {params}: { params: { id: string } }) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const employeeObjectId = new mongoose.Types.ObjectId(params.id);
+        const {id} = await params;
+
+        const employeeObjectId = new mongoose.Types.ObjectId(id);
         const userObjectId = new mongoose.Types.ObjectId(session.id);
 
         const result = await Order.aggregate([
