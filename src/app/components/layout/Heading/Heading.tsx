@@ -6,7 +6,7 @@ import {ModalState, useModalStore} from "@/store/modalStore";
 
 interface IHeadingProps {
     title: string,
-    actionType: ModalState['modal'] | null,
+    actionType?: ModalState['modal'] | null,
     actionBtnText?: string,
 }
 
@@ -25,7 +25,7 @@ export const Heading = ({
         <Button
             className={styles.btn}
             iconType={'plus'}
-            onClick={() => openModal(actionType)}
+            onClick={() => actionType && openModal(actionType)}
         >
             {actionBtnText}
         </Button>
