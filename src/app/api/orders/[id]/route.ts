@@ -3,13 +3,7 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Order from "@/models/Order";
 
-type RouteContext = {
-    params: {
-        id: string;
-    };
-};
-
-export async function DELETE(request: NextRequest, context: RouteContext) {
+export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -18,7 +12,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const { id } = context.params;
+        const {id} = await params;
 
         if (!id) {
             return NextResponse.json({message: "ID замовлення обов’язкове"}, {status: 400});

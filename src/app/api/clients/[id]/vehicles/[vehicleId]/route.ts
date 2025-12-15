@@ -3,17 +3,8 @@ import {getSession} from "@/lib/getSession";
 import {NextRequest, NextResponse} from "next/server";
 import Vehicle from "@/models/Vehicle";
 
-type RouteContext = {
-    params: {
-        id: string;
-        vehicleId: string
-    };
-};
 
-export async function DELETE(
-    request: NextRequest,
-    context: RouteContext
-) {
+export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string,  vehicleId: string}> }) {
     try {
         await connectToDatabase();
         const session = await getSession();
@@ -22,7 +13,9 @@ export async function DELETE(
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const deleted = await Vehicle.findOneAndDelete({_id: context.params.vehicleId, userId: session.id})
+        const {vehicleId} = await params;
+
+        const deleted = await Vehicle.findOneAndDelete({_id: vehicleId, userId: session.id})
 
         if (!deleted) {
             return NextResponse.json({message: "ТЗ не знайдено або вже видалено"}, {status: 404});
