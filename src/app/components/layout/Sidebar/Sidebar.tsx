@@ -24,7 +24,7 @@ export const Sidebar = () => {
 
     return (<aside className={styles.sidebar}>
         <div className={styles.logo}>
-            {profile?.logo ? <img src={profile.logo} alt=""/> : <Logo/>}
+            <Logo/>
         </div>
 
 
