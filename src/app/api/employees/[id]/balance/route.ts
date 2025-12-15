@@ -4,7 +4,7 @@ import {NextRequest, NextResponse} from "next/server";
 import Order from "@/models/Order";
 import mongoose from "mongoose";
 
-export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
         await connectToDatabase();
         const session = await getSession();

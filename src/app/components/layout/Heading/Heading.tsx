@@ -22,12 +22,12 @@ export const Heading = ({
 
         <div className={styles.hr}/>
 
-        <Button
+        {actionType && <Button
             className={styles.btn}
             iconType={'plus'}
-            onClick={() => actionType && openModal(actionType)}
+            onClick={() => openModal(actionType)}
         >
             {actionBtnText}
-        </Button>
+        </Button>}
     </div>)
 };
