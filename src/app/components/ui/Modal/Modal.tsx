@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 type ModalProps = {
     children: ReactNode;
-    headerText?: string;
+    headerText?: ReactNode | string;
     className?: string;
 }
 

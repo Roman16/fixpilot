@@ -3,12 +3,12 @@ import styles from "./сlientModal.module.scss";
 import {ClientForm} from "@/app/components/forms/ClientForm/ClientForm";
 import {useModalStore} from "@/store/modalStore";
 import {IClient} from "@/types/client";
-import {useClients} from "@/hooks/useClients";
+import {useClientsMutations} from "@/hooks/clients/useClientsMutations";
 
 export const ClientModal = () => {
     const closeModal = useModalStore(state => state.closeModal)
     const client = useModalStore(state => state.modalProps)
-    const {createClient, updateClient} = useClients();
+    const {createClient, updateClient} = useClientsMutations();
 
     const submitHandler = async (data: IClient) => {
         try {
@@ -17,23 +17,19 @@ export const ClientModal = () => {
             } else {
                 await createClient.mutateAsync(data);
             }
-
-            closeHandler()
         } catch (error) {
             console.error(error);
+        } finally {
+            closeModal()
         }
     };
-
-    const closeHandler = () => {
-        closeModal()
-    }
 
     return (<Modal headerText={client?.id ? client.name : 'Новий клієнт'} className={styles.modal}>
         <ClientForm
             onSubmit={submitHandler}
-            onClose={closeHandler}
+            onClose={closeModal}
             client={client}
-            loading={createClient.isPending}
+            loading={createClient.isPending || updateClient.isPending}
         />
     </Modal>)
 }

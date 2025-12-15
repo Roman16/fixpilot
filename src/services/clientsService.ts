@@ -3,8 +3,10 @@ import {IClientsResponse, IClient} from "@/types/client";
 
 
 class clientsService extends baseService {
-    getClients() {
-        return this.get<IClientsResponse>('/clients');
+    getClients(page: number = 1, limit: number = 20, search: string = "") {
+        return this.get<IClientsResponse>('/clients', {
+            params: { page, limit, search }
+        });
     }
 
     createClient(data: IClient) {
@@ -17,6 +19,10 @@ class clientsService extends baseService {
 
     deleteClient(id: string) {
         return this.delete(`/clients/${id}`);
+    }
+
+    deleteVehicle(data: {clientId: string, vehicleId: string}) {
+        return this.delete(`/clients/${data.clientId}/vehicles/${data.vehicleId}`);
     }
 
 }

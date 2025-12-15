@@ -3,8 +3,10 @@
 import {Button, Input} from "@/app/components/ui";
 import styles from "./clientForm.module.scss";
 import {VehicleForm} from "@/app/components/forms/VehicleForm/VehicleForm";
-import {useForm} from 'react-hook-form';
+import {useFieldArray, useForm} from 'react-hook-form';
 import {IClient} from "@/types/client";
+import React from "react";
+import {Textarea} from "@/app/components/ui/Textarea/Textarea";
 
 interface ClientFormProps {
     onSubmit: (data: any) => void;
@@ -19,40 +21,52 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                                                           client,
                                                           loading
                                                       }) => {
-    const {register, handleSubmit} = useForm({
+    const {control, register, handleSubmit, setValue} = useForm({
         defaultValues: {
-            client: {
-                name: client.name || '',
-                phone: client.phone || '',
-                comment: client.comment || ''
-            }
+            name: client.name || '',
+            phone: client.phone || '',
+            comment: client.comment || '',
+            vehicles: client.vehicles || [{}]
         }
     });
 
+    const {fields} = useFieldArray({
+        control,
+        name: "vehicles"
+    });
 
     return (<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.row}>
             <Input
                 placeholder={'Ведіть ім`я клієнта'}
                 label={'Ім`я'}
-                {...register('client.name')}
+                {...register('name')}
             />
 
             <Input
                 placeholder={'Ведіть номер телефон'}
                 label={'Телефон'}
-                {...register('client.phone')}
+                {...register('phone')}
             />
         </div>
 
-        <Input
-            type={'multitext'}
-            placeholder={'Додайте будь-який коментар про клієнта'}
-            label={'Коментар'}
-            {...register('client.comment')}
-        />
+        <div className={styles.formBody}>
+            {fields.map((field, index) => (
+                <VehicleForm
+                    key={field.id}
+                    prefix={`vehicles.${index}`}
+                    register={register}
+                    setValue={setValue}
+                    control={control}
+                />
+            ))}
 
-        {/*<VehicleForm/>*/}
+            <Textarea
+                placeholder={'Додайте будь-який коментар про клієнта'}
+                label={'Коментар'}
+                {...register('comment')}
+            />
+        </div>
 
         <div className={styles.actions}>
             <Button

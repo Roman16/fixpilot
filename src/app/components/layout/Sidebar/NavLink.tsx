@@ -11,14 +11,21 @@ interface NavLinkProps {
     icon: JSX.Element;
 }
 
-export const NavLink = ({href, icon, label}:NavLinkProps) => {
+export const NavLink = ({href, icon, label}: NavLinkProps) => {
     const pathname = usePathname();
 
-    return(<Link
-        href={href}
-        className={`${styles.link} ${pathname.startsWith(href) ? styles.active : ""}`}
-    >
-        <span className={styles.icon}>{icon}</span>
-        {label}
-    </Link>)
-}
+    const isActive =
+        href === "/"
+            ? pathname === "/"
+            : pathname.startsWith(href);
+
+    return (
+        <Link
+            href={href}
+            className={`${styles.link} ${isActive ? styles.active : ""}`}
+        >
+            <span className={styles.icon}>{icon}</span>
+            {label}
+        </Link>
+    );
+};

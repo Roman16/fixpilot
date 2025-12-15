@@ -1,12 +1,10 @@
-import React, {InputHTMLAttributes,TextareaHTMLAttributes, useId} from 'react';
+import React, {InputHTMLAttributes, useId} from 'react';
 import styles from './input.module.scss';
-import clsx from "clsx";
+import clsx from 'clsx';
 
-type CommonInputProps = InputHTMLAttributes<HTMLInputElement> & TextareaHTMLAttributes<HTMLTextAreaElement>;
-
-export interface InputProps extends CommonInputProps {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string;
-    as?: 'input' | 'textarea';
+    suffix?: React.ReactNode;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -17,6 +15,7 @@ export const Input: React.FC<InputProps> = ({
                                                 label,
                                                 id,
                                                 className,
+                                                suffix,
                                                 ...rest
                                             }) => {
     const generatedId = useId();
@@ -26,25 +25,23 @@ export const Input: React.FC<InputProps> = ({
         <div className={clsx(styles.inputWrapper, className)}>
             {label && <label htmlFor={inputId} className={styles.label}>{label}</label>}
 
-            {type === 'multitext' ? <textarea
-                className={clsx(styles.input, styles.textarea)}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                id={inputId}
-                {...rest}
-            /> : <input
-                className={styles.input}
-                type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-                id={inputId}
-                {...rest}
-            />}
+            <div className={styles.inputInner}>
+                <input
+                    className={styles.input}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    id={inputId}
+                    {...rest}
+                />
 
+                {suffix && (
+                    <div className={styles.suffix}>
+                        {suffix}
+                    </div>
+                )}
+            </div>
         </div>
-
     );
 };
-

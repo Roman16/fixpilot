@@ -1,22 +1,32 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
+  gap: 20px;
+  overflow: auto;
 
-.row {
-  width: 100%;
-  display: flex;
-  gap: 10px;
+  .row {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    background: rgb(23, 23, 23);
+    padding: 20px;
 
-  div {
-    flex: 1;
+    div {
+      flex: 1;
+    }
   }
-}
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin: 20px 0 0 0;
+  .formBody {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding: 20px;
+  }
 }

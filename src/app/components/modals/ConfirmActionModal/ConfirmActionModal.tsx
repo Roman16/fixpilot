@@ -2,7 +2,7 @@ import {Modal} from "@/app/components/ui/Modal/Modal";
 import {useModalStore} from "@/store/modalStore";
 import styles from "./confirmActionModal.module.scss";
 import {Button} from "@/app/components/ui";
-import {Recycle} from "lucide-react";
+import {FolderX} from "lucide-react";
 
 export const ConfirmActionModal = () => {
     const closeConfirm = useModalStore(state => state.closeConfirm)
@@ -22,7 +22,7 @@ export const ConfirmActionModal = () => {
 
     return (<Modal className={styles.modal}>
         <div className={styles.text}>
-            <Recycle size={50}/>
+            <FolderX />
 
             {modalText}
         </div>

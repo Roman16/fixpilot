@@ -13,10 +13,12 @@
   background: #1f1f20;
   border-radius: var(--border-radius);
   width: 95%;
-  max-width: 900px;
+  max-width: 80vw;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.2s ease-in-out;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -28,7 +30,10 @@
 }
 
 .body {
-  padding: 10px 20px;
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .closeBtn {

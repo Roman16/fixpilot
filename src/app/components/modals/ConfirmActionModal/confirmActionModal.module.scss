@@ -11,6 +11,10 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  svg {
+    width: 100px;
+  }
 }
 
 .actions {
@@ -18,4 +22,5 @@
   justify-content: flex-end;
   gap: 10px;
   margin: 20px 0 0 0;
+  padding: 20px;
 }

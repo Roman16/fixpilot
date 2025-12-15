@@ -1,0 +1,69 @@
+.wrapper {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.inputWrapper {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed var(--color-border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.15s;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  svg {
+    width: 50px;
+  }
+
+  &.drag {
+    background: rgba(0, 128, 255, 0.1);
+    border-color: #0080ff;
+  }
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.placeholder {
+  color: #777;
+  user-select: none;
+}
+
+.fileInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fileName {
+  font-size: 14px;
+}
+
+.removeBtn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.error {
+  color: #d33;
+  font-size: 13px;
+}

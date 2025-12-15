@@ -2,10 +2,11 @@ import mongoose from 'mongoose';
 import {BaseSchema} from "@/lib/BaseSchema";
 
 const UserSchema = new BaseSchema({
+    companyName: {type: String},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    company: {type: String, required: true},
-    companyLogo: {type: String, required: false, default: ""},
+    phone: {type: String, default: ''},
+    logo: {type: String, default: ''},
 });
 
 

@@ -1,0 +1,60 @@
+
+
+.clientTd {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+
+  p {
+    color: #a3a3a3;
+  }
+}
+
+.plate {
+  width: max-content;
+  background: #292929;
+  border: 1px solid rgb(39, 39, 42);
+  border-radius: 5px;
+  margin: 0 auto;
+  padding: 2px 10px;
+
+}
+
+.statusTd {
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 20px;
+  padding: 5px;
+  margin: 0 auto;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  &.new {
+    color: oklch(82.8% 0.189 84.429);
+    cursor: pointer;
+    border: 1px solid oklch(82.8% 0.189 84.429);
+
+    &::before {
+      background: oklch(82.8% 0.189 84.429);
+    }
+  }
+
+  &.completed {
+    color: oklch(76.5% 0.177 163.223);
+    border: 1px solid oklch(76.5% 0.177 163.223);
+
+    &::before {
+      background: oklch(76.5% 0.177 163.223);
+    }
+  }
+}
+

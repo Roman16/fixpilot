@@ -3,7 +3,11 @@ import {Clients} from "@/app/(protected)/clients/Clients";
 
 export default function ClientsPage() {
     return (<div className={'clients-page'}>
-        <Heading title={'Клієнти'}/>
+        <Heading
+            title={'Клієнти'}
+            actionType={'clientModal'}
+            actionBtnText={'Додати клієнта'}
+        />
 
         <Clients/>
     </div>)

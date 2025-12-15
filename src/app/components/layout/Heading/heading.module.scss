@@ -1,13 +1,22 @@
-.title {
-  width: 100%;
+.heading {
   display: flex;
   align-items: center;
-  gap: 20px;
 
-  &:after {
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .hr {
     flex: 1;
-    content: '';
     height: 1px;
     background: var(--color-border);
+    margin: 0 20px;
+  }
+
+  .btn {
+    min-width: max-content;
   }
 }
+

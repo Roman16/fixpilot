@@ -3,7 +3,7 @@ import {Profile} from "@/app/(protected)/profile/Profile";
 
 export default function ProfilePage() {
     return <div className={'profile-page'}>
-        <Heading title={'Профіль'}/>
+        <Heading title={'Інформація про компанію'}/>
 
         <Profile/>
     </div>;

@@ -1,7 +1,6 @@
 import {ILoginInput, IRegisterInput} from '@/types/auth';
 import {baseService} from "@/services/baseService";
 
-
 class authService extends baseService {
     login(data: ILoginInput) {
         return this.post('/login', data);

@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 
-interface ModalState {
-    modal: null | 'clientModal' | 'confirmAction';
+export interface ModalState {
+    modal: null | 'clientModal' | 'confirmAction' | 'orderModal' | 'employeeModal' | 'payoutsModal';
     modalProps?: any;
     openModal: (modal: ModalState['modal'], props?: any) => void;
     closeModal: () => void;

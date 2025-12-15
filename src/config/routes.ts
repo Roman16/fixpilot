@@ -4,6 +4,8 @@ class ROUTES {
 	static REGISTRATION = '/registration';
 	static CLIENTS = '/clients';
 	static PROFILE = '/profile';
+	static EMPLOYEES = '/employees';
+	static ORDERS = '/orders';
 	static NOT_FOUND = '/404';
 
 	// static userProfile(id: string) {

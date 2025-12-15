@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ message: "Невірний email або пароль" }, { status: 401 });
         }
 
-        const token = jwt.sign({id: user._id, email: user.email}, SECRET, {expiresIn: "7d"});
+        const token = jwt.sign({id: user._id, email: user.email}, SECRET, {expiresIn: "30d"});
 
         const response = NextResponse.json(
             {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             path: "/",
-            maxAge: 60 * 60 * 24 * 7, // 7 днів
+            maxAge: 60 * 60 * 24 * 30, // 30 днів
         });
 
         return response;

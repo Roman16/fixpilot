@@ -9,9 +9,6 @@ export class baseService {
 
         this.api = axios.create({
             baseURL,
-            headers: {
-                'Content-Type': 'application/json',
-            },
             withCredentials: true,
         });
 
@@ -21,7 +18,10 @@ export class baseService {
                 const status = error.response?.status;
                 const message = error.response?.data?.message || error.message || 'Сталась помилка';
 
-                if (status === 401) {
+                const url = error.config?.url;
+                const isAuthRequest = url?.includes('/login') || url?.includes('/registration');
+
+                if (status === 401 && !isAuthRequest) {
                     toast.error('Сесія закінчилась. Увійдіть знову');
                     window.location.href = ROUTES.LOGIN
                 } else {
@@ -47,7 +47,8 @@ export class baseService {
     }
 
     protected post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
-        return this.request<T>(this.api.post(url, data, config));
+        const headers = data instanceof FormData ? {} : { 'Content-Type': 'application/json' };
+        return this.request<T>(this.api.post(url, data, { ...config, headers }));
     }
 
     protected put<T>(url: string, data?: any, config?: AxiosRequestConfig) {

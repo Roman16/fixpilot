@@ -2,6 +2,8 @@ import {NextResponse} from "next/server";
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Client from "@/models/Client";
+import Vehicle from "@/models/Vehicle";
+import {IVehicle} from "@/types/vehicles";
 
 export async function POST(req: Request) {
     try {
@@ -13,21 +15,39 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
         const body = await req.json();
-        const {client: {name, phone, comment}} = body;
+        const {name, phone, comment, vehicles = []} = body;
 
-        const newClient = await new Client({
+        const newClient = await Client.create({
             name,
             phone,
             comment,
             userId: session.id,
         });
 
-        await newClient.save();
+        let createdVehicles: any[] = [];
 
+        if (vehicles.length > 0 && !!vehicles[0].brand) {
+            const vehiclesToCreate = vehicles.map((v: IVehicle) => ({
+                userId: session.id,
+                clientId: newClient._id,
+                brand: v.brand,
+                model: v.model,
+                plate: v.plate,
+                vin: v.vin,
+                mileage: v.mileage
+            }));
+
+            createdVehicles = await Vehicle.insertMany(vehiclesToCreate);
+        }
+
+        const clientWithVehicles = {
+            ...newClient.toJSON(),
+            vehicles: createdVehicles.map(v => v.toJSON()),
+        };
 
         return NextResponse.json({
             message: "Клієнт створений успішно",
-            data: newClient,
+            data: clientWithVehicles,
         }, {status: 201});
     } catch (error) {
         console.error("Create clients error:", error);
@@ -45,7 +65,7 @@ export async function GET(req: Request) {
 
         const {searchParams} = new URL(req.url);
         const page = parseInt(searchParams.get("page") || "1");
-        const limit = parseInt(searchParams.get("limit") || "10");
+        const limit = parseInt(searchParams.get("limit") || "20");
         const search = searchParams.get("search")?.trim() || "";
 
         const query: any = {
@@ -69,8 +89,16 @@ export async function GET(req: Request) {
             Client.countDocuments(query),
         ]);
 
+        const clientsWithVehicles = await Promise.all(clients.map(async (client) => {
+            const vehicles = await Vehicle.find({clientId: client._id});
+            return {
+                ...client.toJSON(),
+                vehicles,
+            };
+        }));
+
         return NextResponse.json({
-            data: clients,
+            data: clientsWithVehicles,
             pagination: {
                 total,
                 page,

@@ -48,7 +48,7 @@ export default function LoginForm() {
             })}
         />
 
-        <Button isLoading={isPending}>Увійти</Button>
+        <Button type={'submit'} isLoading={isPending}>Увійти</Button>
 
         <p className={'redirect-text'}>
             Не маєте акаунту? <Link href={ROUTES.REGISTRATION}>Зареєструватися</Link>

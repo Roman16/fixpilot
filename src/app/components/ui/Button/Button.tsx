@@ -8,11 +8,13 @@ import {
     Loader2,
     Save,
     Eye,
+    Printer,
+    DollarSign,
 } from 'lucide-react';
 
 type ButtonVariant = 'primary' | 'ghost';
 
-type IconType = 'delete' | 'edit' | 'plus' | 'save' | 'eye';
+type IconType = 'delete' | 'edit' | 'plus' | 'save' | 'eye' | 'print' | 'pay';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
@@ -26,6 +28,8 @@ const icons: Record<IconType, React.JSX.Element> = {
     plus: <Plus/>,
     save: <Save/>,
     eye: <Eye/>,
+    print: <Printer />,
+    pay: <DollarSign />,
 };
 
 export const Button: React.FC<ButtonProps> = ({

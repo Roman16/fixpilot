@@ -1,0 +1,33 @@
+.autocompleteWrapper {
+  position: relative;
+}
+
+.suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #1f1f20;
+  border: 1px solid #303030;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+  0 3px 6px -4px rgba(0, 0, 0, 0.12),
+  0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+  li {
+    padding: 6px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #303030;
+    font-size: 14px;
+
+    &:hover {
+      background-color: #303030;
+    }
+  }
+}

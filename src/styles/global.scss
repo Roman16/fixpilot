@@ -136,6 +136,22 @@ select {
     width: 100%;
     grid-area: content;
     padding: 20px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-image: var(--company-logo);
+      background-position: center;
+      background-size: 50%;
+      background-repeat: no-repeat;
+      opacity: 0.05;
+      pointer-events: none;
+    }
   }
 }
 
@@ -149,5 +165,20 @@ select {
 
   h1 {
     font-size: 100px;
+  }
+}
+
+.main-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    width: 10vw;
   }
 }

@@ -17,7 +17,7 @@ export default function RegistrationForm() {
 
     const {mutate, isPending} = useMutation({
         mutationKey: ['registration'],
-        mutationFn: authService.registration,
+        mutationFn: (data: IRegisterInput) => authService.registration(data),
         onSuccess: () => {
             toast.success('Акаунт успішно створено!')
             router.push(ROUTES.LOGIN)
