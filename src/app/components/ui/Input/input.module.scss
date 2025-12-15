@@ -47,6 +47,16 @@
         border-color: var(--color-border);
       }
     }
+
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &[type="number"] {
+      -moz-appearance: textfield; // Firefox
+    }
   }
 
   .suffix {
@@ -57,10 +67,4 @@
     cursor: pointer;
     color: rgba(255, 255, 255, .3);
   }
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
