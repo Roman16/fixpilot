@@ -2,9 +2,7 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import {NextResponse} from "next/server";
 import User from "@/models/User";
-
-import fs from "fs";
-import path from "path";
+import { put } from '@vercel/blob';
 
 export async function POST(request: Request) {
     try {
@@ -29,19 +27,16 @@ export async function POST(request: Request) {
                 .replace(/\s+/g, '-')
                 .replace(/[^a-z0-9.\-_]/g, '');
 
-            const fileName = `${Date.now()}-${safeFileName}`;
-            const uploadDir = path.join(process.cwd(), "public", "uploads");
+            const blob = await put(
+                `logos/${session.id}/${Date.now()}-${safeFileName}`,
+                logoFile,
+                {
+                    access: "public",
+                    contentType: logoFile.type,
+                }
+            );
 
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, {recursive: true});
-            }
-
-            const arrayBuffer = await logoFile.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-
-            fs.writeFileSync(path.join(uploadDir, fileName), buffer);
-
-            user.logo = `/uploads/${fileName}`;
+            user.logo = blob.url;
         }
 
         const companyName = formData.get("companyName")?.toString() || '';
