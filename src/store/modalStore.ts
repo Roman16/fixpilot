@@ -1,11 +1,12 @@
 import {create} from 'zustand';
+import {ReactNode} from "react";
 
 export interface ModalState {
     modal: null | 'clientModal' | 'confirmAction' | 'orderModal' | 'employeeModal' | 'payoutsModal';
     modalProps?: any;
     openModal: (modal: ModalState['modal'], props?: any) => void;
     closeModal: () => void;
-    openConfirm: (text: string) => Promise<boolean>;
+    openConfirm: (text: string | ReactNode) => Promise<boolean>;
     closeConfirm: () => void;
 
 }

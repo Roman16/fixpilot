@@ -52,7 +52,7 @@ export const PayoutsModal = () => {
             key: 'commission',
             label: `ЗП (${employee.commission}%)`,
             width: '150px',
-            align: 'right',
+            align: 'center',
             render: (commission: number) => <div className={styles.commission}>{commission} ₴</div>
         },
     ]

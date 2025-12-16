@@ -25,7 +25,9 @@ export const Employees = () => {
 
 
     const handleDelete = async (id: string | undefined) => {
-        const confirmed = await openConfirm('Ви впевнені, що хочете видалити працівника?');
+        const confirmed = await openConfirm(<>Ви впевнені, що хочете видалити працівника?<br/>
+            Він буде прибраний з усіх виконаних робіт у замовленнях.
+            Після цього необхідно вручну призначити нового виконавця.</>);
 
         if (confirmed && id) {
             setDeletingId(id);
@@ -61,6 +63,7 @@ export const Employees = () => {
             key: 'actions',
             label: 'Дії',
             width: '200px',
+            align: 'center',
             render: (_: any, row?: IEmployee) => <div className={tableStyles.actionsCol}>
                 <Button
                     iconType={'pay'}

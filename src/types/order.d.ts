@@ -2,7 +2,7 @@ import {IClient} from "@/types/client";
 import {IVehicle} from "@/types/vehicles";
 import {IPagination} from "@/types/common";
 
-export type OrderStatus = "new" | "in_progress" | "completed" | "cancelled";
+export type OrderStatus = "new" | "completed" | "archived";
 
 export interface IOrder {
     id: string;

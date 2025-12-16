@@ -2,6 +2,8 @@ import {NextRequest, NextResponse} from "next/server";
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Employee from "@/models/Employee";
+import mongoose from "mongoose";
+import Order from "@/models/Order";
 
 export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
     try {
@@ -18,8 +20,27 @@ export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id:
             return NextResponse.json({message: "ID працівника обов’язкове"}, {status: 400});
         }
 
+        const employeeId = new mongoose.Types.ObjectId(id);
+
+        await Order.updateMany(
+            {
+                userId: session.id,
+                "works.employeeId": employeeId,
+            },
+            {
+                $set: {
+                    "works.$[work].employeeId": null,
+                },
+            },
+            {
+                arrayFilters: [
+                    { "work.employeeId": employeeId },
+                ],
+            }
+        );
+
         const deleted = await Employee.findOneAndDelete({
-            _id: id,
+            _id: employeeId,
             userId: session.id,
         });
 
