@@ -12,6 +12,7 @@ import {IClient} from "@/types/client";
 import dayjs from "dayjs";
 import {Works} from "@/app/components/forms/OrderForm/components/Works";
 import {Materials} from "@/app/components/forms/OrderForm/components/Materials";
+import {useProfile} from "@/hooks/profile/useProfile";
 
 interface OrderFormProps {
     onSubmit: (data: any) => void;
@@ -31,6 +32,8 @@ interface FormValues {
 }
 
 export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading}) => {
+    const {data: profile} = useProfile();
+
     const [vehicles, setVehicles] = useState<IVehicle[]>([]);
 
     const {register, handleSubmit, setValue, watch, control} = useForm<FormValues>({
@@ -51,27 +54,31 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
     const watchedWorks = watch("works");
     const watchedMaterials = watch("materials");
 
-    const vehicleOptions = vehicles.map((v: IVehicle) => ({...v, label: `${v.brand} ${v.model} ${v?.plate && `(${v.plate})`}`, value: v.id}));
+    const vehicleOptions = vehicles.map((v: IVehicle) => ({
+        ...v,
+        label: `${v.brand} ${v.model} ${v?.plate && `(${v.plate})`}`,
+        value: v.id
+    }));
 
     const downloadPdfHandler = async () => {
         const formValues = watch();
 
         const blob = await pdf(
-            <PdfTemplate order={{
-                ...formValues,
-                createdAt: order?.createdAt || dayjs().toString(),
-                orderNumber: order?.orderNumber || 666
-            }}/>
+            <PdfTemplate
+                order={{
+                    ...formValues,
+                    createdAt: order?.createdAt || dayjs().toString(),
+                    orderNumber: order?.orderNumber || 666
+                }}
+                profile={profile}
+            />
         ).toBlob();
 
         const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
 
         const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        URL.revokeObjectURL(url);
+
+        window.open(url, "_blank");
     };
 
     return (

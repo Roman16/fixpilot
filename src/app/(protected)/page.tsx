@@ -8,7 +8,7 @@ const ProtectedHomePage: FC = () =>{
     return(<div>
         <Heading title={'Статистика сервісу'}/>
 
-        {/*<Dashboard/>*/}
+        <Dashboard/>
     </div>)
 }
 

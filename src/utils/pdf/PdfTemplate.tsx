@@ -1,8 +1,10 @@
 import React from "react"
-import {Page, Text, View, Document, StyleSheet, Font} from '@react-pdf/renderer'
+import {Page, Text, View, Document, StyleSheet, Font, Image} from '@react-pdf/renderer'
 import {IMaterial, IWork} from "@/types/order";
 import {IClient} from "@/types/client";
 import {IVehicle} from "@/types/vehicles";
+import {useProfile} from "@/hooks/profile/useProfile";
+import {IProfile} from "@/types/profile";
 
 Font.register({
     family: "Arimo",
@@ -130,13 +132,14 @@ interface PdfTemplateProps {
         materials?: IMaterial[],
         mileage?: number | null,
         createdAt?: string,
-    }
+    },
+    profile: IProfile | undefined
 }
 
-export const PdfTemplate: React.FC<PdfTemplateProps> = ({order}) => {
+export const PdfTemplate: React.FC<PdfTemplateProps> = ({order, profile}) => {
     const worksTotal = order.works?.reduce((sum, currentValue) => sum + +(currentValue.price || 0), 0) || 0,
         materialsTotal = order.materials?.reduce((sum, currentValue) => sum + +(currentValue.price || 0), 0) || 0
-
+    console.log(profile?.logo);
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -146,10 +149,10 @@ export const PdfTemplate: React.FC<PdfTemplateProps> = ({order}) => {
 
                 <View style={styles.row}>
                     <View>
-                        <Text style={styles.title}>CRASITSKOGO</Text>
+                        <Text style={styles.title}>{profile?.companyName}</Text>
 
                         <View style={styles.contact}>
-                            <Text>Телефон: +38 (093) 545-45-02</Text>
+                            <Text>Телефон: {profile?.phone}</Text>
                             {/* <Text>Instagram: @moto.house.kiev</Text> */}
                         </View>
 
@@ -160,9 +163,9 @@ export const PdfTemplate: React.FC<PdfTemplateProps> = ({order}) => {
                         </View>
                     </View>
 
-                    {/* <View>
-                        <Image style={styles.img} src={logo}/>
-                    </View> */}
+                     <View>
+                        <Image style={styles.img} src={profile?.logo || ''}/>
+                    </View>
                 </View>
 
                 <View style={{textAlign: 'center'}}>

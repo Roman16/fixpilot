@@ -1,43 +1,30 @@
-.sidebar {
-  width: 200px;
-  grid-area: sidebar;
-  border-right: 2px solid var(--color-border);
-  padding: 20px 10px;
-
-}
-
-.logo {
-  width: 100%;
-  margin-bottom: 20px;
-  opacity: 0.3;
-  transition: opacity var(--transition-fast);
-
-  &:hover {
-    opacity: 0.6;
-  }
-}
-
-.nav {
+.dashboardWrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
+  padding: 20px 40px;
+  gap: 40px;
 
-.link {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  color: var(--color-text);
-  padding: 5px 10px;
-  border-radius: var(--border-radius);
+  .cardList {
+    display: flex;
+    gap: 40px;
 
-  &:hover {
-    background: #ffffff1a;
-    text-decoration: none;
-    color: var(--color-text);
+    .card {
+      flex: 1;
+      padding: 30px;
+      border-radius: 50px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #575757;
+      box-shadow: 0 10px 60px rgba(28, 27, 27, 0.6);
+      background: #303030;
+
+      h4 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 48px;
+      }
+    }
   }
-}
-
-.active {
-  background: #ffffff0d;
 }
