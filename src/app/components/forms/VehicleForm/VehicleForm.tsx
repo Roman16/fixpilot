@@ -1,4 +1,4 @@
-import {Input} from "@/app/components/ui";
+import {Button, Input} from "@/app/components/ui";
 import styles from "./vehicleForm.module.scss";
 import React, {useEffect, useState} from "react";
 import {Autocomplete} from "@/app/components/ui/Autocomplete/Autocomplete";
@@ -9,6 +9,7 @@ interface VehicleFormProps {
     register: any;
     setValue: any;
     control: any;
+    onRemove?: () => void;
 }
 
 interface Brand {
@@ -21,6 +22,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                                                             register,
                                                             setValue,
                                                             control,
+                                                            onRemove
                                                         }) => {
     const [brands, setBrands] = useState<Brand[]>([]);
     const [brandOptions, setBrandOptions] = useState<string[]>([]);
@@ -63,9 +65,12 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
 
     return (
         <div className={styles.vehicleWrap}>
-            <h3 className={styles.groupTitle}>
-                Транспортний засіб
-            </h3>
+            {onRemove && <Button
+                type="button"
+                iconType={'delete'}
+                className={styles.deleteBtn}
+                onClick={onRemove}
+            />}
 
             <div className={styles.row}>
                 <Autocomplete
@@ -92,6 +97,12 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                     placeholder={'АА 1111 АА'}
                     label={'Номерний знак'}
                     {...register(`${prefix}.plate`)}
+                />
+
+                <Input
+                    placeholder={'2025'}
+                    label={'Рік випуску'}
+                    {...register(`${prefix}.year`)}
                 />
 
                 <Input

@@ -4,6 +4,7 @@ export interface IVehicle {
     clientId: string,
     brand: string,
     model: string,
+    year?: string,
     mileage?: number,
     plate?: string,
     vin?: string,

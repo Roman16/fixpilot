@@ -8,7 +8,6 @@ interface VehiclesTableProps {
 }
 
 export const VehiclesTable = ({vehicles, onDelete}: VehiclesTableProps) => {
-
     const vehicleColumns: Column<IVehicle>[] = [
         {
             key: 'brand',

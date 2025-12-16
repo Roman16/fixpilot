@@ -1,7 +1,27 @@
 .vehicleWrap {
+  border-radius: 20px;
+  border: 1px solid #575757;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  .deleteBtn {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    opacity: 0;
+    transition: opacity .2s;
+    z-index: 111;
+  }
+
+  &:hover {
+    .deleteBtn {
+      opacity: 1;
+    }
+  }
 }
 
 .groupTitle {
@@ -24,7 +44,7 @@
 .row {
   width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 10px;
 
   div {
     flex: 1;

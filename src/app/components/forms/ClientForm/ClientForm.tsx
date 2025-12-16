@@ -7,6 +7,7 @@ import {useFieldArray, useForm} from 'react-hook-form';
 import {IClient} from "@/types/client";
 import React from "react";
 import {Textarea} from "@/app/components/ui/Textarea/Textarea";
+import {MessageSquareMore, Motorbike, User} from "lucide-react";
 
 interface ClientFormProps {
     onSubmit: (data: any) => void;
@@ -30,42 +31,72 @@ export const ClientForm: React.FC<ClientFormProps> = ({
         }
     });
 
-    const {fields} = useFieldArray({
+    const {fields, append, remove} = useFieldArray({
         control,
         name: "vehicles"
     });
 
     return (<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.row}>
-            <Input
-                placeholder={'Ведіть ім`я клієнта'}
-                label={'Ім`я'}
-                {...register('name')}
-            />
+            <div className={styles.col}>
+                <div className={styles.clientInfo}>
+                    <h3>
+                        <i className={styles.titleIcon}><User/></i>
+                        Дані клієнта
+                    </h3>
+                    <Input
+                        placeholder={'Ведіть ім`я клієнта'}
+                        label={'Ім`я'}
+                        {...register('name')}
+                    />
 
-            <Input
-                placeholder={'Ведіть номер телефон'}
-                label={'Телефон'}
-                {...register('phone')}
-            />
-        </div>
+                    <Input
+                        placeholder={'Ведіть номер телефон'}
+                        label={'Телефон'}
+                        {...register('phone')}
+                    />
+                </div>
 
-        <div className={styles.formBody}>
-            {fields.map((field, index) => (
-                <VehicleForm
-                    key={field.id}
-                    prefix={`vehicles.${index}`}
-                    register={register}
-                    setValue={setValue}
-                    control={control}
-                />
-            ))}
+                <div className={styles.commentBlock}>
+                    <h3>
+                        <i className={styles.titleIcon}><MessageSquareMore/></i>
+                        Коментар
+                    </h3>
 
-            <Textarea
-                placeholder={'Додайте будь-який коментар про клієнта'}
-                label={'Коментар'}
-                {...register('comment')}
-            />
+                    <Textarea
+                        rows={4}
+                        placeholder={'Додайте будь-який коментар про клієнта'}
+                        {...register('comment')}
+                    />
+                </div>
+            </div>
+
+            <div className={styles.vehiclesBlock}>
+                <h3 className={styles.groupTitle}>
+                    <i className={styles.titleIcon}><Motorbike /></i>
+                    Гараж
+
+                    <Button
+                        iconType={'plus'}
+                        className={styles.addBtn}
+                        type="button"
+                        onClick={() => append({})}
+                    >
+                        Додати
+                    </Button>
+                </h3>
+
+                {fields.map((field, index) => (
+                    <VehicleForm
+                        key={field.id}
+                        prefix={`vehicles.${index}`}
+                        register={register}
+                        setValue={setValue}
+                        control={control}
+                        {...(fields.length > 1 ? { onRemove: () => remove(index) } : {})}
+                    />
+                ))}
+            </div>
         </div>
 
         <div className={styles.actions}>

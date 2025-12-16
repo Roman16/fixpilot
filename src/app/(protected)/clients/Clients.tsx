@@ -35,7 +35,7 @@ export const Clients = () => {
     const clients = data?.data ?? [];
 
     const handleDelete = async (id: string | undefined) => {
-        const confirmed = await openConfirm('Ви впевнені, що хочете видалити клієнта?');
+        const confirmed = await openConfirm(<>Ви впевнені, що хочете видалити клієнта? <br/> Всі замовлення на даного клієнта будуть видалені!</>);
 
         if (confirmed && id) {
             setDeletingId(id);
@@ -47,8 +47,10 @@ export const Clients = () => {
         }
     };
 
-    const handleDeleteVehicle = async (data: {clientId: string, vehicleId: string}) => {
-        await deleteVehicle.mutateAsync(data)
+    const handleDeleteVehicle = async (data: { clientId: string, vehicleId: string }) => {
+        const confirmed = await openConfirm(<>Ви впевнені, що хочете видалити транспортний засіб? <br/> Всі замовлення на даний транспортний засіб будуть видалені!</>);
+
+        if (confirmed) await deleteVehicle.mutateAsync(data)
     }
 
     const handleEdit = (client?: IClient) => {

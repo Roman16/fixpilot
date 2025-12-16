@@ -33,6 +33,7 @@ export async function POST(req: Request) {
                 brand: v.brand,
                 model: v.model,
                 plate: v.plate,
+                year: v.year,
                 vin: v.vin,
                 mileage: v.mileage
             }));

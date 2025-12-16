@@ -6,6 +6,7 @@ const VehicleSchema = new BaseSchema({
     clientId: {type: mongoose.Types.ObjectId, ref: "Client", required: true},
     brand: {type: String, required: true},
     model: {type: String, required: true},
+    year: {type: String},
     mileage: {type: Number},
     plate: {type: String},
     vin: {type: String},

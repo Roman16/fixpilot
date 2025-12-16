@@ -2,9 +2,14 @@ import {NextRequest, NextResponse} from "next/server";
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import Client from "@/models/Client";
+import mongoose from "mongoose";
+import Order from "@/models/Order";
 
 export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+    const sessionDb = await mongoose.startSession();
+
     try {
+
         await connectToDatabase();
         const session = await getSession();
 
@@ -18,19 +23,42 @@ export async function DELETE(req: NextRequest, {params}: { params: Promise<{ id:
             return NextResponse.json({message: "ID клієнта обов’язкове"}, {status: 400});
         }
 
-        const deleted = await Client.findOneAndDelete({
-            _id: id,
-            userId: session.id,
-        });
+        sessionDb.startTransaction();
 
-        if (!deleted) {
-            return NextResponse.json({message: "Клієнта не знайдено або вже видалено"}, {status: 404});
+        const deletedClient = await Client.findOneAndDelete(
+            {
+                _id: id,
+                userId: session.id,
+            },
+            {session: sessionDb}
+        );
+
+        if (!deletedClient) {
+            await sessionDb.abortTransaction();
+            return NextResponse.json(
+                {message: "Клієнта не знайдено або вже видалено"},
+                {status: 404}
+            );
         }
+
+        await Order.deleteMany(
+            {
+                clientId: id,
+                userId: session.id,
+            },
+            {session: sessionDb}
+        );
+
+        await sessionDb.commitTransaction();
 
         return NextResponse.json({message: "Клієнт успішно видалений"}, {status: 200});
     } catch (error) {
+        await sessionDb.abortTransaction();
+
         console.error("Delete client error:", error);
         return NextResponse.json({message: "Сталась помилка при видаленні клієнта"}, {status: 500});
+    } finally {
+        sessionDb.endSession();
     }
 }
 
