@@ -93,13 +93,19 @@ export const Clients = () => {
             render: (_: any, row?: IClient) => <div className={tableStyles.actionsCol}>
                 <Button
                     iconType={'edit'}
-                    onClick={() => handleEdit(row)}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        handleEdit(row)
+                    }}
                     disabled={deletingId === row?.id}
                 />
                 <Button
                     iconType={'delete'}
                     isLoading={deletingId === row?.id}
-                    onClick={() => row?.id && handleDelete(row.id)}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        row?.id && handleDelete(row.id)
+                    }}
                 />
             </div>
         },

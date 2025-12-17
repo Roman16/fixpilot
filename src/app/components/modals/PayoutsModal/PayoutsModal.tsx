@@ -10,10 +10,14 @@ import {IWork} from "@/types/order";
 import {IVehicle} from "@/types/vehicles";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
+import {FC} from "react";
 
-export const PayoutsModal = () => {
+interface PayoutsModalProps {
+    modalProps: IEmployee;
+}
+
+export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
     const closeModal = useModalStore(state => state.closeModal)
-    const employee: IEmployee = useModalStore(state => state.modalProps)
 
     const {
         data: balance,
@@ -104,7 +108,7 @@ export const PayoutsModal = () => {
 
             <div className={styles.actions}>
                 <Button
-                    onClick={closeModal}
+                    onClick={() => closeModal()}
                 >
                     Закрити
                 </Button>

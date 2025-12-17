@@ -3,28 +3,34 @@ import {useModalStore} from "@/store/modalStore";
 import styles from "./confirmActionModal.module.scss";
 import {Button} from "@/app/components/ui";
 import {FolderX} from "lucide-react";
+import {FC, ReactNode} from "react";
 
-export const ConfirmActionModal = () => {
+interface ConfirmActionModalProps {
+    modalId: string ;
+    modalProps: {
+        text: string | ReactNode | undefined;
+        resolve: (value: boolean) => void;
+    }
+}
+
+export const ConfirmActionModal: FC<ConfirmActionModalProps> = ({modalProps, modalId}) => {
     const closeConfirm = useModalStore(state => state.closeConfirm)
-    const modalText = useModalStore(state => state.modalProps.text)
-    const resolve = useModalStore(state => state.modalProps.resolve)
-
 
     const handleConfirm = () => {
-        resolve?.(true);
-        closeConfirm();
+        modalProps.resolve?.(true);
+        closeConfirm(modalId);
     };
 
     const handleCancel = () => {
-        resolve?.(false);
-        closeConfirm();
+        modalProps.resolve?.(false);
+        closeConfirm(modalId);
     };
 
     return (<Modal className={styles.modal}>
         <div className={styles.text}>
             <FolderX />
 
-            {modalText}
+            {modalProps.text}
         </div>
 
         <div className={styles.actions}>

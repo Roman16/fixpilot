@@ -11,7 +11,7 @@ interface ClientModalProps {
 }
 
 export const ClientModal: FC<ClientModalProps> = ({modalProps: client}) => {
-    const closeModal = useModalStore(state => state.closeModal)
+    const {closeModal} = useModalStore()
     const {createClient, updateClient} = useClientsMutations();
 
     const submitHandler = async (data: IClient) => {
@@ -31,7 +31,7 @@ export const ClientModal: FC<ClientModalProps> = ({modalProps: client}) => {
     return (<Modal headerText={client?.id ? client.name : 'Новий клієнт'} className={styles.modal}>
         <ClientForm
             onSubmit={submitHandler}
-            onClose={closeModal}
+            onClose={() => closeModal()}
             client={client}
             loading={createClient.isPending || updateClient.isPending}
         />

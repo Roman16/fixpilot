@@ -12,7 +12,6 @@ interface EmployeeModalProps {
 }
 
 export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, employee}) => {
-    console.log(modalId);
     const {closeModal} = useModalStore()
     const {createEmployee, updateEmployee} = useEmployeesMutations();
 
@@ -34,7 +33,7 @@ export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, employee}) => {
         <EmployeeForm
             employee={employee}
             onSubmit={submitHandler}
-            onClose={closeModal}
+            onClose={() => closeModal()}
             loading={false}
         />
     </Modal>)
