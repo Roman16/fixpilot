@@ -29,6 +29,16 @@
   border-radius: 20px;
   padding: 5px;
   margin: 0 auto;
+  position: relative;
+  
+  div {
+    position: absolute;
+    left: 5px;
+
+    svg {
+      height: 30px;
+    }
+  }
 
   &::before {
     content: '';

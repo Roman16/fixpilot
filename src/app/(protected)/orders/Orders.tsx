@@ -12,6 +12,7 @@ import {useOrdersMutations} from "@/hooks/orders/useOrdersMutations";
 import dayjs from "dayjs";
 import {formatPlate} from "@/utils/helpers";
 import clsx from "clsx";
+import {Loader} from "@/app/components/ui/Loader/Loader";
 
 
 export const Orders = () => {
@@ -20,6 +21,7 @@ export const Orders = () => {
     const [search, setSearch] = useState("");
 
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [updatingId, setUpdatingId] = useState<string | null>(null);
 
     const openModal = useModalStore(state => state.openModal);
     const openConfirm = useModalStore(state => state.openConfirm);
@@ -46,11 +48,17 @@ export const Orders = () => {
     };
 
     const handleChangeStatus = async (order: IOrder) => {
-        updateOrder.mutate({
-            ...order,
-            status: 'completed',
-            closedAt: dayjs().toString()
-        });
+        setUpdatingId(order.id);
+
+        try {
+            await updateOrder.mutateAsync({
+                ...order,
+                status: 'completed',
+                closedAt: dayjs().toString(),
+            });
+        } finally {
+            setUpdatingId(null);
+        }
     }
 
     const handleSearch = (value: string) => {
@@ -104,7 +112,11 @@ export const Orders = () => {
             width: '160px',
             minWidth: '160px',
             align: 'center',
-            render: (status, order) => <StatusCell status={status} onClick={() => handleChangeStatus(order)}/>
+            render: (status, order) => <StatusCell
+                isLoading={updatingId === order.id}
+                status={status}
+                onClick={() => handleChangeStatus(order)}
+            />
         },
         {
             key: 'createdAt',
@@ -168,11 +180,17 @@ export const Orders = () => {
 }
 
 
-const StatusCell: React.FC<{ status: string, onClick: () => void }> = ({status, onClick}) => {
-    switch (status) {
-        case 'new':
-            return <div onClick={onClick} className={clsx(styles[status], styles.statusTd)}>В роботі</div>
-        case 'completed':
-            return <div className={clsx(styles[status], styles.statusTd)}>Виконане</div>
-    }
+const StatusCell: React.FC<{ status: string, isLoading: boolean, onClick: () => void }> = ({
+                                                                                               status,
+                                                                                               isLoading,
+                                                                                               onClick
+                                                                                           }) => {
+
+
+    const text = status === 'completed' ? 'Виконане' : 'В роботі'
+
+    return <div className={clsx(styles[status], styles.statusTd)} onClick={() => status === 'new' && onClick()}>
+        {isLoading && <Loader/>}
+        {text}
+    </div>
 }
