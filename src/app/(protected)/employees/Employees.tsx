@@ -8,6 +8,8 @@ import {useEmployeesList} from "@/hooks/employees/useEmployeesList";
 import {useModalStore} from "@/store/modalStore";
 import {useState} from "react";
 import {useEmployeesMutations} from "@/hooks/employees/useEmployeesMutations";
+import {VehiclesTable} from "@/app/(protected)/clients/components/VehiclesTable";
+import {Payouts} from "@/app/(protected)/employees/components/Payouts";
 
 export const Employees = () => {
     const openConfirm = useModalStore(state => state.openConfirm);
@@ -100,6 +102,12 @@ export const Employees = () => {
             data={data?.data ?? []}
             rowKey={row => row.id ?? ''}
             isLoading={isLoading || isFetching}
+
+            expandable={{
+                expandOnRowClick: true,
+                isRowExpandable: row => true,
+                renderExpanded: row => <Payouts payouts={row.payouts}/>
+            }}
         />
     </>)
 };

@@ -1,6 +1,7 @@
 import {Column, Table} from "@/app/components/ui/Table/Table";
 import {IVehicle} from "@/types/vehicles";
 import {Button} from "@/app/components/ui";
+import styles from '../clients.module.scss'
 
 interface VehiclesTableProps {
     vehicles: IVehicle[];
@@ -52,12 +53,14 @@ export const VehiclesTable = ({vehicles, onDelete}: VehiclesTableProps) => {
         return <div>Немає транспортних засобів</div>;
     }
 
-    return (
-        <Table<IVehicle>
-            columns={vehicleColumns}
-            data={vehicles}
-            rowKey={v => v.id}
-            emptyText="Немає транспорту"
-        />
+    return (<div className={styles.vehiclesBlock}>
+            <h3>Гараж</h3>
+            <Table<IVehicle>
+                columns={vehicleColumns}
+                data={vehicles}
+                rowKey={v => v.id}
+                emptyText="Немає транспорту"
+            />
+        </div>
     );
 };

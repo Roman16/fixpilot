@@ -2,6 +2,8 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import {NextResponse} from "next/server";
 import Employee from "@/models/Employee";
+import Payout from "@/models/Payout";
+import Vehicle from "@/models/Vehicle";
 
 export async function POST(req: Request) {
     try {
@@ -46,8 +48,20 @@ export async function GET() {
             userId: session.id,
         })
 
+        const res = await Promise.all(employees.map(async (employee) => {
+            const payouts = await Payout.find({
+                userId: session.id,
+                employeeId: employee._id
+            });
+
+            return {
+                ...employee.toJSON(),
+                payouts,
+            };
+        }));
+
         return NextResponse.json({
-            data: employees,
+            data: res,
         });
     } catch (error) {
         console.error("Load employees error:", error);

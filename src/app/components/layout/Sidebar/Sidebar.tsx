@@ -9,7 +9,6 @@ import {
     IdCardLanyard
 } from "lucide-react";
 import ROUTES from "@/config/routes";
-import {useProfile} from "@/hooks/profile/useProfile";
 
 const links = [
     {href: "/", label: "Статистика", icon: <ChartNoAxesCombined size={18}/>},
@@ -20,8 +19,6 @@ const links = [
 ];
 
 export const Sidebar = () => {
-    const {data: profile} = useProfile();
-
     return (<aside className={styles.sidebar}>
         <div className={styles.logo}>
             <Logo/>
@@ -37,9 +34,9 @@ export const Sidebar = () => {
     </aside>)
 }
 
-const Logo = () => <svg width="250" height="70" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="40" fontFamily="Helvetica Neue, sans-serif" fontSize="50">
-        <tspan fill="#7c4dff">Fix</tspan>
-        <tspan fill="#000">Pilot</tspan>
+const Logo = () => <svg width="300" height="70" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="40" fontFamily="Helvetica Neue, sans-serif" fontSize="40">
+        <tspan fill="#7c4dff">Garage</tspan>
+        <tspan fill="#000">OS</tspan>
     </text>
 </svg>
