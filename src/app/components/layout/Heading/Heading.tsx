@@ -2,11 +2,11 @@
 
 import styles from './heading.module.scss';
 import {Button} from "@/app/components/ui";
-import {ModalState, useModalStore} from "@/store/modalStore";
+import {ModalType, useModalStore} from "@/store/modalStore";
 
 interface IHeadingProps {
     title: string,
-    actionType?: ModalState['modal'] | null,
+    actionType?: ModalType | null;
     actionBtnText?: string,
 }
 
@@ -23,9 +23,9 @@ export const Heading = ({
         <div className={styles.hr}/>
 
         {actionType && <Button
-            className={styles.btn}
-            iconType={'plus'}
-            onClick={() => openModal(actionType)}
+          className={styles.btn}
+          iconType={'plus'}
+          onClick={() => openModal(actionType)}
         >
             {actionBtnText}
         </Button>}
