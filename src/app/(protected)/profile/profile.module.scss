@@ -27,10 +27,32 @@
   .saveBtn {
     margin: auto 0 0 auto;
   }
+
+  .row {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+  }
+
+  @media(max-width: 600px) {
+    width: 100%;
+
+    .row {
+      flex-direction: column;
+
+      .col {
+        width: 100%;
+      }
+    }
+
+    .fieldsRow {
+      flex-direction: column;
+
+      div {
+        width: 100%;
+        flex: 1;
+      }
+    }
+  }
 }
 
-.row {
-  width: 100%;
-  display: flex;
-  gap: 20px;
-}

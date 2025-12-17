@@ -5,12 +5,16 @@ import {Button} from "@/app/components/ui";
 import {IEmployee} from "@/types/employee";
 import {Column, Table} from "@/app/components/ui/Table/Table";
 import employeesService from "@/services/employeesService";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import {IWork} from "@/types/order";
 import {IVehicle} from "@/types/vehicles";
 import dayjs from "dayjs";
+import toast from "react-hot-toast";
 
 export const PayoutsModal = () => {
+    const closeModal = useModalStore(state => state.closeModal)
+    const employee: IEmployee = useModalStore(state => state.modalProps)
+
     const {
         data: balance,
         isLoading
@@ -19,8 +23,20 @@ export const PayoutsModal = () => {
         queryFn: () => employeesService.getEmployeeBalance(employee.id),
     });
 
-    const closeModal = useModalStore(state => state.closeModal)
-    const employee: IEmployee = useModalStore(state => state.modalProps)
+    const payoutMutation = useMutation({
+        mutationFn: () => employeesService.payoutEmployee(employee.id),
+        onSuccess: () => {
+            toast.success('Заробітна плата успішно виплачена!');
+            closeModal();
+        },
+        onError: () => {
+            toast.error('Помилка під час виплати');
+        }
+    });
+
+    const handlePayout = () => {
+        payoutMutation.mutate();
+    };
 
     const columns: Column<IWork>[] = [
         {
@@ -95,6 +111,8 @@ export const PayoutsModal = () => {
 
                 <Button
                     variant={'primary'}
+                    onClick={handlePayout}
+                    isLoading={payoutMutation.isPending}
                 >
                     Здійснити виплату
                 </Button>

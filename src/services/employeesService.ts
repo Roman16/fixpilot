@@ -22,6 +22,10 @@ class employeesService extends baseService {
     getEmployeeBalance(id: string) {
         return this.get<IPayout>(`/employees/${id}/balance`);
     }
+
+    payoutEmployee(employeeId: string) {
+        return this.post('/payouts', {employeeId})
+    }
 }
 
 export default new employeesService();

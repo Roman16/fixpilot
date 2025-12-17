@@ -4,10 +4,14 @@ import {ClientForm} from "@/app/components/forms/ClientForm/ClientForm";
 import {useModalStore} from "@/store/modalStore";
 import {IClient} from "@/types/client";
 import {useClientsMutations} from "@/hooks/clients/useClientsMutations";
+import {FC} from "react";
 
-export const ClientModal = () => {
+interface ClientModalProps {
+    modalProps?: IClient;
+}
+
+export const ClientModal: FC<ClientModalProps> = ({modalProps: client}) => {
     const closeModal = useModalStore(state => state.closeModal)
-    const client = useModalStore(state => state.modalProps)
     const {createClient, updateClient} = useClientsMutations();
 
     const submitHandler = async (data: IClient) => {

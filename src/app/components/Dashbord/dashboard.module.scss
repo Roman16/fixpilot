@@ -27,4 +27,14 @@
       }
     }
   }
+
+  @media (max-width: 600px) {
+    .cardList {
+      flex-direction: column;
+    }
+
+    .chartWrapper {
+      display: none;
+    }
+  }
 }

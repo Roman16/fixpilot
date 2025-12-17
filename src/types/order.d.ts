@@ -24,6 +24,7 @@ export interface IWork {
     name?: string;
     price?: number;
     employeeId?: string;
+    payoutId?: string;
 }
 
 export interface IMaterial {

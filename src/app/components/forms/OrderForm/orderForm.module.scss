@@ -12,6 +12,29 @@
     top: 0;
     z-index: 11;
 
+    .clientRow {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      position: relative;
+
+      & > div {
+        flex: 1;
+      }
+
+      button {
+        width: 38px;
+        height: 38px;
+        position: absolute;
+        right: 0;
+        z-index: 11;
+        border-right: 0;
+        border-top: 0;
+        border-bottom: 0;
+
+      }
+    }
+
     & > div {
       flex: 1;
 
@@ -76,7 +99,14 @@
       .materialCount {
         width: 200px;
         max-width: 200px;
+        border-left: 1px solid #fff;
       }
+
+      .materialCount {
+        width: 100px;
+        max-width: 100px;
+      }
+
 
       .priceContainer {
         max-width: 100px;

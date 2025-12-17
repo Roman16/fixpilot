@@ -84,7 +84,7 @@ export function Select<T = unknown>({
                 setInputValue(value)
             }
         }
-    }, [value]);
+    }, [value, options]);
 
     return (
         <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>

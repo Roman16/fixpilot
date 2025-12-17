@@ -25,7 +25,7 @@ export const NavLink = ({href, icon, label}: NavLinkProps) => {
             className={`${styles.link} ${isActive ? styles.active : ""}`}
         >
             <span className={styles.icon}>{icon}</span>
-            {label}
+            <span className={styles.text}> {label}</span>
         </Link>
     );
 };

@@ -12,7 +12,7 @@ import {MessageSquareMore, Motorbike, User} from "lucide-react";
 interface ClientFormProps {
     onSubmit: (data: any) => void;
     onClose: () => void;
-    client: IClient;
+    client?: IClient;
     loading: boolean;
 }
 
@@ -24,10 +24,10 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                                                       }) => {
     const {control, register, handleSubmit, setValue} = useForm({
         defaultValues: {
-            name: client.name || '',
-            phone: client.phone || '',
-            comment: client.comment || '',
-            vehicles: client.vehicles || [{}]
+            name: client?.name || '',
+            phone: client?.phone || '',
+            comment: client?.comment || '',
+            vehicles: client?.vehicles || [{}]
         }
     });
 

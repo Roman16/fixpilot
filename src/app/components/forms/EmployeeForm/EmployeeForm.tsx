@@ -21,10 +21,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                                                         }) => {
     const {control, register, handleSubmit, setValue} = useForm<IEmployee>({
         defaultValues: {
-            name: employee.name || '',
-            phone: employee.phone || '',
-            role: employee.role || '',
-            commission: employee.commission || 40
+            name: employee?.name || '',
+            phone: employee?.phone || '',
+            role: employee?.role || '',
+            commission: employee?.commission || 40
         }
     });
 

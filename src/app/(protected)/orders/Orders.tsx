@@ -53,6 +53,11 @@ export const Orders = () => {
         });
     }
 
+    const handleSearch = (value: string) => {
+        setSearch(value)
+        setPage(1)
+    }
+
     const columns: Column<IOrder>[] = [
         {
             key: 'orderNumber',
@@ -150,6 +155,7 @@ export const Orders = () => {
             rowKey={row => row.id ?? ''}
             isLoading={isLoading || isFetching}
             searchable
+            onSearch={handleSearch}
             searchPlaceholder={'Пошук замовлень (клієнт, транспортний засіб)'}
 
             pagination={{

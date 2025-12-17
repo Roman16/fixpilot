@@ -4,10 +4,16 @@ import styles from "./employeeModal.module.scss";
 import {IEmployee} from "@/types/employee";
 import {EmployeeForm} from "@/app/components/forms/EmployeeForm/EmployeeForm";
 import {useEmployeesMutations} from "@/hooks/employees/useEmployeesMutations";
+import {FC} from "react";
 
-export const EmployeeModal = () => {
-    const closeModal = useModalStore(state => state.closeModal)
-    const employee = useModalStore(state => state.modalProps)
+interface EmployeeModalProps {
+    modalId: string;
+    employee: IEmployee;
+}
+
+export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, employee}) => {
+    console.log(modalId);
+    const {closeModal} = useModalStore()
     const {createEmployee, updateEmployee} = useEmployeesMutations();
 
     const submitHandler = async (data: IEmployee) => {
@@ -20,7 +26,7 @@ export const EmployeeModal = () => {
         } catch (error) {
             console.error(error);
         } finally {
-            closeModal()
+            closeModal(modalId)
         }
     };
 

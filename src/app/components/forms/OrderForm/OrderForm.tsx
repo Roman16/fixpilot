@@ -13,11 +13,12 @@ import dayjs from "dayjs";
 import {Works} from "@/app/components/forms/OrderForm/components/Works";
 import {Materials} from "@/app/components/forms/OrderForm/components/Materials";
 import {useProfile} from "@/hooks/profile/useProfile";
+import {useModalStore} from "@/store/modalStore";
 
 interface OrderFormProps {
     onSubmit: (data: any) => void;
     onClose: () => void;
-    order: IOrder | null;
+    order?: IOrder | null;
     loading: boolean;
 }
 
@@ -32,6 +33,8 @@ interface FormValues {
 }
 
 export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading}) => {
+    const openModal = useModalStore((state) => state.openModal);
+    console.log(order);
     const {data: profile} = useProfile();
 
     const [vehicles, setVehicles] = useState<IVehicle[]>([]);
@@ -84,17 +87,26 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.generalInfo}>
-                <ClientAutocomplete
-                    disabled={!!order?.id}
-                    value={selectedClientId}
-                    onChange={(client) => {
-                        setValue("clientId", client?.id || '')
-                        setValue("client", client || null)
-                        setValue("vehicleId", null)
-                        setValue("mileage", null)
-                        setVehicles(client?.vehicles || [])
-                    }}
-                />
+                <div className={styles.clientRow}>
+                    <ClientAutocomplete
+                        disabled={!!order?.id}
+                        value={selectedClientId}
+                        onChange={(client) => {
+                            setValue("clientId", client?.id || '')
+                            setValue("client", client || null)
+                            setValue("vehicleId", null)
+                            setValue("mileage", null)
+                            setVehicles(client?.vehicles || [])
+                        }}
+                    />
+
+                    <Button
+                        type={'button'}
+                        iconType={'addUser'}
+                        onClick={() => openModal('clientModal')}
+                    />
+                </div>
+
 
                 <Select<IVehicle>
                     label="Транспортний засіб"

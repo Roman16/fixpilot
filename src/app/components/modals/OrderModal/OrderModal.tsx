@@ -4,9 +4,13 @@ import {OrderForm} from "@/app/components/forms/OrderForm/OrderForm";
 import {useModalStore} from "@/store/modalStore";
 import {IOrder} from "@/types/order";
 import {useOrdersMutations} from "@/hooks/orders/useOrdersMutations";
+import {FC} from "react";
 
-export const OrderModal = () => {
-    const order = useModalStore(state => state.modalProps)
+interface OrderModalProps {
+    modalProps?: IOrder;
+}
+
+export const OrderModal: FC<OrderModalProps> = ({modalProps: order}) => {
     const closeModal = useModalStore(state => state.closeModal)
 
     const {createOrder, updateOrder} = useOrdersMutations();
@@ -26,7 +30,7 @@ export const OrderModal = () => {
     };
 
     return (<Modal
-        headerText={order?.id ? `Замовлення на ${order.vehicle.brand} ${order.vehicle.model}` : 'Нове замовлення'}
+        headerText={order && order?.id ? `Замовлення на ${order.vehicle?.brand} ${order.vehicle?.model}` : 'Нове замовлення'}
         className={styles.modal}>
         <OrderForm
             order={order}

@@ -20,13 +20,13 @@ export const Modal = ({
 
     return (<div
         className={styles.overlay}
-        onClick={closeModal}
+        onClick={() => closeModal()}
     >
         <div
             className={clsx(styles.modal, className)}
             onClick={(e) => e.stopPropagation()}
         >
-            <button onClick={closeModal} className={styles.closeBtn}>
+            <button onClick={() => closeModal()} className={styles.closeBtn}>
                 <X size={16}/>
             </button>
 

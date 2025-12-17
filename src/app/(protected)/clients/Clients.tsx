@@ -10,7 +10,6 @@ import {useState} from "react";
 import {useClientsList} from "@/hooks/clients/useClientsList";
 import {useClientsMutations} from "@/hooks/clients/useClientsMutations";
 import {VehiclesTable} from "@/app/(protected)/clients/components/VehiclesTable";
-import {Motorbike} from 'lucide-react';
 import styles from "./clients.module.scss";
 
 export const Clients = () => {
@@ -24,12 +23,7 @@ export const Clients = () => {
     const openConfirm = useModalStore(state => state.openConfirm);
 
     const {deleteClient, deleteVehicle} = useClientsMutations();
-
-    const {
-        data,
-        isLoading,
-        isFetching
-    } = useClientsList(page, limit, search);
+    const {data, isLoading, isFetching} = useClientsList(page, limit, search);
 
     const pagination = data?.pagination;
     const clients = data?.data ?? [];
@@ -66,7 +60,7 @@ export const Clients = () => {
         {
             key: 'name',
             label: 'Ім’я',
-            minWidth: '300px',
+            minWidth: '200px',
         },
         {
             key: 'phone',
@@ -83,12 +77,14 @@ export const Clients = () => {
             key: 'updatedAt',
             label: 'Останній візит',
             width: '200px',
+            minWidth: '150px',
             render: (value: string) => dayjs(value).format('DD.MM.YYYY')
         },
         {
             key: 'comment',
             label: 'Коментар',
             width: '400px',
+            minWidth: '200px',
         },
         {
             key: 'actions',

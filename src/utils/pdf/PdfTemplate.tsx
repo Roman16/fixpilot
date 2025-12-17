@@ -3,8 +3,8 @@ import {Page, Text, View, Document, StyleSheet, Font, Image} from '@react-pdf/re
 import {IMaterial, IWork} from "@/types/order";
 import {IClient} from "@/types/client";
 import {IVehicle} from "@/types/vehicles";
-import {useProfile} from "@/hooks/profile/useProfile";
 import {IProfile} from "@/types/profile";
+import dayjs from "dayjs";
 
 Font.register({
     family: "Arimo",
@@ -139,12 +139,12 @@ interface PdfTemplateProps {
 export const PdfTemplate: React.FC<PdfTemplateProps> = ({order, profile}) => {
     const worksTotal = order.works?.reduce((sum, currentValue) => sum + +(currentValue.price || 0), 0) || 0,
         materialsTotal = order.materials?.reduce((sum, currentValue) => sum + +(currentValue.price || 0), 0) || 0
-    console.log(profile?.logo);
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.date}>
-                    <Text>{order.createdAt}</Text>
+                    <Text>{dayjs(order.createdAt).format('DD-MM-YYYY')}</Text>
                 </View>
 
                 <View style={styles.row}>

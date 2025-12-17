@@ -5,6 +5,7 @@ import {Button, Input} from "@/app/components/ui";
 import {Select} from "@/app/components/ui/Select/Select";
 import {IEmployee} from "@/types/employee";
 import {useFieldArray} from "react-hook-form";
+import {IWork} from "@/types/order";
 
 
 interface WorksProps {
@@ -32,7 +33,6 @@ export const Works: FC<WorksProps> = ({
     const handleAddWork = () => {
         append({name: "", employeeId: watched[0].employeeId})
     }
-
 
     return (
         <div className={styles.section}>
@@ -74,7 +74,6 @@ export const Works: FC<WorksProps> = ({
                             suffix={'₴'}
                         />
                     </div>
-
 
                     <Button
                         className={styles.delete}

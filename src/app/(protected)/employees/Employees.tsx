@@ -43,19 +43,23 @@ export const Employees = () => {
         {
             key: 'name',
             label: 'Ім’я',
+            minWidth: '150px',
         },
         {
             key: 'phone',
             label: 'Телефон',
+            minWidth: '150px',
         },
         {
             key: 'role',
             label: 'Посада',
+            minWidth: '150px',
         },
         {
             key: 'commission',
             label: 'Комісія',
             width: '200px',
+            minWidth: '100px',
             align: 'center',
             render: commission => `${commission} %`
         },
@@ -63,6 +67,7 @@ export const Employees = () => {
             key: 'actions',
             label: 'Дії',
             width: '200px',
+            minWidth: '150px',
             align: 'center',
             render: (_: any, row?: IEmployee) => <div className={tableStyles.actionsCol}>
                 <Button

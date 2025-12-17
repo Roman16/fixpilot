@@ -155,7 +155,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 50px;
+  top: 60px;
   bottom: 0;
   margin: auto;
   z-index: 11;
@@ -163,6 +163,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 
   svg {
     width: 100px;

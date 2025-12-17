@@ -7,18 +7,33 @@ import {OrderModal} from "@/app/components/modals/OrderModal/OrderModal";
 import {EmployeeModal} from "@/app/components/modals/EmployeeModal/EmployeeModal";
 import {PayoutsModal} from "@/app/components/modals/PayoutsModal/PayoutsModal";
 
+const modalMap = {
+    confirmAction: ConfirmActionModal,
+    clientModal: ClientModal,
+    orderModal: OrderModal,
+    employeeModal: EmployeeModal,
+    payoutsModal: PayoutsModal
+};
+
 export const ModalContainer = () => {
-    const {modal} = useModalStore();
+    const modals = useModalStore(state => state.modals);
 
-    if (!modal) return null;
+    return (
+        <>
+            {modals.map((modal, index) => {
+                const Component = modalMap[modal.type];
+                if (!Component) return null;
 
-    const modals = {
-        confirmAction: <ConfirmActionModal/>,
-        clientModal: <ClientModal/>,
-        orderModal: <OrderModal/>,
-        employeeModal: <EmployeeModal/>,
-        payoutsModal: <PayoutsModal/>
-    };
-
-    return modals[modal]
+                return (
+                    <Component
+                        key={modal.id}
+                        {...modal.props}
+                        modalProps={modal.props}
+                        modalId={modal.id}
+                        zIndex={1000 + index}
+                    />
+                );
+            })}
+        </>
+    );
 };

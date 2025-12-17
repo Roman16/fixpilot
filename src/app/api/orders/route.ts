@@ -4,6 +4,7 @@ import {NextResponse} from "next/server";
 import Order from "@/models/Order";
 import Vehicle from "@/models/Vehicle";
 import Client from "@/models/Client";
+import mongoose from "mongoose";
 
 export async function GET(req: Request) {
     try {
@@ -18,46 +19,78 @@ export async function GET(req: Request) {
         const limit = parseInt(searchParams.get("limit") || "20");
         const search = searchParams.get("search")?.trim() || "";
 
-        const query: any = {
-            userId: session.id,
+        const skip = (page - 1) * limit;
+
+        const userId = new mongoose.Types.ObjectId(session.id);
+
+        const matchStage: any = {
+            userId
         };
 
         if (search) {
-            query.$or = [
-                {name: {$regex: search, $options: "i"}},
-                {phone: {$regex: search, $options: "i"}},
+            const regex = new RegExp(search, "i");
+
+            matchStage.$or = [
+                {"client.name": regex},
+                {"client.phone": regex},
+                {"vehicle.brand": regex},
+                {"vehicle.model": regex},
+                {"vehicle.plate": regex},
             ];
         }
 
-        const skip = (page - 1) * limit;
-
-        const [orders, total] = await Promise.all([
-            Order.find(query)
-                .sort({createdAt: -1})
-                .skip(skip)
-                .limit(limit),
-            Order.countDocuments(query),
+        const result = await Order.aggregate([
+            // user orders only
+            {$match: {userId}},
+            {
+                $lookup: {
+                    from: "clients",
+                    localField: "clientId",
+                    foreignField: "_id",
+                    as: "client"
+                }
+            },
+            {$unwind: "$client"},
+            {
+                $lookup: {
+                    from: "vehicles",
+                    localField: "vehicleId",
+                    foreignField: "_id",
+                    as: "vehicle"
+                }
+            },
+            {$unwind: "$vehicle"},
+            search ? {$match: matchStage} : {$match: {}},
+            {$sort: {createdAt: -1}},
+            {
+                $addFields: {
+                    id: {$toString: "$_id"}
+                }
+            },
+            {
+                $facet: {
+                    data: [
+                        {$skip: skip},
+                        {$limit: limit}
+                    ],
+                    total: [
+                        {$count: "count"}
+                    ]
+                }
+            }
         ]);
 
-        const preparedOrders = await Promise.all(orders.map(async (order) => {
-            const client = await Client.findById(order.clientId);
-            const vehicle = await Vehicle.findById(order.vehicleId);
-
-            return {
-                ...order.toJSON(),
-                vehicle,
-                client
-            };
-        }));
+        const orders = result[0].data;
+        const total = result[0].total[0]?.count || 0;
 
         return NextResponse.json({
-            data: preparedOrders,
+            data: orders,
             pagination: {
                 total,
                 page,
                 limit,
-                pages: Math.ceil(total / limit),
-            },
+                pages: Math.ceil(total / limit)
+            }
         });
     } catch (error) {
         console.error("Load orders error:", error);
