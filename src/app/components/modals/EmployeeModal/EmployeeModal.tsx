@@ -34,7 +34,7 @@ export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, modalProps: empl
             employee={employee}
             onSubmit={submitHandler}
             onClose={() => closeModal()}
-            loading={false}
+            loading={createEmployee.isPending || updateEmployee.isPending}
         />
     </Modal>)
 }

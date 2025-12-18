@@ -14,12 +14,12 @@ interface EmployeeFormProps {
 }
 
 export const EmployeeForm: React.FC<EmployeeFormProps> = ({
-                                                            onSubmit,
-                                                            onClose,
-                                                            employee,
-                                                            loading
-                                                        }) => {
-    const {control, register, handleSubmit, setValue} = useForm<IEmployee>({
+                                                              onSubmit,
+                                                              onClose,
+                                                              employee,
+                                                              loading
+                                                          }) => {
+    const {register, handleSubmit} = useForm<IEmployee>({
         defaultValues: {
             name: employee?.name || '',
             phone: employee?.phone || '',

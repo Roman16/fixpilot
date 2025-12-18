@@ -67,4 +67,22 @@
     gap: 20px;
     justify-content: flex-end;
   }
+
+  @media (max-width: 700px) {
+    overflow: auto;
+
+    .row {
+      height: max-content;
+      flex-direction: column;
+      overflow: auto;
+
+      .col {
+        width: 100%;
+      }
+    }
+
+    .vehiclesBlock {
+      overflow: visible;
+    }
+  }
 }

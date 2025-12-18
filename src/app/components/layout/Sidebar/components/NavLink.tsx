@@ -8,10 +8,11 @@ import {usePathname} from "next/navigation";
 interface NavLinkProps {
     href: string;
     label: string;
+    onClick: () => void;
     icon: JSX.Element;
 }
 
-export const NavLink = ({href, icon, label}: NavLinkProps) => {
+export const NavLink = ({href, icon, label, onClick}: NavLinkProps) => {
     const pathname = usePathname();
 
     const isActive =
@@ -23,6 +24,7 @@ export const NavLink = ({href, icon, label}: NavLinkProps) => {
         <Link
             href={href}
             className={`${styles.link} ${isActive ? styles.active : ""}`}
+            onClick={onClick}
         >
             <span className={styles.icon}>{icon}</span>
             <span className={styles.text}> {label}</span>

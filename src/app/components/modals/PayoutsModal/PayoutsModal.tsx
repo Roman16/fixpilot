@@ -46,13 +46,13 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         {
             key: 'date',
             label: 'Дата',
-            width: '150px',
+            width: '120px',
             render: date => dayjs(date).format('DD.MM.YYYY')
         },
         {
             key: 'vehicle',
             label: 'Замовлення',
-            minWidth: '300px',
+            minWidth: '250px',
             render: (vehicle: IVehicle) => <div
                 className={styles.vehicle}>{vehicle?.brand} {vehicle?.model} {vehicle?.plate &&
               <div>{vehicle.plate}</div>}
@@ -65,14 +65,14 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         {
             key: 'price',
             label: 'Вартість',
-            width: '150px',
+            width: '130px',
             render: price => `${price} ₴`
         },
         {
             key: 'commission',
             label: `ЗП (${employee.commission}%)`,
-            width: '150px',
-            align: 'center',
+            width: '130px',
+            align: 'right',
             render: (commission: number) => <div className={styles.commission}>{commission} ₴</div>
         },
     ]

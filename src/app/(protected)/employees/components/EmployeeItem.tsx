@@ -36,7 +36,43 @@ export const EmployeeItem: FC<IEmployeeItemProps> = ({employee, onEdit, onDelete
         </div>
 
 
+        {/*<div className={styles.row}>*/}
+        {/*    <div className={styles.total}>*/}
+        {/*        <p>Зароблено</p>*/}
+        {/*        <h3>10 ₴</h3>*/}
+        {/*    </div>*/}
+
+        {/*    <div className={styles.total}>*/}
+        {/*        <p>Виплачено</p>*/}
+        {/*        <h3>10 ₴</h3>*/}
+        {/*    </div>*/}
+        {/*</div>*/}
+
+        {/*<div className={styles.balance}>*/}
+        {/*    <div>*/}
+        {/*        <p>До виплати</p>*/}
+        {/*        <h3>1000 ₴</h3>*/}
+        {/*    </div>*/}
+
+        {/*    <Button*/}
+        {/*        onClick={onPaid}*/}
+        {/*    >*/}
+        {/*        Виплатити*/}
+        {/*    </Button>*/}
+        {/*</div>*/}
+
+        <div className={styles.history}>
+            <div className={styles.historyBtn}>
+                Історія виплат
+                <i><ChevronDown/></i>
+            </div>
+        </div>
+
         <div className={styles.actions}>
+            <Button
+                onClick={onPaid}
+                iconType={'pay'}
+            />
             <Button
                 onClick={onEdit}
                 iconType={'edit'}
@@ -46,38 +82,6 @@ export const EmployeeItem: FC<IEmployeeItemProps> = ({employee, onEdit, onDelete
                 onClick={onDelete}
                 iconType={'delete'}
             />
-        </div>
-
-        <div className={styles.row}>
-            <div className={styles.total}>
-                <p>Зароблено</p>
-                <h3>10 ₴</h3>
-            </div>
-
-            <div className={styles.total}>
-                <p>Виплачено</p>
-                <h3>10 ₴</h3>
-            </div>
-        </div>
-
-        <div className={styles.balance}>
-            <div>
-                <p>До виплати</p>
-                <h3>1000 ₴</h3>
-            </div>
-
-            <Button
-                onClick={onPaid}
-            >
-                Виплатити
-            </Button>
-        </div>
-
-        <div className={styles.history}>
-            <div className={styles.historyBtn}>
-                Історія виплат
-                <i><ChevronDown/></i>
-            </div>
         </div>
     </div>)
 }

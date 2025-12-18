@@ -86,7 +86,9 @@ select {
 }
 
 .content {
+  flex: 1;
   display: flex;
+  overflow: hidden;
 
   & > div {
     flex: 1;
@@ -153,6 +155,16 @@ select {
       background-repeat: no-repeat;
       opacity: 0.05;
       pointer-events: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+
+    .content {
+      & > div {
+        width: 100%;
+      }
     }
   }
 }

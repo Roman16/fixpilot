@@ -6,11 +6,14 @@ import {
     ClipboardList,
     Settings,
     ChartNoAxesCombined,
-    IdCardLanyard, LogOut
+    IdCardLanyard,
+    LogOut,
+    Menu, X
 } from "lucide-react";
 import ROUTES from "@/config/routes";
 import {ThemeToggle} from "@/app/components/layout/Sidebar/components/ThemeToggle";
 import clsx from "clsx";
+import {useState} from "react";
 
 const links = [
     // {href: "/", label: "Статистика", icon: <ChartNoAxesCombined size={18}/>},
@@ -21,26 +24,36 @@ const links = [
 ];
 
 export const Sidebar = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     return (<aside className={styles.sidebar}>
         <div className={styles.logo}>
             <Logo/>
         </div>
 
+        <div className={clsx(styles.container, {
+            [styles.opened]: isSidebarOpen
+        })}>
+            <nav className={styles.nav}>
+                {links.map(link => <NavLink
+                    key={link.href}
+                    onClick={() => setIsSidebarOpen(false)}
+                    {...link}
+                />)}
+            </nav>
 
-        <nav className={styles.nav}>
-            {links.map(link => <NavLink
-                key={link.href}
-                {...link}
-            />)}
-        </nav>
+            <div className={styles.footer}>
+                <ThemeToggle/>
 
-        <div className={styles.footer}>
-            <ThemeToggle/>
-
-            <div className={clsx(styles.link,styles.logout)}>
-                <span className={styles.icon}><LogOut/></span>
-                <span className={styles.text}> Вийти</span>
+                <div className={clsx(styles.link, styles.logout)}>
+                    <span className={styles.icon}><LogOut/></span>
+                    <span className={styles.text}> Вийти</span>
+                </div>
             </div>
+        </div>
+
+        <div className={styles.burger} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            {isSidebarOpen ? <X/> :  <Menu /> }
         </div>
     </aside>)
 }

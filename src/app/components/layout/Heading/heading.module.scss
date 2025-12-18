@@ -18,5 +18,17 @@
   .btn {
     min-width: max-content;
   }
+
+  @media(max-width: 700px) {
+    .title {
+      font-size: 28px;
+    }
+
+    .btn {
+      svg {
+        display: none;
+      }
+    }
+  }
 }
 
