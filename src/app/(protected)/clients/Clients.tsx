@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import {useState} from "react";
 import {useClientsList} from "@/hooks/clients/useClientsList";
 import {useClientsMutations} from "@/hooks/clients/useClientsMutations";
-import {VehiclesTable} from "@/app/(protected)/clients/components/VehiclesTable";
+import {Vehicles} from "@/app/(protected)/clients/components/Vehicles";
 import styles from "./clients.module.scss";
 
 export const Clients = () => {
@@ -131,7 +131,7 @@ export const Clients = () => {
                 expandOnRowClick: true,
                 isRowExpandable: row => !!row?.vehicles?.length,
                 renderExpanded: row => (
-                    <VehiclesTable
+                    <Vehicles
                         vehicles={row?.vehicles || []}
                         onDelete={(id) => handleDeleteVehicle({
                             clientId: row.id,

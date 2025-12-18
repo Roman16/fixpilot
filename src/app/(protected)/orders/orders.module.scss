@@ -3,16 +3,16 @@
 .clientTd {
   display: flex;
   flex-direction: column;
-  color: #fff;
+  color: var(--color-text);
 
   p {
-    color: #a3a3a3;
+    color: var(--color-muted-text);
   }
 }
 
 .plate {
   width: max-content;
-  background: #292929;
+  background: var(--color-block-bg2);
   border: 1px solid rgb(39, 39, 42);
   border-radius: 5px;
   margin: 0 auto;

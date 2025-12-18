@@ -1,0 +1,114 @@
+.employeesList {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+
+  .employeeItem {
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--color-block-bg);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.1),
+    0 3px 5px 0 rgba(0, 0, 0, 0.1);
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border-radius: 50%;
+      background: var(--color-main-bg);
+    }
+
+    .employeeInfo {
+      h3 {
+        font-size: 20px;
+        color: var(--color-text);
+        margin-bottom: 5px;
+      }
+
+      p {
+        color: var(--color-muted-text);
+      }
+    }
+
+    .commission {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--color-muted-text);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 10px;
+
+      span {
+        font-weight: 600;
+        color: var(--color-text);
+      }
+    }
+
+    .total {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      p {
+        color: var(--color-muted-text);
+      }
+    }
+
+    .balance {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-radius: 10px;
+      background: var(--color-block-bg2);
+
+      p {
+        color: var(--color-muted-text);
+      }
+    }
+
+    .history {
+      display: flex;
+      flex-direction: column;
+
+      .historyBtn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+
+        i {
+          color: var(--color-muted-text);
+        }
+      }
+    }
+
+    .actions {
+      position: absolute;
+      right: 10px;
+      top: 20px;
+      display: flex;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+
+    &:hover {
+      .actions {
+        opacity: 1;
+      }
+    }
+  }
+}

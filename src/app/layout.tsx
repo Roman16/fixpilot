@@ -1,13 +1,17 @@
-import type {Metadata} from "next";
+'use client';
+
 import '../styles/global.scss';
 import {Providers} from './providers'
 import {Toaster} from "react-hot-toast";
-
-export const metadata: Metadata = {
-    title: "FixPilot",
-};
+import {useEffect} from "react";
+import {useThemeStore} from "@/store/themeStore";
 
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+    const initTheme = useThemeStore((s) => s.initTheme);
+
+    useEffect(() => {
+        initTheme();
+    }, [initTheme]);
 
     return (
         <html lang="en">

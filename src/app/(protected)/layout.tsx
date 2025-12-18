@@ -25,11 +25,11 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
 
         <div
             className={'content'}
-            style={
-                profile?.logo
-                    ? { ['--company-logo' as any]: `url(${profile.logo})` }
-                    : undefined
-            }
+            // style={
+            //     profile?.logo
+            //         ? { ['--company-logo' as any]: `url(${profile.logo})` }
+            //         : undefined
+            // }
         >
             {children}
         </div>

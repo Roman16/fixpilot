@@ -1,5 +1,6 @@
 "use client"
 
+import styles from "./employees.module.scss";
 import {Column, Table} from "@/app/components/ui/Table/Table";
 import tableStyles from "@/app/components/ui/Table/table.module.scss";
 import {Button} from "@/app/components/ui";
@@ -8,8 +9,8 @@ import {useEmployeesList} from "@/hooks/employees/useEmployeesList";
 import {useModalStore} from "@/store/modalStore";
 import {useState} from "react";
 import {useEmployeesMutations} from "@/hooks/employees/useEmployeesMutations";
-import {VehiclesTable} from "@/app/(protected)/clients/components/VehiclesTable";
 import {Payouts} from "@/app/(protected)/employees/components/Payouts";
+import {EmployeeItem} from "@/app/(protected)/employees/components/EmployeeItem";
 
 export const Employees = () => {
     const openConfirm = useModalStore(state => state.openConfirm);
@@ -96,18 +97,13 @@ export const Employees = () => {
         },
     ]
 
-    return (<>
-        <Table<IEmployee>
-            columns={columns}
-            data={data?.data ?? []}
-            rowKey={row => row.id ?? ''}
-            isLoading={isLoading || isFetching}
-
-            expandable={{
-                expandOnRowClick: true,
-                isRowExpandable: row => true,
-                renderExpanded: row => <Payouts payouts={row.payouts}/>
-            }}
-        />
-    </>)
+    return (<div className={styles.employeesList}>
+        {data?.data.map((employee: IEmployee, index) => <EmployeeItem
+            key={employee.id}
+            employee={employee}
+            onEdit={() => openModal('employeeModal', employee)}
+            onDelete={() => employee?.id && handleDelete(employee.id)}
+            onPaid={() => openModal('payoutsModal', employee)}
+        />)}
+    </div>)
 };

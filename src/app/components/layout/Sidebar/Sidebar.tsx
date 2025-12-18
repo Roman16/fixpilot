@@ -1,17 +1,19 @@
 import styles from './sidebar.module.scss'
-import {NavLink} from "@/app/components/layout/Sidebar/NavLink";
+import {NavLink} from "@/app/components/layout/Sidebar/components/NavLink";
 
 import {
     Users,
     ClipboardList,
     Settings,
     ChartNoAxesCombined,
-    IdCardLanyard
+    IdCardLanyard, LogOut
 } from "lucide-react";
 import ROUTES from "@/config/routes";
+import {ThemeToggle} from "@/app/components/layout/Sidebar/components/ThemeToggle";
+import clsx from "clsx";
 
 const links = [
-    {href: "/", label: "Статистика", icon: <ChartNoAxesCombined size={18}/>},
+    // {href: "/", label: "Статистика", icon: <ChartNoAxesCombined size={18}/>},
     {href: ROUTES.ORDERS, label: "Замовлення", icon: <ClipboardList size={18}/>},
     {href: ROUTES.CLIENTS, label: "Клієнти", icon: <Users size={18}/>},
     {href: ROUTES.EMPLOYEES, label: "Працівники", icon: <IdCardLanyard size={18}/>},
@@ -31,6 +33,15 @@ export const Sidebar = () => {
                 {...link}
             />)}
         </nav>
+
+        <div className={styles.footer}>
+            <ThemeToggle/>
+
+            <div className={clsx(styles.link,styles.logout)}>
+                <span className={styles.icon}><LogOut/></span>
+                <span className={styles.text}> Вийти</span>
+            </div>
+        </div>
     </aside>)
 }
 

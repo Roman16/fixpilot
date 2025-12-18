@@ -8,10 +8,10 @@ import {FC} from "react";
 
 interface EmployeeModalProps {
     modalId: string;
-    employee: IEmployee;
+    modalProps: IEmployee;
 }
 
-export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, employee}) => {
+export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, modalProps: employee}) => {
     const {closeModal} = useModalStore()
     const {createEmployee, updateEmployee} = useEmployeesMutations();
 

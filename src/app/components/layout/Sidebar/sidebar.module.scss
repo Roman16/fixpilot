@@ -3,11 +3,14 @@
   grid-area: sidebar;
   border-right: 2px solid var(--color-border);
   padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-block-bg);
 
   .logo {
     width: 100%;
     margin-bottom: 20px;
-    opacity: 0.3;
+    opacity: 0.5;
     transition: opacity var(--transition-fast);
     display: flex;
     justify-content: center;
@@ -17,7 +20,7 @@
     }
 
     &:hover {
-      opacity: 0.6;
+      opacity: 0.8;
     }
   }
 
@@ -31,24 +34,57 @@
     display: flex;
     align-items: center;
     gap: 20px;
-    color: var(--color-text);
+    color: var(--color-muted-text);
     padding: 10px 15px;
-    border-radius: var(--border-radius);
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    position: relative;
 
     .icon {
       display: flex;
       min-width: 20px;
     }
 
+    &.active {
+      background: var(--color-block-bg);
+      color: var(--color-text);
+      box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    }
+
     &:hover {
-      background: #ffffff1a;
+      background: var(--color-block-bg2);
       text-decoration: none;
       color: var(--color-text);
     }
   }
 
-  .active {
-    background: #ffffff0d;
+
+  .footer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: auto 0 0 0;
+
+    .toggle {
+      width: 46px;
+      height: 46px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+
+      &:hover {
+        background: #ffffff1a;
+        color: var(--color-text);
+      }
+    }
+
+    .logout {
+      flex: 1;
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+    }
   }
 
   @media(max-width: 600px) {
