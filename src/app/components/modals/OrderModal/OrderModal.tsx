@@ -37,7 +37,7 @@ export const OrderModal: FC<OrderModalProps> = ({modalProps: order}) => {
             loading={createOrder.isPending || updateOrder.isPending}
 
             onSubmit={submitHandler}
-            onClose={closeModal}
+            onClose={() => closeModal()}
         />
     </Modal>)
 }

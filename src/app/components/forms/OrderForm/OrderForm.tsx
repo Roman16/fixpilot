@@ -34,7 +34,6 @@ interface FormValues {
 
 export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading}) => {
     const openModal = useModalStore((state) => state.openModal);
-    console.log(order);
     const {data: profile} = useProfile();
 
     const [vehicles, setVehicles] = useState<IVehicle[]>([]);
@@ -157,17 +156,19 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     onClick={downloadPdfHandler}
                 />
 
-                <Button type="button" onClick={onClose} disabled={loading}>
+                {order?.status !== 'completed' && <>
+                  <Button type="button" onClick={onClose} disabled={loading}>
                     Скасувати
-                </Button>
+                  </Button>
 
-                <Button
+                  <Button
                     type="submit"
                     variant="primary"
                     isLoading={loading}
-                >
+                  >
                     Зберегти
-                </Button>
+                  </Button>
+                </>}
             </div>
         </form>
     );
