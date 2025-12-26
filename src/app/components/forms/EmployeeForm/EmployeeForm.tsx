@@ -4,12 +4,12 @@ import {Button, Input} from "@/app/components/ui";
 import styles from "./employeeForm.module.scss";
 import {useForm} from 'react-hook-form';
 import React from "react";
-import {IEmployee} from "@/types/employee";
+import {IEmployee, IEmployeeFormValues} from "@/types/employee";
 
 interface EmployeeFormProps {
     onSubmit: (data: any) => void;
     onClose: () => void;
-    employee: IEmployee;
+    employee: Partial<IEmployee>;
     loading: boolean;
 }
 
@@ -19,12 +19,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                                                               employee,
                                                               loading
                                                           }) => {
-    const {register, handleSubmit} = useForm<IEmployee>({
+    const {register, handleSubmit} = useForm<IEmployeeFormValues>({
         defaultValues: {
             name: employee?.name || '',
             phone: employee?.phone || '',
             role: employee?.role || '',
-            commission: employee?.commission || 40
+            commissionRate: employee?.commissionRate || 40
         }
     });
 
@@ -50,7 +50,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
         <Input
             placeholder={'Ведіть відсоток комісії (%)'}
             label={'Відсоток комісії (%)'}
-            {...register('commission', {
+            {...register('commissionRate', {
                 valueAsNumber: true
             })}
         />

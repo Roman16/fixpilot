@@ -1,4 +1,4 @@
-export const Loader = () => <div>
+export const Loader = ({className}: {className?: string}) => <div className={`loader ${className || ''}`}>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
         <path
             fill="#54368f"

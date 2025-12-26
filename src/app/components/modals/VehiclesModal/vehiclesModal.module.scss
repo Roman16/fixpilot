@@ -1,0 +1,16 @@
+.modal {
+  max-width: 600px;
+
+  .form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+  }
+}

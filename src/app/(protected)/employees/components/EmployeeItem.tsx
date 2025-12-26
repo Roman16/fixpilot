@@ -1,17 +1,25 @@
 import {IEmployee} from "@/types/employee";
-import {FC} from "react";
+import {FC, useState} from "react";
 import styles from '../employees.module.scss'
 import {Button} from "@/app/components/ui";
 import {ChevronDown} from "lucide-react";
+import {Loader} from "@/app/components/ui/Loader/Loader";
+import {Payouts} from "./Payouts";
+import clsx from "clsx";
 
 interface IEmployeeItemProps {
     employee: IEmployee,
     onEdit: () => void,
     onDelete: () => void,
     onPaid: () => void,
+    isDeleting: boolean | null,
 }
 
-export const EmployeeItem: FC<IEmployeeItemProps> = ({employee, onEdit, onDelete, onPaid}) => {
+export const EmployeeItem: FC<IEmployeeItemProps> = ({employee, onEdit, onDelete, onPaid, isDeleting}) => {
+    const [isPayoutsOpen, setIsPayoutsOpen] = useState(false);
+
+    const handlePayoutsOpen = () => setIsPayoutsOpen(!isPayoutsOpen);
+
     return (<div className={styles.employeeItem}>
         <div className={styles.row}>
             <div className={styles.icon}>
@@ -32,56 +40,39 @@ export const EmployeeItem: FC<IEmployeeItemProps> = ({employee, onEdit, onDelete
         <div className={styles.commission}>
             Комісія
 
-            <span>{employee.commission}%</span>
+            <span>{employee.commissionRate}%</span>
         </div>
 
-
-        {/*<div className={styles.row}>*/}
-        {/*    <div className={styles.total}>*/}
-        {/*        <p>Зароблено</p>*/}
-        {/*        <h3>10 ₴</h3>*/}
-        {/*    </div>*/}
-
-        {/*    <div className={styles.total}>*/}
-        {/*        <p>Виплачено</p>*/}
-        {/*        <h3>10 ₴</h3>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
-
-        {/*<div className={styles.balance}>*/}
-        {/*    <div>*/}
-        {/*        <p>До виплати</p>*/}
-        {/*        <h3>1000 ₴</h3>*/}
-        {/*    </div>*/}
-
-        {/*    <Button*/}
-        {/*        onClick={onPaid}*/}
-        {/*    >*/}
-        {/*        Виплатити*/}
-        {/*    </Button>*/}
-        {/*</div>*/}
-
-        <div className={styles.history}>
-            <div className={styles.historyBtn}>
+        <div className={clsx(styles.history, {
+            [styles.historyOpened]: isPayoutsOpen
+        })}>
+            <div className={styles.historyBtn} onClick={handlePayoutsOpen}>
                 Історія виплат
                 <i><ChevronDown/></i>
             </div>
+
+            <Payouts payouts={employee.payouts}/>
         </div>
 
         <div className={styles.actions}>
             <Button
+                title={'Розрахувати'}
                 onClick={onPaid}
                 iconType={'pay'}
             />
             <Button
+                title={'Редагувати'}
                 onClick={onEdit}
                 iconType={'edit'}
             />
 
             <Button
+                title={'Видалити'}
                 onClick={onDelete}
                 iconType={'delete'}
             />
         </div>
+
+        {isDeleting && <Loader className={styles.loader}/>}
     </div>)
 }

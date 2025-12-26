@@ -11,6 +11,7 @@ import {IVehicle} from "@/types/vehicles";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import {FC} from "react";
+import {Price} from "@/app/components/ui/Price/Price";
 
 interface PayoutsModalProps {
     modalProps: IEmployee;
@@ -66,21 +67,21 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
             key: 'price',
             label: 'Вартість',
             width: '130px',
-            render: price => `${price} ₴`
+            render: price => <Price value={price}/>
         },
         {
             key: 'commission',
-            label: `ЗП (${employee.commission}%)`,
+            label: `ЗП (${employee.commissionRate}%)`,
             width: '130px',
             align: 'right',
-            render: (commission: number) => <div className={styles.commission}>{commission} ₴</div>
+            render: (commission: number) => <div className={styles.commission}><Price value={commission}/></div>
         },
     ]
 
     return (<Modal
         headerText={<div className={styles.modalHeader}>
             <h3>Розрахунок Зарплати</h3>
-            <p>{employee.name} {employee?.role && ` - ${employee.role}`} (комісія: {employee.commission} %)</p>
+            <p>{employee.name} {employee?.role && ` - ${employee.role}`} (комісія: {employee.commissionRate} %)</p>
         </div>}
         className={styles.modal}
     >
@@ -98,11 +99,11 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
 
             <div className={styles.totalContainer}>
                 <p>
-                    Загальна сума робіт: <span>{balance?.totalAmount || 0} ₴</span>
+                    Загальна сума робіт: <Price value={balance?.totalAmount || 0}/>
                 </p>
 
                 <h2>
-                    До виплати: <span>{balance?.totalCommission || 0} ₴</span>
+                    До виплати: <Price value={balance?.totalCommission || 0}/>
                 </h2>
             </div>
 

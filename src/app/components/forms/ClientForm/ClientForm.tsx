@@ -76,14 +76,14 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                     <i className={styles.titleIcon}><Motorbike /></i>
                     Гараж
 
-                    <Button
+                    {!client?.id && <Button
                         iconType={'plus'}
                         className={styles.addBtn}
                         type="button"
                         onClick={() => append({})}
                     >
                         Додати
-                    </Button>
+                    </Button>}
                 </h3>
 
                 {fields.map((field, index) => (
@@ -93,6 +93,7 @@ export const ClientForm: React.FC<ClientFormProps> = ({
                         register={register}
                         setValue={setValue}
                         control={control}
+                        disabled={!!client?.id}
                         {...(fields.length > 1 ? { onRemove: () => remove(index) } : {})}
                     />
                 ))}

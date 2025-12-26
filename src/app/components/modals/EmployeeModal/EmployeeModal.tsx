@@ -1,7 +1,7 @@
 import {Modal} from "@/app/components/ui/Modal/Modal";
 import {useModalStore} from "@/store/modalStore";
 import styles from "./employeeModal.module.scss";
-import {IEmployee} from "@/types/employee";
+import {IEmployee, IEmployeeFormValues} from "@/types/employee";
 import {EmployeeForm} from "@/app/components/forms/EmployeeForm/EmployeeForm";
 import {useEmployeesMutations} from "@/hooks/employees/useEmployeesMutations";
 import {FC} from "react";
@@ -15,7 +15,7 @@ export const EmployeeModal: FC<EmployeeModalProps> = ({modalId, modalProps: empl
     const {closeModal} = useModalStore()
     const {createEmployee, updateEmployee} = useEmployeesMutations();
 
-    const submitHandler = async (data: IEmployee) => {
+    const submitHandler = async (data: IEmployeeFormValues) => {
         try {
             if (employee?.id) {
                 await updateEmployee.mutateAsync({...data, id: employee.id});

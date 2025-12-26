@@ -18,6 +18,7 @@ export const Clients = () => {
     const [search, setSearch] = useState("");
 
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deletingVehicleId, setDeletingVehicleId] = useState<string | null>(null);
 
     const openModal = useModalStore(state => state.openModal);
     const openConfirm = useModalStore(state => state.openConfirm);
@@ -44,7 +45,14 @@ export const Clients = () => {
     const handleDeleteVehicle = async (data: { clientId: string, vehicleId: string }) => {
         const confirmed = await openConfirm(<>Ви впевнені, що хочете видалити транспортний засіб? <br/> Всі замовлення на даний транспортний засіб будуть видалені!</>);
 
-        if (confirmed) await deleteVehicle.mutateAsync(data)
+        if (confirmed) {
+            setDeletingVehicleId(data.vehicleId);
+            try {
+                await deleteVehicle.mutateAsync(data)
+            } finally {
+                setDeletingVehicleId(null);
+            }
+        }
     }
 
     const handleEdit = (client?: IClient) => {
@@ -68,12 +76,6 @@ export const Clients = () => {
             minWidth: '200px',
         },
         {
-            key: 'vehicles',
-            label: 'Автопарк',
-            width: '200px',
-            render: (arr) => <div className={styles.vehicles}>{arr.length} ТЗ</div>
-        },
-        {
             key: 'updatedAt',
             label: 'Останній візит',
             width: '200px',
@@ -87,8 +89,14 @@ export const Clients = () => {
             minWidth: '200px',
         },
         {
+            key: 'vehicles',
+            label: 'ТЗ',
+            width: '60px',
+            align: 'center',
+            render: (arr) => <div className={styles.vehicles}>{arr.length}</div>
+        },
+        {
             key: 'actions',
-            label: 'Дії',
             width: '100px',
             render: (_: any, row?: IClient) => <div className={tableStyles.actionsCol}>
                 <Button
@@ -132,7 +140,9 @@ export const Clients = () => {
                 isRowExpandable: row => !!row?.vehicles?.length,
                 renderExpanded: row => (
                     <Vehicles
+                        client={row}
                         vehicles={row?.vehicles || []}
+                        deletingId={deletingVehicleId}
                         onDelete={(id) => handleDeleteVehicle({
                             clientId: row.id,
                             vehicleId: id

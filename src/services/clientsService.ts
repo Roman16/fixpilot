@@ -1,5 +1,6 @@
 import {baseService} from "@/services/baseService";
 import {IClientsResponse, IClient} from "@/types/client";
+import {IVehicle} from "@/types/vehicles";
 
 
 class clientsService extends baseService {
@@ -10,7 +11,7 @@ class clientsService extends baseService {
     }
 
     createClient(data: IClient) {
-        return this.post('/clients', data);
+        return this.post<{data: IClient}>('/clients', data);
     }
 
     updateClient(data: IClient,) {
@@ -19,6 +20,14 @@ class clientsService extends baseService {
 
     deleteClient(id: string) {
         return this.delete(`/clients/${id}`);
+    }
+
+    createVehicle(data: {clientId: string, vehicle: IVehicle}) {
+        return this.post(`/clients/${data.clientId}/vehicles`, data.vehicle);
+    }
+
+    updateVehicle(data: { vehicle: IVehicle}) {
+        return this.patch(`/vehicles/${data.vehicle.id}`, data.vehicle);
     }
 
     deleteVehicle(data: {clientId: string, vehicleId: string}) {

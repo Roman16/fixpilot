@@ -1,85 +1,81 @@
 'use client';
 
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import clsx from 'clsx';
 import styles from './fileUploader.module.scss';
-import {ImageUp} from "lucide-react";
-import {Button} from "@/app/components/ui";
+import {ImageUp} from 'lucide-react';
+import {Button} from '@/app/components/ui';
+import {Loader} from '@/app/components/ui/Loader/Loader';
 
 interface FileUploaderProps {
-    value?: File | null;
-    onChange: (file: File | null) => void;
+    file?: File | null;
+    imageUrl?: string | null;
+    onFileChange: (file: File | null) => void;
+    onRemoveImage?: () => void;
     accept?: string[];
     label?: string;
-    maxSizeMB?: number;
     className?: string;
+    isPending?: boolean;
 }
 
 export const FileUploader: React.FC<FileUploaderProps> = ({
-                                                              value,
-                                                              onChange,
+                                                              file,
+                                                              imageUrl,
+                                                              onFileChange,
+                                                              onRemoveImage,
                                                               accept,
                                                               label,
-                                                              maxSizeMB = 10,
                                                               className,
+                                                              isPending,
                                                           }) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [drag, setDrag] = useState(false);
 
-    const openFileDialog = () => inputRef.current?.click();
+    const previewUrl = useMemo(() => {
+        if (!file) return null;
+        return URL.createObjectURL(file);
+    }, [file]);
 
-    const validateFile = useCallback(
-        (file: File) => {
-            setError(null);
-
-            if (file.size > maxSizeMB * 1024 * 1024) {
-                setError(`Максимальний розмір: ${maxSizeMB}MB`);
-                return false;
+    useEffect(() => {
+        return () => {
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
             }
+        };
+    }, [previewUrl]);
 
-            if (accept?.length) {
-                const valid = accept.some(format => {
-                    if (format.includes("/*")) {
-                        const base = format.split("/")[0];
-                        return file.type.startsWith(base);
-                    }
-                    return file.name.toLowerCase().endsWith(format.toLowerCase());
-                });
-
-                if (!valid) {
-                    setError("Формат файлу не дозволений");
-                    return false;
-                }
-            }
-
-            return true;
-        },
-        [accept, maxSizeMB]
-    );
-
-    const handleFile = (file: File) => {
-        if (validateFile(file)) {
-            onChange(file);
+    const openFileDialog = () => {
+        if (!isPending) {
+            inputRef.current?.click();
         }
     };
 
     const onFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) handleFile(file);
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile) {
+            onFileChange(selectedFile);
+        }
     };
 
-    const onDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setDrag(false);
-        const file = e.dataTransfer.files?.[0];
-        if (file) handleFile(file);
-    };
+    const renderPreview = () => {
+        if (file && previewUrl) {
+            return (
+                <Preview
+                    src={previewUrl}
+                    onRemove={() => onFileChange(null)}
+                />
+            );
+        }
 
-    const removeFile = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onChange(null);
-        setError(null);
+        if (imageUrl) {
+            return (
+                <Preview
+                    src={imageUrl}
+                    onRemove={onRemoveImage}
+                />
+            );
+        }
+
+        return <ImageUp />;
     };
 
     return (
@@ -87,61 +83,52 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
             {label && <div className={styles.label}>{label}</div>}
 
             <div
-                className={clsx(styles.inputWrapper, {[styles.drag]: drag})}
+                className={styles.inputWrapper}
                 onClick={openFileDialog}
-                onDragEnter={() => setDrag(true)}
-                onDragLeave={() => setDrag(false)}
-                onDragOver={e => e.preventDefault()}
-                onDrop={onDrop}
             >
-                {value ? (
-                    value.type.startsWith("image/") ? (
-                        <div className={styles.previewWrapper}>
-                            <img
-                                src={URL.createObjectURL(value)}
-                                alt="preview"
-                                className={styles.previewImage}
-                            />
-
-                            <Button
-                                iconType={'delete'}
-                                type="button"
-                                className={styles.removeBtn}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeFile(e);
-                                }}
-                            />
-                        </div>
-                    ) : (
-                        <div className={styles.fileInfo}>
-                            <span>{value.name}</span>
-
-                            <Button
-                                iconType={'delete'}
-                                type="button"
-                                className={styles.removeBtn}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeFile(e);
-                                }}
-                            />
-                        </div>
-                    )
-                ) : (
-                    <ImageUp/>
-                )}
+                {renderPreview()}
+                {isPending && <Loader className={styles.loader} />}
             </div>
 
             <input
                 ref={inputRef}
                 type="file"
                 className={styles.hiddenInput}
-                accept={accept?.join(",")}
+                accept={accept?.join(',')}
                 onChange={onFileSelect}
+                disabled={isPending}
             />
-
-            {error && <div className={styles.error}>{error}</div>}
         </div>
     );
 };
+
+/**
+ * Preview sub-component
+ */
+const Preview = ({
+                     src,
+                     onRemove,
+                 }: {
+    src: string;
+    onRemove?: () => void;
+}) => (
+    <div className={styles.previewWrapper}>
+        <img
+            src={src}
+            alt="preview"
+            className={styles.previewImage}
+        />
+
+        {onRemove && (
+            <Button
+                iconType="delete"
+                type="button"
+                className={styles.removeBtn}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove();
+                }}
+            />
+        )}
+    </div>
+);

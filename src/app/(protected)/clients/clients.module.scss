@@ -1,7 +1,12 @@
 .vehicles {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
+  background: var(--color-block-bg2);
 }
 
 .vehiclesBlock {
@@ -21,11 +26,12 @@
 
   .list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
 
     .vehicleItem {
-      padding: 10px 20px;
-      border-radius: 20px;
+      padding: 10px 10px;
+      border-radius: 10px;
       border: 1px solid var(--color-border);
       display: flex;
       flex-direction: column;
@@ -46,7 +52,7 @@
 
         span {
           padding: 5px 10px;
-          border: 1px solid var(--color-block-bg);
+          border: 3px solid var(--color-block-bg);
           border-radius: 10px;
           font-weight: 600;
         }
@@ -57,11 +63,41 @@
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .deleteBtn {
+      .vehicleLoader {
         position: absolute;
-        right: 5px;
-        bottom: 5px;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 20px;
+
+        svg {
+          height: 60%;
+        }
+      }
+
+      .vehicleActions {
+        display: flex;
+        gap: 10px;
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
         border: 0;
+        opacity: 0;
+        transition: opacity .2s;
+
+        button {
+          width: 30px;
+          height: 30px;
+        }
+      }
+
+      &:hover .vehicleActions {
+        opacity: 1;
       }
     }
   }

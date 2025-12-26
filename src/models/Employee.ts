@@ -6,7 +6,7 @@ const EmployeeSchema = new BaseSchema({
     name: {type: String},
     phone: {type: String, unique: true},
     role: {type: String},
-    commission: {type: Number},
+    commissionRate: {type: Number},
 });
 
 

@@ -30,6 +30,7 @@ export interface IWork {
 export interface IMaterial {
     name?: string;
     price?: number;
+    count?: number;
 }
 
 export interface IOrdersResponse {

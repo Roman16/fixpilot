@@ -1,15 +1,11 @@
 "use client"
 
 import styles from "./employees.module.scss";
-import {Column, Table} from "@/app/components/ui/Table/Table";
-import tableStyles from "@/app/components/ui/Table/table.module.scss";
-import {Button} from "@/app/components/ui";
 import {IEmployee} from "@/types/employee";
 import {useEmployeesList} from "@/hooks/employees/useEmployeesList";
 import {useModalStore} from "@/store/modalStore";
 import {useState} from "react";
 import {useEmployeesMutations} from "@/hooks/employees/useEmployeesMutations";
-import {Payouts} from "@/app/(protected)/employees/components/Payouts";
 import {EmployeeItem} from "@/app/(protected)/employees/components/EmployeeItem";
 
 export const Employees = () => {
@@ -42,68 +38,14 @@ export const Employees = () => {
         }
     };
 
-    const columns: Column<IEmployee>[] = [
-        {
-            key: 'name',
-            label: 'Ім’я',
-            minWidth: '150px',
-        },
-        {
-            key: 'phone',
-            label: 'Телефон',
-            minWidth: '150px',
-        },
-        {
-            key: 'role',
-            label: 'Посада',
-            minWidth: '150px',
-        },
-        {
-            key: 'commission',
-            label: 'Комісія',
-            width: '200px',
-            minWidth: '100px',
-            align: 'center',
-            render: commission => `${commission} %`
-        },
-        {
-            key: 'actions',
-            label: 'Дії',
-            width: '200px',
-            minWidth: '150px',
-            align: 'center',
-            render: (_: any, row?: IEmployee) => <div className={tableStyles.actionsCol}>
-                <Button
-                    iconType={'pay'}
-                    onClick={() => openModal('payoutsModal', row)}
-                    disabled={deletingId === row?.id}
-                    title={'Розрахувати виплату'}
-                />
-
-                <Button
-                    iconType={'edit'}
-                    onClick={() => openModal('employeeModal', row)}
-                    disabled={deletingId === row?.id}
-                    title={'Редагувати працівника'}
-                />
-
-                <Button
-                    iconType={'delete'}
-                    isLoading={deletingId === row?.id}
-                    onClick={() => row?.id && handleDelete(row.id)}
-                    title={'Видалити працівника'}
-                />
-            </div>
-        },
-    ]
-
     return (<div className={styles.employeesList}>
-        {data?.data.map((employee: IEmployee, index) => <EmployeeItem
+        {data?.data.map((employee: IEmployee) => <EmployeeItem
             key={employee.id}
             employee={employee}
             onEdit={() => openModal('employeeModal', employee)}
             onDelete={() => employee?.id && handleDelete(employee.id)}
             onPaid={() => openModal('payoutsModal', employee)}
+            isDeleting={employee.id === deletingId}
         />)}
     </div>)
 };

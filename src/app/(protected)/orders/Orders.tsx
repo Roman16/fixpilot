@@ -5,14 +5,18 @@ import {Column, Table} from "@/app/components/ui/Table/Table";
 import {IMaterial, IOrder, IWork} from "@/types/order";
 import {useModalStore} from "@/store/modalStore";
 import {useOrdersList} from "@/hooks/orders/useOrdersList";
-import {useState} from "react";
+import React, {useState} from "react";
 import tableStyles from "@/app/components/ui/Table/table.module.scss";
 import {Button} from "@/app/components/ui";
 import {useOrdersMutations} from "@/hooks/orders/useOrdersMutations";
 import dayjs from "dayjs";
 import {formatPlate} from "@/utils/helpers";
-import clsx from "clsx";
-import {Loader} from "@/app/components/ui/Loader/Loader";
+import {StatusCell} from "@/app/(protected)/orders/components/StatusCell";
+import {OrderDetails} from "@/app/(protected)/orders/components/OrderDetails";
+import {Price} from "@/app/components/ui/Price/Price";
+import {useProfile} from "@/hooks/profile/useProfile";
+import {pdf} from "@react-pdf/renderer";
+import {PdfTemplate} from "@/utils/pdf/PdfTemplate";
 
 
 export const Orders = () => {
@@ -28,6 +32,8 @@ export const Orders = () => {
 
     const {deleteOrder, updateOrder} = useOrdersMutations();
     const {data, isLoading, isFetching} = useOrdersList(page, limit, search);
+    const {data: profile} = useProfile();
+
 
     const orders = data?.data || []
     const pagination = data?.pagination;
@@ -64,6 +70,23 @@ export const Orders = () => {
     const handleSearch = (value: string) => {
         setSearch(value)
         setPage(1)
+    }
+
+    const handlePrint = async (order: IOrder) => {
+        const blob = await pdf(
+            <PdfTemplate
+                order={{
+                    ...order,
+                    createdAt: order?.createdAt || dayjs().toString(),
+                    orderNumber: order?.orderNumber || 666
+                }}
+                profile={profile}
+            />
+        ).toBlob();
+
+        const url = URL.createObjectURL(blob);
+
+        window.open(url, "_blank");
     }
 
     const columns: Column<IOrder>[] = [
@@ -140,21 +163,34 @@ export const Orders = () => {
             width: '150px',
             minWidth: '150px',
             align: 'center',
-            render: (_, order) => <><b>{calcTotalSum(order?.works || [], order?.materials || [])}</b> ₴</>
+            render: (_, order) => <b><Price value={calcTotalSum(order?.works || [], order?.materials || [])}/></b>
         },
         {
             key: 'actions',
-            width: '100px',
+            minWidth: '140px',
             render: (_, order) => <div className={tableStyles.actionsCol}>
                 <Button
+                    iconType={'print'}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        handlePrint(order)
+                    }}
+                />
+                <Button
                     iconType={'edit'}
-                    onClick={() => openModal('orderModal', order)}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        openModal('orderModal', order)
+                    }}
                     disabled={deletingId === order?.id}
                 />
                 <Button
                     iconType={'delete'}
                     isLoading={deletingId === order.id}
-                    onClick={() => handleDelete(order.id)}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        handleDelete(order.id)
+                    }}
                 />
             </div>
         },
@@ -175,22 +211,18 @@ export const Orders = () => {
                 totalPages: pagination?.pages ?? 1,
                 onPageChange: setPage,
             }}
+
+            expandable={{
+                singleExpand: true,
+                expandOnRowClick: true,
+                isRowExpandable: row => !!row?.works?.length,
+                renderExpanded: row => (
+                    <OrderDetails
+                        order={row}
+                    />
+                )
+            }}
         />
     </>)
 }
 
-
-const StatusCell: React.FC<{ status: string, isLoading: boolean, onClick: () => void }> = ({
-                                                                                               status,
-                                                                                               isLoading,
-                                                                                               onClick
-                                                                                           }) => {
-
-
-    const text = status === 'completed' ? 'Виконане' : 'В роботі'
-
-    return <div className={clsx(styles[status], styles.statusTd)} onClick={() => status === 'new' && onClick()}>
-        {isLoading && <Loader/>}
-        {text}
-    </div>
-}

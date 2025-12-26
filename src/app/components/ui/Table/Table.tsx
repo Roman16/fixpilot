@@ -34,6 +34,7 @@ interface TableProps<T> {
         isRowExpandable?: (row: T) => boolean;
         renderExpanded: (row: T) => ReactNode;
         expandOnRowClick?: boolean;
+        singleExpand?: boolean;
     }
 }
 
@@ -57,10 +58,22 @@ export function Table<T>({
     const toggleRow = (key: string | number) => {
         setExpandedRows(prev => {
             const next = new Set(prev);
-            next.has(key) ? next.delete(key) : next.add(key);
+
+            if (expandable?.singleExpand) {
+                if (next.has(key)) {
+                    next.delete(key);
+                } else {
+                    next.clear();
+                    next.add(key);
+                }
+            } else {
+                next.has(key) ? next.delete(key) : next.add(key);
+            }
+
             return next;
         });
     };
+
 
     const handleSearch = (value: string) => {
         if (debounceRef.current) {

@@ -1,47 +1,22 @@
 import {IPayout} from "@/types/payout";
 import {FC} from "react";
 import dayjs from "dayjs";
-import {Column, Table} from "@/app/components/ui/Table/Table";
-import styles from "@/app/(protected)/clients/clients.module.scss";
+import styles from "../employees.module.scss"
+import {Price} from "@/app/components/ui/Price/Price";
 
 interface PayoutsProps {
     payouts?: IPayout[]
 }
 
-export const Payouts: FC<PayoutsProps> = ({payouts}) => {
-    const vehicleColumns: Column<IPayout>[] = [
-        {
-            key: 'createdAt',
-            label: 'Дата',
-            render: date => dayjs(date).format('DD.MM.YYYY')
-        },
-        {
-            key: 'totalAmount',
-            label: 'Вартість робіт',
-            render: s => `${s} ₴`
-        },
-        {
-            key: 'commission',
-            label: 'Комісія',
-            render: s => `${s} %`
-        },
-        {
-            key: 'totalCommission',
-            label: 'Сума виплати',
-            render: s => `${s} ₴`
-        },
+export const Payouts: FC<PayoutsProps> = ({payouts = []}) => {
+    return (<div className={styles.payoutsList}>
+            {payouts.length === 0 && <p>Історія порожня</p>}
 
-    ];
+            {payouts.map(i => <div>
+                {dayjs(i.createdAt).format('DD.MM.YYYY HH:mm')}
 
-    return (<div className={styles.vehiclesBlock}>
-            <h3>Історія виплат</h3>
-
-            <Table<IPayout>
-                columns={vehicleColumns}
-                data={payouts || []}
-                rowKey={v => v.id}
-                emptyText="Немає транспорту"
-            />
+                <Price value={i.totalCommission}/>
+            </div>)}
         </div>
     );
 }

@@ -9,8 +9,8 @@ import dayjs from "dayjs";
 Font.register({
     family: "Arimo",
     fonts: [
-        { src: "/fonts/arimo/Arimo-Regular.ttf", fontWeight: "normal" },
-        { src: "/fonts/arimo/Arimo-Bold.ttf", fontWeight: "bold" },
+        {src: "/fonts/arimo/Arimo-Regular.ttf", fontWeight: "normal"},
+        {src: "/fonts/arimo/Arimo-Bold.ttf", fontWeight: "bold"},
     ],
 });
 
@@ -153,7 +153,7 @@ export const PdfTemplate: React.FC<PdfTemplateProps> = ({order, profile}) => {
 
                         <View style={styles.contact}>
                             <Text>Телефон: {profile?.phone}</Text>
-                            {/* <Text>Instagram: @moto.house.kiev</Text> */}
+                            <Text>Адреса: {profile?.address}</Text>
                         </View>
 
                         <View style={styles.workTime}>
@@ -163,7 +163,7 @@ export const PdfTemplate: React.FC<PdfTemplateProps> = ({order, profile}) => {
                         </View>
                     </View>
 
-                     <View>
+                    <View>
                         <Image style={styles.img} src={profile?.logo || ''}/>
                     </View>
                 </View>

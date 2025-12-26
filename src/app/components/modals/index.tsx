@@ -6,13 +6,15 @@ import {ConfirmActionModal} from "@/app/components/modals/ConfirmActionModal/Con
 import {OrderModal} from "@/app/components/modals/OrderModal/OrderModal";
 import {EmployeeModal} from "@/app/components/modals/EmployeeModal/EmployeeModal";
 import {PayoutsModal} from "@/app/components/modals/PayoutsModal/PayoutsModal";
+import {VehiclesModal} from "@/app/components/modals/VehiclesModal/VehiclesModal";
 
 const modalMap = {
     confirmAction: ConfirmActionModal,
     clientModal: ClientModal,
     orderModal: OrderModal,
     employeeModal: EmployeeModal,
-    payoutsModal: PayoutsModal
+    payoutsModal: PayoutsModal,
+    vehiclesModal: VehiclesModal,
 };
 
 export const ModalContainer = () => {

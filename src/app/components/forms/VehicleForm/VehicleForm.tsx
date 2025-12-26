@@ -10,6 +10,7 @@ interface VehicleFormProps {
     setValue: any;
     control: any;
     onRemove?: () => void;
+    disabled?: boolean;
 }
 
 interface Brand {
@@ -22,7 +23,8 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                                                             register,
                                                             setValue,
                                                             control,
-                                                            onRemove
+                                                            onRemove,
+                                                            disabled
                                                         }) => {
     const [brands, setBrands] = useState<Brand[]>([]);
     const [brandOptions, setBrandOptions] = useState<string[]>([]);
@@ -65,7 +67,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
 
     return (
         <div className={styles.vehicleWrap}>
-            {onRemove && <Button
+            {onRemove && !disabled && <Button
                 type="button"
                 iconType={'delete'}
                 className={styles.deleteBtn}
@@ -80,6 +82,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                     onChange={handleSelectBrand}
                     suggestions={brandOptions}
                     openOnFocus={true}
+                    disabled={disabled}
                 />
 
                 <Autocomplete
@@ -89,6 +92,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                     onChange={handleSelectModel}
                     suggestions={modelOptions}
                     openOnFocus={true}
+                    disabled={disabled}
                 />
             </div>
 
@@ -97,12 +101,14 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                     placeholder={'АА 1111 АА'}
                     label={'Номерний знак'}
                     {...register(`${prefix}.plate`)}
+                    disabled={disabled}
                 />
 
                 <Input
                     placeholder={'2025'}
                     label={'Рік випуску'}
                     {...register(`${prefix}.year`)}
+                    disabled={disabled}
                 />
 
                 <Input
@@ -110,6 +116,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                     placeholder={'69000'}
                     label={'Пробіг'}
                     {...register(`${prefix}.mileage`)}
+                    disabled={disabled}
                 />
             </div>
 
@@ -117,6 +124,7 @@ export const VehicleForm: React.FC<VehicleFormProps> = ({
                 placeholder={'JWJF353664JBB36RT'}
                 label={'VIN'}
                 {...register(`${prefix}.vin`)}
+                disabled={disabled}
             />
         </div>
     );

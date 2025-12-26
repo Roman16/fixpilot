@@ -6,6 +6,7 @@ export type ModalType =
     | 'confirmAction'
     | 'orderModal'
     | 'employeeModal'
+    | 'vehiclesModal'
     | 'payoutsModal';
 
 interface ModalItem {
@@ -38,7 +39,6 @@ export const useModalStore = create<ModalState>((set, get) => ({
     },
 
     closeModal: (id) => {
-        console.log(id);
         set(state => ({
             modals: id
                 ? state.modals.filter(m => m.id !== id)

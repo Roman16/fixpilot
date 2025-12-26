@@ -86,7 +86,7 @@
   }
 
   &:hover {
-    background-color: var(--color-block-bg2);
+    background-color: var(--color-table-row-hover);
   }
 }
 
@@ -105,7 +105,9 @@
   }
 
   &.center {
+    display: flex;
     text-align: center;
+    justify-content: center;
   }
 
   &.right {
@@ -152,7 +154,7 @@
 .actionsCol {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .loader {

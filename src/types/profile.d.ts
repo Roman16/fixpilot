@@ -3,5 +3,6 @@ export interface IProfile {
     email?: string,
     phone?: string,
     companyName?: string,
+    address?: string,
     logo?: string,
 }

@@ -8,7 +8,7 @@ class profileService extends baseService {
     }
 
     updateProfile(formData: FormData): Promise<IProfile> {
-        return this.post('/profile', formData) as Promise<IProfile>;
+        return this.patch('/profile', formData) as Promise<IProfile>;
     }
 }
 

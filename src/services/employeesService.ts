@@ -1,17 +1,17 @@
 import {baseService} from "@/services/baseService";
-import {IEmployee, IEmployeesResponse} from "@/types/employee";
+import {ICreateEmployeeDto, IEmployee, IUpdateEmployeeDto} from "@/types/employee";
 import {IPayout} from "@/types/payout";
 
 class employeesService extends baseService {
     getEmployees() {
-        return this.get<IEmployeesResponse>('/employees');
+        return this.get<{ data: IEmployee }>('/employees');
     }
 
-    createEmployee(data: IEmployee) {
-        return this.post('/employees', data);
+    createEmployee(data: ICreateEmployeeDto) {
+        return this.post<{ data: IEmployee }>('/employees', data);
     }
 
-    updateEmployee(data: IEmployee) {
+    updateEmployee(data: IUpdateEmployeeDto) {
         return this.patch(`/employees/${data.id}`, data);
     }
 

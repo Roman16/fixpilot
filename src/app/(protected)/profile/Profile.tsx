@@ -11,6 +11,7 @@ interface ProfileFormValues {
     companyName?: string;
     email?: string;
     phone?: string;
+    address?: string;
     logo?: File | null;
 }
 
@@ -29,6 +30,7 @@ export const Profile = () => {
             companyName: '',
             email: '',
             phone: '',
+            address: '',
             logo: null,
         },
     });
@@ -39,6 +41,7 @@ export const Profile = () => {
                 companyName: profile.companyName || '',
                 email: profile.email || '',
                 phone: profile.phone || '',
+                address: profile.address || '',
                 logo: null,
             });
         }
@@ -49,10 +52,17 @@ export const Profile = () => {
         formData.append("companyName", values.companyName || '');
         formData.append("email", values.email || '');
         formData.append("phone", values.phone || '');
+        formData.append("address", values.address || '');
         if (values.logo) formData.append("logo", values.logo);
 
         updateProfileMutation.mutate(formData);
     };
+
+    const handleDeleteLogo = async () => {
+        const formData = new FormData();
+        formData.append("removeLogo", 'true');
+        updateProfileMutation.mutate(formData);
+    }
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -62,10 +72,13 @@ export const Profile = () => {
                     control={control}
                     render={({field}) => (
                         <FileUploader
-                            value={field.value}
-                            onChange={field.onChange}
-                            accept={["image/*"]}
+                            file={field.value}
+                            imageUrl={profile?.logo}
+                            onFileChange={field.onChange}
+                            onRemoveImage={handleDeleteLogo}
+                            accept={['image/*']}
                             label="Логотип"
+                            isPending={updateProfileMutation.isPending}
                         />
                     )}
                 />
@@ -97,6 +110,11 @@ export const Profile = () => {
                             })}
                         />
                     </div>
+
+                    <Input
+                        label={'Адреса'}
+                        {...register("address")}
+                    />
                 </div>
             </div>
 

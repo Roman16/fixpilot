@@ -76,8 +76,6 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             />
         ).toBlob();
 
-        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
-
         const url = URL.createObjectURL(blob);
 
         window.open(url, "_blank");
@@ -157,9 +155,22 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                 />
 
                 {order?.status !== 'completed' && <>
-                  <Button type="button" onClick={onClose} disabled={loading}>
+                  <Button
+                    type="button"
+                    onClick={onClose}
+                    disabled={loading}
+                  >
                     Скасувати
                   </Button>
+
+                  {order?.id && <Button
+                    type={'button'}
+                    variant="primary"
+                    isLoading={loading}
+                    onClick={() => onSubmit({...order, status: 'completed'})}
+                  >
+                    Виконано
+                  </Button>}
 
                   <Button
                     type="submit"

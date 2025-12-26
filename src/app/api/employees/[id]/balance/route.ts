@@ -54,7 +54,7 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
                     workCommission: {
                         $multiply: [
                             "$works.price",
-                            {$divide: ["$employee.commission", 100]}
+                            {$divide: ["$employee.commissionRate", 100]}
                         ]
                     }
                 }

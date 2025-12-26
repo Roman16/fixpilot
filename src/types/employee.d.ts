@@ -1,14 +1,28 @@
 import {IPayout} from "@/types/payout";
 
-export interface IEmployee {
-    id: string;
-    name?: string;
-    phone?: string;
-    role?: string;
-    commission?: number | null;
-    payouts?: IPayout[]
+export interface IEmployeeFormValues {
+    name: string;
+    phone: string;
+    role: string;
+    commissionRate: number | null;
 }
 
-export interface IEmployeesResponse {
-    data: IEmployee[];
+export interface IEmployee extends IEmployeeFormValues {
+    id: string;
+    payouts?: IPayout[];
+    earnings?: {
+        totalEarned: number;
+        totalPaid: number;
+    };
+}
+
+export interface ICreateEmployeeDto {
+    name: string;
+    phone: string;
+    role: string;
+    commissionRate: number | null;
+}
+
+export interface IUpdateEmployeeDto extends ICreateEmployeeDto {
+    id: string;
 }

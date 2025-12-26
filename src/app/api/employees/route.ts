@@ -2,8 +2,7 @@ import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
 import {NextResponse} from "next/server";
 import Employee from "@/models/Employee";
-import Payout from "@/models/Payout";
-import Vehicle from "@/models/Vehicle";
+import mongoose from "mongoose";
 
 export async function POST(req: Request) {
     try {
@@ -15,12 +14,12 @@ export async function POST(req: Request) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
         const body = await req.json();
-        const {name, phone, commission, role} = body;
+        const {name, phone, commissionRate, role} = body;
 
         const newEmployee = await Employee.create({
             name,
             phone,
-            commission,
+            commissionRate,
             role,
             userId: session.id,
         });
@@ -35,7 +34,6 @@ export async function POST(req: Request) {
     }
 }
 
-
 export async function GET() {
     try {
         await connectToDatabase();
@@ -44,21 +42,34 @@ export async function GET() {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
 
-        const employees = await Employee.find({
-            userId: session.id,
-        })
+        const userObjectId = new mongoose.Types.ObjectId(session.id);
 
-        const res = await Promise.all(employees.map(async (employee) => {
-            const payouts = await Payout.find({
-                userId: session.id,
-                employeeId: employee._id
-            });
-
-            return {
-                ...employee.toJSON(),
-                payouts,
-            };
-        }));
+        const res = await Employee.aggregate([
+            {
+                $match:{
+                    userId: userObjectId,
+                }
+            },
+            {
+                $lookup: {
+                    from: "payouts",
+                    localField: "_id",
+                    foreignField: "employeeId",
+                    as: "payouts"
+                }
+            },
+            {
+                $addFields: {
+                    id: "$_id"
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    __v: 0,
+                }
+            }
+        ])
 
         return NextResponse.json({
             data: res,
