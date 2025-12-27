@@ -51,6 +51,7 @@ export const Works: FC<WorksProps> = ({
 
                     <Select<IEmployee>
                         options={employees.map((e: IEmployee) => ({
+                            ...e,
                             value: e.id,
                             label: `${e.name} ${e?.role && `(${e.role})`}`,
                             id: e.id
