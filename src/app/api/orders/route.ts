@@ -109,20 +109,41 @@ export async function POST(req: Request) {
         }
         const body = await req.json();
         const {clientId, vehicleId, mileage, works, materials} = body;
+        const normalizedMileage = Number(mileage);
 
-        const lastOrder = await Order.findOne().sort({ createdAt: -1 });
+        const lastOrder = await Order.findOne().sort({createdAt: -1});
         const nextOrderNumber = lastOrder ? lastOrder.orderNumber + 1 : 1;
 
         const newOrder = await Order.create({
             clientId,
             vehicleId,
-            mileage,
+            mileage: normalizedMileage,
             works,
             materials,
             status: "new",
             userId: session.id,
             orderNumber: nextOrderNumber,
         });
+
+        await Client.findOneAndUpdate(
+            {_id: clientId, userId: session.id},
+            {$set: {visitAt: new Date() }}
+        );
+
+        await Vehicle.findOneAndUpdate(
+            {
+                _id: vehicleId,
+                userId: session.id,
+                $or: [
+                    { mileage: { $exists: false } },
+                    { mileage: null },
+                    { $expr: { $lt: ['$mileage', normalizedMileage] } }
+                ]
+            },
+            {
+                $set: { mileage: normalizedMileage }
+            }
+        );
 
         const client = await Client.findById(clientId);
         const vehicle = await Vehicle.findById(vehicleId);

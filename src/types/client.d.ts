@@ -6,6 +6,7 @@ export interface IClient {
     name: string;
     phone: string;
     comment?: string;
+    visitAt?: string;
     vehicles?: IVehicle[];
 }
 

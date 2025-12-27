@@ -104,10 +104,17 @@ select {
 //AUTH
 .auth-page {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: linear-gradient(90deg, rgba(36, 36, 36, 1) 0%, rgb(46, 46, 46, 0.9) 40%, rgb(43, 42, 42) 100%);
+
+  & > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
   form {
     width: 95%;
@@ -130,6 +137,63 @@ select {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+  }
+
+  &__form-container {
+    h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: #A1A1AA;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .auth-details {
+    height: 100%;
+    padding: 40px;
+    background: linear-gradient(118deg, rgb(18, 18, 18, .8) 0%, rgba(255, 255, 255, .05) 250%);
+    align-items: flex-start;
+
+    &__container {
+      max-width: 580px;
+    }
+
+    h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 20px;
+      color: #A1A1AA;
+    }
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 20px 0 0 0;
+
+      li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 16px;
+        background: oklab(0.999994 0.0000455678 0.0000200868 / 0.05);
+        backdrop-filter: blur(8px);
+        font-size: 18px;
+        border-radius: 10px;
+        border: 1px solid oklab(0.999994 0.0000455678 0.0000200868 / 0.1);
+      }
+    }
+
+    @media (max-width: 700px) {
+      display: none;
     }
   }
 }

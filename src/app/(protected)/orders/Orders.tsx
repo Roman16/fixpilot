@@ -167,6 +167,7 @@ export const Orders = () => {
         },
         {
             key: 'actions',
+            width: '140px',
             minWidth: '140px',
             render: (_, order) => <div className={tableStyles.actionsCol}>
                 <Button

@@ -76,11 +76,11 @@ export const Clients = () => {
             minWidth: '200px',
         },
         {
-            key: 'updatedAt',
+            key: 'visitAt',
             label: 'Останній візит',
             width: '200px',
             minWidth: '150px',
-            render: (value: string) => dayjs(value).format('DD.MM.YYYY')
+            render: (value: string) => value ? dayjs(value).format('DD.MM.YYYY') : '—'
         },
         {
             key: 'comment',

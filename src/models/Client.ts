@@ -6,6 +6,7 @@ const ClientSchema = new BaseSchema({
     name: {type: String},
     phone: {type: String, required: true, unique: true},
     comment: {type: String},
+    visitAt: {type: Date, default: null},
 });
 
 
