@@ -143,6 +143,10 @@ select {
       align-items: center;
       justify-content: space-between;
     }
+
+    @media (max-width: 700px) {
+      padding: 40px 20px;
+    }
   }
 
   &__form-container {
