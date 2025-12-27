@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import employeesService from "@/services/employeesService";
-import {IEmployeesResponse} from "@/types/employee";
+import {IEmployeesResponse} from "../../types/employee";
 
 export const useEmployeesList = () => {
     return useQuery<IEmployeesResponse>({
