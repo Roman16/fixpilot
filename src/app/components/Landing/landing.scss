@@ -57,6 +57,7 @@
     align-items: center;
     min-height: calc(100vh - 60px);
     position: relative;
+    padding: 20px 10px;
 
     &__bg {
       position: absolute;
@@ -137,6 +138,16 @@
         }
       }
     }
+
+    @media (max-width: 708px) {
+      min-height: initial;
+      padding: 100px 20px;
+
+      &__title {
+        font-size: 40px;
+        line-height: 50px;
+      }
+    }
   }
 
   .features {
@@ -206,6 +217,10 @@
           font-size: 16px;
         }
       }
+    }
+
+    @media (max-width: 708px) {
+      padding: 40px 20px;
     }
   }
 
