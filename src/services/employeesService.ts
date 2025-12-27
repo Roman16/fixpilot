@@ -4,7 +4,7 @@ import {IPayout} from "@/types/payout";
 
 class employeesService extends baseService {
     getEmployees() {
-        return this.get<{ data: IEmployee }>('/employees');
+        return this.get<{ data: IEmployee[] }>('/employees');
     }
 
     createEmployee(data: ICreateEmployeeDto) {

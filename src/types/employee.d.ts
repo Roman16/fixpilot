@@ -26,3 +26,7 @@ export interface ICreateEmployeeDto {
 export interface IUpdateEmployeeDto extends ICreateEmployeeDto {
     id: string;
 }
+
+export interface IEmployeesResponse {
+    data: IEmployee[];
+}
