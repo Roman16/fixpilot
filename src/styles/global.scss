@@ -85,8 +85,8 @@ select {
 
 .page {
   width: 100%;
-  min-height: 100%;
-  height: max-content;
+  height: 100%;
+  min-height: max-content;
   overflow: auto;
 }
 
@@ -162,7 +162,7 @@ select {
   }
 
   .auth-details {
-    height: 100%;
+    min-height: 100%;
     padding: 40px;
     background: linear-gradient(118deg, rgb(18, 18, 18, .8) 0%, rgba(255, 255, 255, .05) 250%);
     align-items: flex-start;
