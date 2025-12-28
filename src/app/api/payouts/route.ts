@@ -50,14 +50,14 @@ export async function POST(req: NextRequest) {
             });
         });
 
-        const commissionAmount = Math.round(totalAmount * (employee.commission / 100));
+        const commissionAmount = Math.round(totalAmount * (employee.commissionRate / 100));
 
         const payout = await Payout.create({
             userId: session.id,
             employeeId,
             totalAmount,
             totalCommission: commissionAmount,
-            commission: employee.commission,
+            commission: employee.commissionRate,
             orders: Array.from(orderIds)
         });
 

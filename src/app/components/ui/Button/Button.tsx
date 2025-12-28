@@ -9,12 +9,12 @@ import {
     Save,
     Eye,
     Printer,
-    DollarSign, UserRoundPlus,X
+    DollarSign, UserRoundPlus, X, HousePlus
 } from 'lucide-react';
 
 type ButtonVariant = 'primary' | 'ghost';
 
-type IconType = 'delete' | 'edit' | 'plus' | 'save' | 'eye' | 'print' | 'pay' | 'addUser' | 'close';
+type IconType = 'delete' | 'edit' | 'plus' | 'save' | 'eye' | 'print' | 'pay' | 'addUser' | 'close' | 'addVehicle';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: ButtonVariant;
@@ -28,10 +28,11 @@ const icons: Record<IconType, React.JSX.Element> = {
     plus: <Plus/>,
     save: <Save/>,
     eye: <Eye/>,
-    print: <Printer />,
-    pay: <DollarSign />,
-    addUser: <UserRoundPlus />,
-    close: <X />,
+    print: <Printer/>,
+    pay: <DollarSign/>,
+    addUser: <UserRoundPlus/>,
+    addVehicle: <HousePlus/>,
+    close: <X/>,
 };
 
 export const Button: React.FC<ButtonProps> = ({

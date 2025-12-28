@@ -101,7 +101,6 @@ select {
     flex-direction: column;
     gap: 20px;
     z-index: 1;
-    overflow: hidden;
   }
 }
 
@@ -272,4 +271,18 @@ select {
   svg {
     width: 10vw;
   }
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6c6c6c transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #373737;
+  border-radius: 5px;
 }

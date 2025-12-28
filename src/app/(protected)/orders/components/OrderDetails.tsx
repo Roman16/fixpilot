@@ -1,15 +1,20 @@
 import {IOrder} from "@/types/order";
 import styles from "../orders.module.scss";
 import {Package, Wrench} from "lucide-react";
+import {Price} from "@/app/components/ui/Price/Price";
 
 
 export const OrderDetails = ({order}: { order: IOrder }) => {
-    console.log(order);
+    console.log(order.materials);
     return (<div className={styles.orderDetails}>
         <div className={styles.listGroup}>
             <h4><Wrench/>Виконані роботи</h4>
 
             <div className={styles.list}>
+                <div className={styles.headerRow}>
+                    <div>Опис</div>
+                    <div>Ціна</div>
+                </div>
                 {order.works.map(work => <div className={styles.listRow}>
                     <div>{work.name}</div>
                     <div>{work.price} ₴</div>
@@ -26,10 +31,16 @@ export const OrderDetails = ({order}: { order: IOrder }) => {
             <h4><Package/> Матеріали</h4>
 
             <div className={styles.list}>
-                {order.materials.map(work => <div className={styles.listRow}>
-                    <div>{work.name}</div>
-                    <div>{work.count}</div>
-                    <div>{work.price} ₴</div>
+                <div className={styles.headerRow}>
+                    <div>Опис</div>
+                    <div>К-сть</div>
+                    <div>Ціна</div>
+                </div>
+
+                {order.materials.map(m => <div className={styles.listRow}>
+                    <div>{m.name}</div>
+                    <div>{m.count}</div>
+                    <div> <Price value={(m.price ?? 0) * (m.count ?? 1)} /></div>
                 </div>)}
 
                 <div className={styles.totalRow}>

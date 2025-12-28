@@ -5,7 +5,7 @@ import {Button} from "@/app/components/ui";
 import {IEmployee} from "@/types/employee";
 import {Column, Table} from "@/app/components/ui/Table/Table";
 import employeesService from "@/services/employeesService";
-import {useMutation, useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {IWork} from "@/types/order";
 import {IVehicle} from "@/types/vehicles";
 import dayjs from "dayjs";
@@ -19,6 +19,7 @@ interface PayoutsModalProps {
 
 export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
     const closeModal = useModalStore(state => state.closeModal)
+    const queryClient = useQueryClient();
 
     const {
         data: balance,
@@ -31,8 +32,11 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
     const payoutMutation = useMutation({
         mutationFn: () => employeesService.payoutEmployee(employee.id),
         onSuccess: () => {
-            toast.success('Заробітна плата успішно виплачена!');
-            closeModal();
+            queryClient.invalidateQueries({queryKey: ['employees']})
+                .then(() => {
+                    toast.success('Заробітна плата успішно виплачена!');
+                    closeModal();
+                })
         },
         onError: () => {
             toast.error('Помилка під час виплати');
@@ -66,7 +70,7 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         {
             key: 'price',
             label: 'Вартість',
-            width: '130px',
+            width: '110px',
             render: price => <Price value={price}/>
         },
         {

@@ -70,7 +70,7 @@
 
   .orderDetails {
     display: flex;
-    gap: 10%;
+    gap: 5%;
 
     .listGroup {
       flex: 1;
@@ -92,8 +92,16 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        border: 1px solid var(--color-border);
+        border-radius: 10px;
+        padding: 10px;
 
-        .listRow {
+        .headerRow {
+          color: var(--color-muted-text);
+        }
+
+        .listRow,
+        .headerRow {
           display: flex;
           gap: 10px;
 
@@ -101,6 +109,23 @@
             &:first-child {
               flex: 1;
             }
+
+            &:nth-child(2),
+            &:nth-child(3) {
+              width: 100px;
+            }
+
+            &:nth-child(2) {
+              text-align: center;
+            }
+
+            &:last-child {
+              text-align: right;
+            }
+          }
+
+          &:hover {
+            border-bottom: 1px solid var(--color-border);
           }
         }
 
@@ -109,6 +134,7 @@
           align-items: center;
           border-top: 1px dashed var(--color-border);
           padding: 10px 0 0 0;
+          font-weight: 600;
 
           div {
             &:first-child {

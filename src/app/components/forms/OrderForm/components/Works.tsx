@@ -6,6 +6,7 @@ import {Select} from "@/app/components/ui/Select/Select";
 import {IEmployee} from "@/types/employee";
 import {useFieldArray} from "react-hook-form";
 import {IWork} from "@/types/order";
+import {Price} from "@/app/components/ui/Price/Price";
 
 
 interface WorksProps {
@@ -97,7 +98,7 @@ export const Works: FC<WorksProps> = ({
 
                 <h5>Загальна вартість робіт:</h5>
                 <p>
-                    {watched?.reduce((sum, item) => sum + Number(item.price || 0), 0)} ₴
+                    <Price value={watched?.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
                 </p>
             </div>
         </div>

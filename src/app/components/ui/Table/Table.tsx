@@ -188,7 +188,7 @@ export function Table<T>({
 
 const Arrow = () => <div className={styles.arrow}>
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-right h-4 w-4"
+         strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right h-4 w-4"
          aria-hidden="true" data-replit-metadata="client/src/pages/Clients.tsx:247:76"
          data-component-name="ChevronRight">
         <path d="m9 18 6-6-6-6"></path>

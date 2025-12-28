@@ -2,6 +2,7 @@ import React from "react";
 import styles from "@/app/components/forms/OrderForm/orderForm.module.scss";
 import {Button, Input} from "@/app/components/ui";
 import {useFieldArray} from "react-hook-form";
+import {Price} from "@/app/components/ui/Price/Price";
 
 
 interface MaterialsProps {
@@ -76,7 +77,7 @@ export const Materials: React.FC<MaterialsProps> = ({
 
                 <h5>Загальна вартість матеріалів:</h5>
                 <p>
-                    {watched?.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item?.count ?? 0)), 0)} ₴
+                    <Price value={watched?.reduce((sum, item) => sum + (Number(item.price || 0) * Number(item?.count ?? 0)), 0)}/>
                 </p>
             </div>
         </div>

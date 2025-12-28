@@ -3,11 +3,15 @@ import {baseService} from "@/services/baseService";
 
 class authService extends baseService {
     login(data: ILoginInput) {
-        return this.post('/login', data);
+        return this.post('/auth/login', data);
     }
 
     registration(data: IRegisterInput) {
-        return this.post('/registration', data);
+        return this.post('/auth/registration', data);
+    }
+
+    logout() {
+        return this.post('/auth/logout');
     }
 }
 

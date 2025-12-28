@@ -84,9 +84,14 @@ export const Orders = () => {
             />
         ).toBlob();
 
-        const url = URL.createObjectURL(blob);
+        const fileName = `Наряд-замовлення_${order.vehicle?.brand || ""}_${order.vehicle?.plate || ""}.pdf`;
 
-        window.open(url, "_blank");
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     const columns: Column<IOrder>[] = [

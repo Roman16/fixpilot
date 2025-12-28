@@ -14,6 +14,7 @@ import {Works} from "@/app/components/forms/OrderForm/components/Works";
 import {Materials} from "@/app/components/forms/OrderForm/components/Materials";
 import {useProfile} from "@/hooks/profile/useProfile";
 import {useModalStore} from "@/store/modalStore";
+import {Price} from "@/app/components/ui/Price/Price";
 
 interface OrderFormProps {
     onSubmit: (data: any) => void;
@@ -35,7 +36,6 @@ interface FormValues {
 export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading}) => {
     const openModal = useModalStore((state) => state.openModal);
     const {data: profile} = useProfile();
-
     const [vehicles, setVehicles] = useState<IVehicle[]>([]);
 
     const {register, handleSubmit, setValue, watch, control} = useForm<FormValues>({
@@ -76,9 +76,14 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             />
         ).toBlob();
 
-        const url = URL.createObjectURL(blob);
+        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
 
-        window.open(url, "_blank");
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -89,12 +94,14 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                         disabled={!!order?.id}
                         value={selectedClientId}
                         onChange={(client) => {
+                            const vehicle = client?.vehicles?.[0] || null;
                             setValue("clientId", client?.id || '')
                             setValue("client", client || null)
-                            setValue("vehicleId", null)
-                            setValue("mileage", null)
+                            setValue("vehicleId", vehicle?.id ?? null)
+                            setValue("mileage", vehicle?.mileage ?? null)
                             setVehicles(client?.vehicles || [])
                         }}
+                        onSetVehicles={(arr = []) => setVehicles(arr)}
                     />
 
                     <Button
@@ -104,18 +111,26 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     />
                 </div>
 
+                <div className={styles.clientRow}>
+                    <Select<IVehicle>
+                        label="Транспортний засіб"
+                        options={vehicleOptions}
+                        disabled={!selectedClientId || !!order?.id}
+                        value={order?.id ? `${order.vehicle?.brand} ${order.vehicle?.model} ${order.vehicle?.plate && `(${order.vehicle.plate})`}` : selectedVehicleId}
+                        onChange={(id, vehicle) => {
+                            setValue("vehicleId", id)
+                            setValue("mileage", vehicle.mileage)
+                            setValue("vehicle", vehicle)
+                        }}
+                    />
+                    <Button
+                        disabled={!selectedClientId || !!order?.id}
+                        type={'button'}
+                        iconType={'addVehicle'}
+                        onClick={() => openModal('vehiclesModal', {id: selectedClientId})}
+                    />
+                </div>
 
-                <Select<IVehicle>
-                    label="Транспортний засіб"
-                    options={vehicleOptions}
-                    disabled={!selectedClientId || !!order?.id}
-                    value={order?.id ? `${order.vehicle?.brand} ${order.vehicle?.model} ${order.vehicle?.plate && `(${order.vehicle.plate})`}` : selectedVehicleId}
-                    onChange={(id, vehicle) => {
-                        setValue("vehicleId", id)
-                        setValue("mileage", vehicle.mileage)
-                        setValue("vehicle", vehicle)
-                    }}
-                />
 
                 <Input
                     label="Пробіг"
@@ -145,7 +160,7 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             <div className={styles.actions}>
                 <h3>
                     Разом до
-                    сплати: {watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)} ₴
+                    сплати: <Price value={watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
                 </h3>
 
                 <Button
@@ -163,14 +178,14 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     Скасувати
                   </Button>
 
-                  {order?.id && <Button
-                    type={'button'}
-                    variant="primary"
-                    isLoading={loading}
-                    onClick={() => onSubmit({...order, status: 'completed'})}
-                  >
-                    Виконано
-                  </Button>}
+                    {order?.id && <Button
+                      type={'button'}
+                      variant="primary"
+                      isLoading={loading}
+                      onClick={() => onSubmit({...order, status: 'completed'})}
+                    >
+                      Виконано
+                    </Button>}
 
                   <Button
                     type="submit"
