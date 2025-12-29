@@ -18,7 +18,7 @@ export default function LoginForm() {
         mutationKey: ['login'],
         mutationFn: (data: IRegisterInput) => authService.login(data),
         onSuccess: () => {
-            router.push(ROUTES.CLIENTS)
+            router.push(ROUTES.ORDERS)
         }
     });
 

@@ -1,28 +1,34 @@
-import {NextRequest, NextResponse} from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-const PUBLIC_ROUTES = ["/login", "/registration"];
+const AUTH_PAGES = ['/login', '/registration'];
+const PUBLIC_PAGES = ['/'];
+const APP_PAGES = ['/orders'];
 
-export function middleware(req: NextRequest) {
-    try {
-        const {pathname} = req.nextUrl;
+export function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl;
 
-        if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
-            return NextResponse.next();
-        }
+    const token = request.cookies.get('token')?.value;
 
-        const token = req.cookies.get("token")?.value;
+    const isAuthPage = AUTH_PAGES.some((path) => pathname.startsWith(path));
+    const isPublicPage = PUBLIC_PAGES.includes(pathname);
+    const isAppPage = APP_PAGES.some((path) => pathname.startsWith(path));
 
-        if (!token) {
-            return NextResponse.redirect(new URL("/login", req.url));
-        }
-    } catch (error) {
-        console.log(error);
+    if (token && (isAuthPage || isPublicPage)) {
+        return NextResponse.redirect(new URL('/orders', request.url));
     }
+
+    if (!token && isAppPage) {
+        return NextResponse.redirect(new URL('/login', request.url));
+    }
+
+    return NextResponse.next();
 }
 
 export const config = {
     matcher: [
-        "/account/:path*",
-        "/clients/:path*",
+        '/',
+        '/login/:path*',
+        '/registration/:path*',
+        '/orders/:path*',
     ],
 };
