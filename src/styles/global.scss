@@ -238,6 +238,8 @@ select {
     flex-direction: column;
 
     .content {
+      padding: 20px 10px;
+
       & > div {
         width: 100%;
       }

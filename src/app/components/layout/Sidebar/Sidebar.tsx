@@ -39,7 +39,7 @@ export const Sidebar = () => {
 
     return (<aside className={styles.sidebar}>
         <div className={styles.logo}>
-            <Logo/>
+            Garage<span>OS</span>
         </div>
 
         <div className={clsx(styles.container, {
