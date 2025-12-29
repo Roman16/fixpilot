@@ -20,11 +20,10 @@ body {
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   display: flex;
-  overflow: hidden;
+}
 
-  @media (max-width: 700px) {
-    overflow: inherit;
-  }
+body {
+  overflow: auto;
 }
 
 a {
@@ -108,9 +107,10 @@ select {
 
 //AUTH
 .auth-page {
+  width: 100%;
+  min-height: 100vh;
+  height: max-content;
   display: flex;
-  align-items: center;
-  justify-content: center;
   background: linear-gradient(90deg, rgba(36, 36, 36, 1) 0%, rgb(46, 46, 46, 0.9) 40%, rgb(43, 42, 42) 100%);
 
   & > div {
@@ -166,7 +166,6 @@ select {
   }
 
   .auth-details {
-    min-height: 100%;
     padding: 40px;
     background: linear-gradient(118deg, rgb(18, 18, 18, .8) 0%, rgba(255, 255, 255, .05) 250%);
     align-items: flex-start;
