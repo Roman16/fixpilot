@@ -174,4 +174,12 @@
       }
     }
   }
+
+  @media (max-width: 700px) {
+    .employeeItem {
+      .actions {
+        opacity: 1;
+      }
+    }
+  }
 }

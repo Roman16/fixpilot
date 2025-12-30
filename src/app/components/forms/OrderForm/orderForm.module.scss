@@ -195,6 +195,7 @@
     .generalInfo {
       flex-direction: column;
       gap: 5px;
+      position: inherit;
 
       & > div:last-child {
         max-width: 100%;
@@ -216,6 +217,11 @@
       h3 {
         width: 100%;
         margin-bottom: 10px;
+        display: flex;
+
+        span {
+          margin: 0 0 0 auto;
+        }
       }
     }
   }

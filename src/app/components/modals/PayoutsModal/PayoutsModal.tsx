@@ -52,6 +52,7 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
             key: 'date',
             label: 'Дата',
             width: '120px',
+            minWidth: '120px',
             render: date => dayjs(date).format('DD.MM.YYYY')
         },
         {
@@ -66,6 +67,8 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         {
             key: 'work',
             label: 'Опис роботи',
+            width: '200px',
+            minWidth: '200px',
         },
         {
             key: 'price',
@@ -77,6 +80,7 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
             key: 'commission',
             label: `ЗП (${employee.commissionRate}%)`,
             width: '130px',
+            minWidth: '130px',
             align: 'right',
             render: (commission: number) => <div className={styles.commission}><Price value={commission}/></div>
         },

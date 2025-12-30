@@ -1,6 +1,7 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig} from 'axios';
 import toast from 'react-hot-toast';
 import ROUTES from "@/config/routes";
+import authService from "@/services/authService";
 
 export class baseService {
     protected api: AxiosInstance;
@@ -23,7 +24,8 @@ export class baseService {
 
                 if (status === 401 && !isAuthRequest) {
                     toast.error('Сесія закінчилась. Увійдіть знову');
-                    window.location.href = ROUTES.LOGIN
+                    authService.logout()
+                        .then(() => window.location.href = ROUTES.LOGIN)
                 } else {
                     toast.error(message);
                 }
@@ -47,8 +49,8 @@ export class baseService {
     }
 
     protected post<T>(url: string, data?: any, config?: AxiosRequestConfig) {
-        const headers = data instanceof FormData ? {} : { 'Content-Type': 'application/json' };
-        return this.request<T>(this.api.post(url, data, { ...config, headers }));
+        const headers = data instanceof FormData ? {} : {'Content-Type': 'application/json'};
+        return this.request<T>(this.api.post(url, data, {...config, headers}));
     }
 
     protected put<T>(url: string, data?: any, config?: AxiosRequestConfig) {
