@@ -2,6 +2,7 @@ import '../styles/global.scss';
 import {Providers} from './providers'
 import {Toaster} from "react-hot-toast";
 import type {Viewport} from "next";
+import { Analytics } from '@vercel/analytics/next';
 
 export const viewport: Viewport = {
     width: "device-width",
@@ -14,6 +15,8 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
         <body>
         <Providers>
             {children}
+
+            <Analytics />
 
             <Toaster
                 position="top-right"
