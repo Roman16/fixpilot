@@ -67,7 +67,6 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         {
             key: 'work',
             label: 'Опис роботи',
-            width: '200px',
             minWidth: '200px',
         },
         {

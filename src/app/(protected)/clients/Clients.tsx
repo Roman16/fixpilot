@@ -137,7 +137,7 @@ export const Clients = () => {
 
             expandable={{
                 expandOnRowClick: true,
-                isRowExpandable: row => !!row?.vehicles?.length,
+                isRowExpandable: () =>  true,
                 renderExpanded: row => (
                     <Vehicles
                         client={row}
