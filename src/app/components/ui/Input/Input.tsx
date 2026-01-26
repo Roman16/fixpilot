@@ -1,3 +1,5 @@
+"use client"
+
 import React, {InputHTMLAttributes, useId, useState} from 'react';
 import styles from './input.module.scss';
 import clsx from 'clsx';
