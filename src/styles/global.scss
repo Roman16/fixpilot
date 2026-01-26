@@ -102,6 +102,13 @@ select {
     z-index: 1;
     overflow-x: hidden;
   }
+
+  .employees-page,
+  .clients-page,
+  .orders-page,
+  .profile-page {
+    padding: 20px;
+  }
 }
 
 
@@ -215,7 +222,6 @@ select {
   & > .content {
     width: 100%;
     grid-area: content;
-    padding: 20px;
     position: relative;
 
     &::before {

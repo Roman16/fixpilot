@@ -4,7 +4,7 @@ export interface ILoginInput {
   }
   
   export interface IRegisterInput extends ILoginInput {
-    company: string;
+    companyName: string;
     confirmPassword: string;
   }
   
@@ -13,7 +13,7 @@ export interface ILoginInput {
     user: {
       _id: string;
       email: string;
-      company: string;
+      companyName: string;
     };
   }
   

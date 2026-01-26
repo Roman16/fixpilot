@@ -19,12 +19,12 @@ class employeesService extends baseService {
         return this.delete(`/employees/${id}`);
     }
 
-    getEmployeeBalance(id: string) {
-        return this.get<IPayout>(`/employees/${id}/balance`);
+    getEmployeesBalance() {
+        return this.get<IPayout[]>(`/employees/balance`);
     }
 
-    payoutEmployee(employeeId: string) {
-        return this.post('/payouts', {employeeId})
+    payoutEmployees() {
+        return this.post('/payouts')
     }
 }
 

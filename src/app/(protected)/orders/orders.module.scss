@@ -66,6 +66,50 @@
         background: oklch(76.5% 0.177 163.223);
       }
     }
+
+    &.archived {
+      color: oklch(0.562 0 89.876);
+      border: 1px solid oklch(0.517 0 89.876);
+
+      &::before {
+        background: oklch(0.457 0 89.876);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.4);
+      }
+      100% {
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+
+    @keyframes borderPulse {
+      0% {
+        border-color: currentColor;
+      }
+      50% {
+        border-color: transparent;
+      }
+      100% {
+        border-color: currentColor;
+      }
+    }
+
+    &.isLoading {
+      animation: borderPulse 1s ease-in-out infinite;
+
+      &::before {
+        animation: pulse 1s ease-in-out infinite;
+      }
+    }
   }
 
   .orderDetails {
@@ -148,7 +192,6 @@
         }
       }
     }
-
   }
 }
 

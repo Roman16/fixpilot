@@ -2,7 +2,6 @@ import {Modal} from "@/app/components/ui/Modal/Modal";
 import styles from "./payoutsModal.module.scss";
 import {useModalStore} from "@/store/modalStore";
 import {Button} from "@/app/components/ui";
-import {IEmployee} from "@/types/employee";
 import {Column, Table} from "@/app/components/ui/Table/Table";
 import employeesService from "@/services/employeesService";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
@@ -10,14 +9,10 @@ import {IWork} from "@/types/order";
 import {IVehicle} from "@/types/vehicles";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
-import {FC} from "react";
 import {Price} from "@/app/components/ui/Price/Price";
+import {IPayout} from "@/types/payout";
 
-interface PayoutsModalProps {
-    modalProps: IEmployee;
-}
-
-export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
+export const PayoutsModal = () => {
     const closeModal = useModalStore(state => state.closeModal)
     const queryClient = useQueryClient();
 
@@ -26,11 +21,11 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         isLoading
     } = useQuery({
         queryKey: ['balance'],
-        queryFn: () => employeesService.getEmployeeBalance(employee.id),
+        queryFn: () => employeesService.getEmployeesBalance(),
     });
 
     const payoutMutation = useMutation({
-        mutationFn: () => employeesService.payoutEmployee(employee.id),
+        mutationFn: () => employeesService.payoutEmployees(),
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['employees']})
                 .then(() => {
@@ -77,7 +72,7 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         },
         {
             key: 'commission',
-            label: `ЗП (${employee.commissionRate}%)`,
+            label: `Комісія`,
             width: '130px',
             minWidth: '130px',
             align: 'right',
@@ -85,33 +80,58 @@ export const PayoutsModal: FC<PayoutsModalProps> = ({modalProps: employee}) => {
         },
     ]
 
-    return (<Modal
-        headerText={<div className={styles.modalHeader}>
-            <h3>Розрахунок Зарплати</h3>
-            <p>{employee.name} {employee?.role && ` - ${employee.role}`} (комісія: {employee.commissionRate} %)</p>
-        </div>}
-        className={styles.modal}
+    const employeeColumns: Column<any>[] = [
+        {
+            key: 'name',
+            label: 'Ім`я',
+            render: (_, data) => data.employee.name
+        },
+        {
+            key: 'commission',
+            label: 'Комісія',
+            render: (_, data) => `${data.employee.commissionRate}%`
+        },
+        {
+            key: 'totalAmount',
+            label: 'Загальна вартість робіт',
+            render: (data) => <Price value={data}/>
+        },
+        {
+            key: 'totalCommission',
+            label: 'Загальна комісія',
+            align: 'right',
+            render: (data) => <span style={{fontWeight: 600}}><Price value={data}/></span>
+        },
+    ]
+
+    return (<Modal headerText={<div className={styles.modalHeader}>
+        <h3>Розрахунок Зарплати</h3>
+    </div>}
+                   className={styles.modal}
     >
         <div className={styles.modalBody}>
             <div className={styles.tableContainer}>
-                <h4>Виконані роботи</h4>
-
-                <Table<IWork>
-                    columns={columns}
-                    data={balance?.works || []}
-                    rowKey={row => row.name ?? ''}
+                <Table<IPayout>
+                    columns={employeeColumns}
+                    data={balance || []}
+                    rowKey={row => row.id ?? ''}
                     isLoading={isLoading}
+
+                    expandable={{
+                        expandOnRowClick: true,
+                        singleExpand: true,
+                        isRowExpandable: () => true,
+                        renderExpanded: row => (<div className={styles.expandedContainer}>
+                                <Table<IWork>
+                                    columns={columns}
+                                    data={row?.works || []}
+                                    rowKey={row => row.name ?? ''}
+                                    isLoading={isLoading}
+                                />
+                            </div>
+                        )
+                    }}
                 />
-            </div>
-
-            <div className={styles.totalContainer}>
-                <p>
-                    Загальна сума робіт: <Price value={balance?.totalAmount || 0}/>
-                </p>
-
-                <h2>
-                    До виплати: <Price value={balance?.totalCommission || 0}/>
-                </h2>
             </div>
 
             <div className={styles.actions}>

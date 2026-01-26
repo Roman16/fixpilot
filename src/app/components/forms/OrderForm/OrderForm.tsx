@@ -169,7 +169,7 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     onClick={downloadPdfHandler}
                 />
 
-                {order?.status !== 'completed' && <>
+                {order?.status !== 'completed' && order?.status !== 'archived' && <>
                   <Button
                     type="button"
                     onClick={onClose}

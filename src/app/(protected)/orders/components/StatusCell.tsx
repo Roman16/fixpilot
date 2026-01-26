@@ -1,19 +1,25 @@
 import clsx from "clsx";
 import styles from "../orders.module.scss";
-import {Loader} from "@/app/components/ui/Loader/Loader";
 
-export const StatusCell: React.FC<{ status: string, isLoading: boolean, onClick: () => void }> = ({
+type OrderStatus = 'completed' | 'new' | 'archived';
+
+export const StatusCell: React.FC<{ status: OrderStatus, isLoading: boolean, onClick: () => void }> = ({
                                                                                                       status,
                                                                                                       isLoading,
                                                                                                       onClick
                                                                                                   }) => {
-    const text = status === 'completed' ? 'Виконане' : 'В роботі'
+    const statusMap = {
+        'completed': 'Виконане',
+        'new': 'В роботі',
+        'archived': 'Архів'
+    }
 
-    return <div className={clsx(styles[status], styles.statusTd)} onClick={(e) => {
+    return <div className={clsx(styles[status], styles.statusTd, {
+        [styles.isLoading]: isLoading
+    })} onClick={(e) => {
         e.stopPropagation()
         status === 'new' && onClick()
     }}>
-        {isLoading && <Loader/>}
-        {text}
+        {statusMap[status] ?? status}
     </div>
 }

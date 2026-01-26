@@ -13,24 +13,30 @@ import ROUTES from "@/config/routes";
 export default function RegistrationForm() {
     const router = useRouter()
 
-    const {register, handleSubmit} = useForm<IRegisterInput>();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: {errors}
+    } = useForm<IRegisterInput>();
 
     const {mutate, isPending} = useMutation({
         mutationKey: ['registration'],
         mutationFn: (data: IRegisterInput) => authService.registration(data),
         onSuccess: () => {
             toast.success('Акаунт успішно створено!')
-            router.push(ROUTES.LOGIN)
+            router.push(ROUTES.CLIENTS)
+            setTimeout(() => {
+                toast.success('Додайте свого першого клієнта')
+            }, 2000)
         }
     });
 
     const onSubmit = (data: IRegisterInput) => {
-        if (data.password !== data.confirmPassword) {
-            return;
-        }
-
         mutate(data);
     };
+
+    const password = watch("password");
 
     return (<form onSubmit={handleSubmit(onSubmit)}>
         <h1>Реєстрація</h1>
@@ -40,6 +46,7 @@ export default function RegistrationForm() {
             type={'email'}
             placeholder={'Введіть ваш Email'}
             label={'Email'}
+            error={errors.email?.message}
             {...register("email", {required: "Email обовʼязковий"})}
         />
 
@@ -47,14 +54,17 @@ export default function RegistrationForm() {
             disabled={isPending}
             placeholder={'Введіть назву компанії'}
             label={'Назва компанії'}
-            {...register("company", {required: "Назва компанії обовʼязкова"})}
+            error={errors.companyName?.message}
+            {...register("companyName", {required: "Назва компанії обовʼязкова"})}
         />
 
         <Input
             disabled={isPending}
+            withPasswordToggle
             label={'Пароль'}
             type={'password'}
             placeholder={'••••••••••'}
+            error={errors.password?.message}
             {...register("password", {
                 required: "Пароль обовʼязковий",
                 minLength: {value: 6, message: "Мінімум 6 символів"}
@@ -63,10 +73,16 @@ export default function RegistrationForm() {
 
         <Input
             disabled={isPending}
+            withPasswordToggle
             label={'Повторіть пароль'}
             type={'password'}
             placeholder={'••••••••••'}
-            {...register("confirmPassword", {required: "Підтвердження обовʼязкове"})}
+            error={errors.confirmPassword?.message}
+            {...register("confirmPassword", {
+                required: "Підтвердження обовʼязкове",
+                validate: (value) =>
+                    value === password || "Паролі не співпадають",
+            })}
         />
 
         <Button isLoading={isPending}>

@@ -60,7 +60,7 @@ export const Orders = () => {
             await updateOrder.mutateAsync({
                 ...order,
                 status: 'completed',
-                closedAt: dayjs().toString(),
+                closedAt: dayjs().toISOString(),
             });
         } finally {
             setUpdatingId(null);
@@ -155,12 +155,12 @@ export const Orders = () => {
             render: (value) => dayjs(value).format('DD.MM.YYYY')
         },
         {
-            key: 'updatedAt',
+            key: 'closedAt',
             label: 'Дата закриття',
             width: '150px',
             minWidth: '150px',
             align: 'center',
-            render: (value, order) => order.status === 'completed' ? dayjs(value).format('DD.MM.YYYY') : '—'
+            render: (value, order) => order.status !== 'new' ? dayjs(value).format('DD.MM.YYYY') : '—'
         },
         {
             key: 'sum',

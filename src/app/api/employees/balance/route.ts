@@ -1,20 +1,18 @@
 import {connectToDatabase} from "@/lib/db";
 import {getSession} from "@/lib/getSession";
-import {NextRequest, NextResponse} from "next/server";
+import {NextResponse} from "next/server";
 import Order from "@/models/Order";
 import mongoose from "mongoose";
 
-export async function GET(req: NextRequest, {params}: { params: Promise<{ id: string }> }) {
+export async function GET() {
     try {
         await connectToDatabase();
+
         const session = await getSession();
         if (!session || !session.id) {
-            return NextResponse.json({message: "Неавторизовано"}, {status: 401});
+            return NextResponse.json({ message: "Неавторизовано" }, { status: 401 });
         }
 
-        const {id} = await params;
-
-        const employeeObjectId = new mongoose.Types.ObjectId(id);
         const userObjectId = new mongoose.Types.ObjectId(session.id);
 
         const result = await Order.aggregate([
@@ -32,14 +30,15 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
                     as: "vehicle"
                 }
             },
-            {$unwind: "$vehicle"},
-            {$unwind: "$works"},
+            { $unwind: "$vehicle" },
+            { $unwind: "$works" },
+
             {
                 $match: {
-                    "works.employeeId": employeeObjectId,
                     "works.payoutId": null,
                 }
             },
+
             {
                 $lookup: {
                     from: "employees",
@@ -48,13 +47,14 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
                     as: "employee"
                 }
             },
-            {$unwind: "$employee"},
+            { $unwind: "$employee" },
+
             {
                 $addFields: {
                     workCommission: {
                         $multiply: [
                             "$works.price",
-                            {$divide: ["$employee.commissionRate", 100]}
+                            { $divide: ["$employee.commissionRate", 100] }
                         ]
                     }
                 }
@@ -62,9 +62,16 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
 
             {
                 $group: {
-                    _id: "$works.employeeId",
-                    totalAmount: {$sum: "$works.price"},
-                    totalCommission: {$sum: "$workCommission"},
+                    _id: "$employee._id",
+                    employee: {
+                        $first: {
+                            _id: "$employee._id",
+                            name: "$employee.name",
+                            commissionRate: "$employee.commissionRate",
+                        }
+                    },
+                    totalAmount: { $sum: "$works.price" },
+                    totalCommission: { $sum: "$workCommission" },
                     works: {
                         $push: {
                             orderId: "$_id",
@@ -80,12 +87,30 @@ export async function GET(req: NextRequest, {params}: { params: Promise<{ id: st
                         }
                     }
                 }
+            },
+            {
+                $addFields: {
+                    id: "$_id"
+                }
+            },
+            {
+                $project: {
+                    _id: 0
+                }
+            },
+            {
+                $sort: {
+                    "employee.name": 1
+                }
             }
         ]);
 
-        return NextResponse.json(result[0] || {});
+        return NextResponse.json(result);
     } catch (error) {
-        console.error("Load employees error:", error);
-        return NextResponse.json({message: "Сталась помилка при отриманні працівників"}, {status: 500});
+        console.error("Load employees balance error:", error);
+        return NextResponse.json(
+            { message: "Сталась помилка при отриманні балансів працівників" },
+            { status: 500 }
+        );
     }
 }

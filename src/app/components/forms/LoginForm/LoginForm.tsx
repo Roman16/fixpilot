@@ -12,7 +12,11 @@ import {useRouter} from "next/navigation";
 export default function LoginForm() {
     const router = useRouter()
 
-    const {register, handleSubmit} = useForm<IRegisterInput>();
+    const {
+        register,
+        handleSubmit,
+        formState: {errors}
+    } = useForm<IRegisterInput>();
 
     const {mutate, isPending} = useMutation({
         mutationKey: ['login'],
@@ -34,14 +38,17 @@ export default function LoginForm() {
             type={'email'}
             placeholder={'Введіть ваш Email'}
             label={'Email'}
+            error={errors.email?.message}
             {...register("email", {required: "Email обовʼязковий"})}
         />
 
         <Input
             disabled={isPending}
+            withPasswordToggle
             label={'Пароль'}
             type={'password'}
             placeholder={'••••••••••'}
+            error={errors.password?.message}
             {...register("password", {
                 required: "Пароль обовʼязковий",
                 minLength: {value: 6, message: "Мінімум 6 символів"}

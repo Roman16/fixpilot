@@ -60,6 +60,7 @@ export async function PATCH(req: Request, context: any) {
                     mileage: body.mileage,
                     works: body.works,
                     materials: body.materials,
+                    closedAt: body.closedAt,
                 }
             },
             { new: true }
