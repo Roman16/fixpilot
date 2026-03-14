@@ -57,11 +57,17 @@
       align-items: center;
       justify-content: space-between;
 
-      div {
+      .select {
         cursor: pointer;
-      }
 
+        input {
+          height: 30px;
+          font-size: 14px;
+          padding: 0 10px;
+        }
+      }
     }
+
     .sectionHeader {
       display: flex;
       align-items: center;

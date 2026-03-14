@@ -78,6 +78,7 @@ export const Works: FC<WorksProps> = ({register, setValue, watched, control, app
                             label: pkg.name,
                         }))}
                         value=""
+                        className={styles.select}
                         placeholder="Додати пакет послуг"
                         onChange={(_, pkg) => handleApplyPackage(pkg)}
                     />

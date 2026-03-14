@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {useForm, useFieldArray} from 'react-hook-form';
 import {Button, Input} from '@/app/components/ui';
 import {useServiceTemplates, useUpdateServiceTemplates} from '@/hooks/serviceTemplates/useServiceTemplates';
-import {IServiceTemplate, IServicePackage} from '@/types/serviceTemplate';
+import {IServiceTemplate} from '@/types/serviceTemplate';
 import styles from './serviceTemplatesSettings.module.scss';
 import {ChevronDown, ChevronUp} from "lucide-react";
 
@@ -38,8 +38,6 @@ export const ServiceTemplatesSettingsForm: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-
-            {/* ── Стандартні роботи ── */}
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
                     <div>
@@ -78,7 +76,6 @@ export const ServiceTemplatesSettingsForm: React.FC = () => {
                 </Button>
             </section>
 
-            {/* ── Стандартні матеріали ── */}
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
                     <div>
@@ -117,7 +114,6 @@ export const ServiceTemplatesSettingsForm: React.FC = () => {
                 </Button>
             </section>
 
-            {/* ── Пакети послуг ── */}
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
                     <div>
