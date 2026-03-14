@@ -1,0 +1,125 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 0.2rem;
+  }
+}
+
+.hint {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  margin: 0;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.itemRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  & > div:first-child {
+    flex: 1;
+  }
+}
+
+.priceInput {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.countInput {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+// ── Package card ──
+
+.packageList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.packageCard {
+  border: 1px solid var(--border-color, rgba(0,0,0,0.1));
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.packageHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  cursor: pointer;
+  background: var(--bg-secondary, rgba(0,0,0,0.025));
+  transition: background 0.15s;
+
+  &:hover {
+    background: var(--bg-hover, rgba(0,0,0,0.05));
+  }
+}
+
+.packageNameWrap {
+  flex: 1;
+}
+
+.chevron {
+  font-size: 0.65rem;
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+.packageContent {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  border-top: 1px solid var(--border-color, rgba(0,0,0,0.08));
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.packageCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.5;
+    margin: 0 0 0.25rem;
+  }
+}
+
+.saveBtn {
+  align-self: flex-start;
+}

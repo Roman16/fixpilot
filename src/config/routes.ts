@@ -7,6 +7,7 @@ class ROUTES {
 	static EMPLOYEES = '/employees';
 	static ORDERS = '/orders';
 	static NOT_FOUND = '/404';
+	static SETTINGS = '/settings';
 
 	// static userProfile(id: string) {
 	// 	return `/users/${id}`;

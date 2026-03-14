@@ -15,7 +15,7 @@ interface ProfileFormValues {
     logo?: File | null;
 }
 
-export const Profile = () => {
+export const ProfileForm = () => {
     const {data: profile} = useProfile();
     const updateProfileMutation = useUpdateProfile();
 

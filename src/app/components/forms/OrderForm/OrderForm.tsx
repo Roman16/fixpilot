@@ -15,6 +15,7 @@ import {Materials} from "@/app/components/forms/OrderForm/components/Materials";
 import {useProfile} from "@/hooks/profile/useProfile";
 import {useModalStore} from "@/store/modalStore";
 import {Price} from "@/app/components/ui/Price/Price";
+import {useFieldArray} from "react-hook-form";
 
 interface OrderFormProps {
     onSubmit: (data: any) => void;
@@ -49,6 +50,13 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             materials: order?.materials ?? [],
         },
     });
+
+    const {
+        fields: materialFields,
+        append: appendMaterial,
+        remove: removeMaterial
+    } = useFieldArray({control, name: "materials"});
+
 
     const selectedClientId = watch("clientId");
     const selectedVehicleId = watch("vehicleId");
@@ -148,19 +156,25 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     register={register}
                     watched={watchedWorks}
                     setValue={setValue}
+                    appendMaterial={appendMaterial}
                 />
 
                 <Materials
                     control={control}
                     register={register}
                     watched={watchedMaterials}
+                    fields={materialFields}
+                    append={appendMaterial}
+                    remove={removeMaterial}
+                    setValue={setValue}
                 />
             </div>
 
             <div className={styles.actions}>
                 <h3>
                     Разом до
-                    сплати: <Price value={watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
+                    сплати: <Price
+                    value={watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
                 </h3>
 
                 <Button

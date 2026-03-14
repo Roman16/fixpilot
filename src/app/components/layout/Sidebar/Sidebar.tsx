@@ -5,7 +5,6 @@ import {
     Users,
     ClipboardList,
     Settings,
-    ChartNoAxesCombined,
     IdCardLanyard,
     LogOut,
     Menu, X
@@ -23,7 +22,7 @@ const links = [
     {href: ROUTES.ORDERS, label: "Замовлення", icon: <ClipboardList size={18}/>},
     {href: ROUTES.CLIENTS, label: "Клієнти", icon: <Users size={18}/>},
     {href: ROUTES.EMPLOYEES, label: "Працівники", icon: <IdCardLanyard size={18}/>},
-    {href: ROUTES.PROFILE, label: "Профіль", icon: <Settings size={18}/>},
+    {href: ROUTES.SETTINGS, label: "Налаштування", icon: <Settings size={18}/>},
 ];
 
 export const Sidebar = () => {
@@ -68,10 +67,3 @@ export const Sidebar = () => {
         </div>
     </aside>)
 }
-
-const Logo = () => <svg height="70" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="40" fontFamily="Helvetica Neue, sans-serif" fontSize="40">
-        <tspan fill="#7c4dff">Garage</tspan>
-        <tspan fill="#000">OS</tspan>
-    </text>
-</svg>

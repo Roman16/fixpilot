@@ -52,6 +52,16 @@
   }
 
   .section {
+    .selectTitle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      div {
+        cursor: pointer;
+      }
+
+    }
     .sectionHeader {
       display: flex;
       align-items: center;
