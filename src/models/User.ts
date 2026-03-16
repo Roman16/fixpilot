@@ -8,6 +8,8 @@ const UserSchema = new BaseSchema({
     phone: {type: String, default: ''},
     address: {type: String, default: ''},
     logo: {type: String, default: ''},
+    supplierLogin: {type: String, default: ''},
+    supplierPassword: {type: String, default: ''},
 });
 
 

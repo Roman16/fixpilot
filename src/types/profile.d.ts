@@ -5,4 +5,6 @@ export interface IProfile {
     companyName?: string,
     address?: string,
     logo?: string,
+    supplierLogin?: string,
+    supplierPassword?: string,
 }

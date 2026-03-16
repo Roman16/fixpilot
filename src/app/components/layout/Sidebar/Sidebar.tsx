@@ -20,6 +20,7 @@ import {useRouter} from "next/navigation";
 const links = [
     // {href: "/", label: "Статистика", icon: <ChartNoAxesCombined size={18}/>},
     {href: ROUTES.ORDERS, label: "Замовлення", icon: <ClipboardList size={18}/>},
+    {href: ROUTES.CATALOG, label: "Каталог", icon: <ClipboardList size={18}/>},
     {href: ROUTES.CLIENTS, label: "Клієнти", icon: <Users size={18}/>},
     {href: ROUTES.EMPLOYEES, label: "Працівники", icon: <IdCardLanyard size={18}/>},
     {href: ROUTES.SETTINGS, label: "Налаштування", icon: <Settings size={18}/>},
