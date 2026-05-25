@@ -39,6 +39,24 @@ export const Works: FC<WorksProps> = ({register, setValue, watched, control, app
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
+
+    // const activeElementRef = useRef<Element | null>(null);
+    //
+    // const lastWork = watched[watched.length - 1];
+    //
+    // useEffect(() => {
+    //     if (!lastWork?.name || lastWork.name.trim() === '') return;
+    //     activeElementRef.current = document.activeElement;
+    //     append({name: '', employeeId: lastWork?.employeeId || ''});
+    // }, [lastWork?.name]);
+    //
+    // useEffect(() => {
+    //     if (activeElementRef.current) {
+    //         (activeElementRef.current as HTMLElement).focus();
+    //         activeElementRef.current = null;
+    //     }
+    // }, [fields.length]);
+
     const handleAddWork = () => {
         append({name: '', employeeId: watched[0]?.employeeId || ''});
     };

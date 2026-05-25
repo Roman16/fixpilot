@@ -3,15 +3,13 @@
 import {useState} from "react";
 import {ProfileForm} from "@/app/components/forms/ProfileForm/ProfileForm";
 import {ServiceTemplatesSettingsForm} from "@/app/components/forms/ServiceTemplatesSettingsForm/ServiceTemplatesSettingsForm";
-import {SupplierSettingsForm} from "@/app/components/forms/SupplierSettingsForm/SupplierSettingsForm";
 import styles from "./settings.module.scss";
 
-type Tab = 'profile' | 'templates' | 'supplier';
+type Tab = 'profile' | 'templates';
 
 const tabs: {id: Tab; label: string}[] = [
     {id: 'profile', label: 'Профіль'},
     {id: 'templates', label: 'Шаблони робіт'},
-    {id: 'supplier', label: 'Постачальник'},
 ];
 
 export default function SettingsPage() {
@@ -34,7 +32,6 @@ export default function SettingsPage() {
             <div className={styles.content}>
                 {activeTab === 'profile' && <ProfileForm />}
                 {activeTab === 'templates' && <ServiceTemplatesSettingsForm />}
-                {activeTab === 'supplier' && <SupplierSettingsForm />}
             </div>
         </div>
     );

@@ -6,6 +6,8 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 export interface Session {
     id: string;
     email?: string;
+
+    delete(id: string): void;
 }
 
 export async function getSession(): Promise<Session | null> {

@@ -70,7 +70,7 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
         value: v.id
     }));
 
-    const downloadPdfHandler = async () => {
+    const generatePdfBlob = async () => {
         const formValues = watch();
 
         const blob = await pdf(
@@ -84,14 +84,46 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             />
         ).toBlob();
 
-        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
+        return { blob, formValues };
+    };
 
+    const downloadPdfHandler = async () => {
+        const { blob, formValues } = await generatePdfBlob();
+
+        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
         link.download = fileName;
         link.click();
         URL.revokeObjectURL(url);
+    };
+
+    const shareViaTelegramHandler = async () => {
+        const { blob, formValues } = await generatePdfBlob();
+
+        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        URL.revokeObjectURL(url);
+
+        const clientName = formValues.client?.name || '';
+        const vehicle = `${formValues.vehicle?.brand || ''} ${formValues.vehicle?.model || ''}`.trim();
+        const total = watchedMaterials.reduce((s, i) => s + Number(i.price || 0), 0)
+            + watchedWorks.reduce((s, i) => s + Number(i.price || 0), 0);
+
+        const message =
+            `Вітаємо, ${clientName}!\n` +
+            `Наряд-замовлення №${order?.orderNumber} на ${vehicle}.\n` +
+            `Сума до сплати: ${total} ₴`;
+
+        await navigator.clipboard.writeText(message);
+
+        const phone = formValues.client?.phone?.replace(/\D/g, '');
+        window.open(`https://t.me/+${phone}`, '_blank');
     };
 
     return (
@@ -182,6 +214,14 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
                     iconType={'print'}
                     onClick={downloadPdfHandler}
                 />
+
+                <Button
+                    type="button"
+                    onClick={shareViaTelegramHandler}
+                    disabled={loading}
+                >
+                    Надіслати клієнту
+                </Button>
 
                 {order?.status !== 'completed' && order?.status !== 'archived' && <>
                   <Button

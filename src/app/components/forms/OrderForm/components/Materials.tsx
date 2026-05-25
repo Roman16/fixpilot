@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import styles from '@/app/components/forms/OrderForm/orderForm.module.scss';
 import {Button, Input} from '@/app/components/ui';
 import {useFieldArray} from 'react-hook-form';
@@ -16,7 +16,6 @@ interface MaterialsProps {
 }
 
 export const Materials: React.FC<MaterialsProps> = ({    register, watched, fields, append, remove, setValue}) => {
-
     return (
         <div className={styles.section}>
             <h3>Використані матеріали</h3>

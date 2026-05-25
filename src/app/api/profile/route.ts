@@ -70,12 +70,6 @@ export async function PATCH(request: Request) {
             user.address = address.toString();
         }
 
-        const supplierLogin = formData.get('supplierLogin');
-        if (supplierLogin !== null) user.supplierLogin = supplierLogin.toString();
-
-        const supplierPassword = formData.get('supplierPassword');
-        if (supplierPassword !== null) user.supplierPassword = supplierPassword.toString();
-
         await user.save();
 
         return NextResponse.json({
@@ -84,8 +78,6 @@ export async function PATCH(request: Request) {
             phone: user.phone,
             address: user.address,
             logo: user.logo,
-            supplierLogin: user.supplierLogin,
-            supplierPassword: user.supplierPassword,
         });
     } catch (error) {
         console.error("Update profile error:", error);
@@ -113,8 +105,6 @@ export async function GET() {
             phone: user.phone || '',
             address: user.address || '',
             logo: user.logo || '',
-            supplierLogin: user.supplierLogin,
-            supplierPassword: user.supplierPassword,
         });
     } catch (error) {
         console.error("Load clients error:", error);
