@@ -20,7 +20,7 @@ export const Modal = ({
 
     return (<div
         className={styles.overlay}
-        onClick={() => closeModal()}
+        // onClick={() => closeModal()}
     >
         <div
             className={clsx(styles.modal, className)}
