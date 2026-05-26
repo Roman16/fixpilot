@@ -48,7 +48,13 @@ export const ClientAutocomplete: React.FC<ClientAutocompleteProps> = ({
             label={'Клієнт'}
             value={value}
             options={options}
-            optionRender={(option) => <>{option.name} <br/> {option.phone}</>}
+            optionRender={(option) => (
+              <>
+                  {option.name} - {option.phone}
+                  <br />
+                  {option.vehicles?.[0]?.brand || ''} {option.vehicles?.[0]?.model || ''}
+              </>
+            )}
             disabled={disabled}
 
             onChange={onSelectHandle}
