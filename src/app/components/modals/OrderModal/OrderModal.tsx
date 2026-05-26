@@ -22,10 +22,10 @@ export const OrderModal: FC<OrderModalProps> = ({modalProps: order}) => {
             } else {
                 await createOrder.mutateAsync(data);
             }
+
+            closeModal()
         } catch (error) {
             console.error(error);
-        } finally {
-            closeModal()
         }
     };
 

@@ -21,10 +21,10 @@ export const ClientModal: FC<ClientModalProps> = ({modalProps: client}) => {
             } else {
                 await createClient.mutateAsync(data);
             }
+
+            closeModal()
         } catch (error) {
             console.error(error);
-        } finally {
-            closeModal()
         }
     };
 

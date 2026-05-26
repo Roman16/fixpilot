@@ -10,8 +10,8 @@ const WorkSchema = new mongoose.Schema({
 
 const OrderSchema = new BaseSchema({
     userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
-    clientId: {type: mongoose.Types.ObjectId, ref: 'Client', required: true},
-    vehicleId: {type: mongoose.Types.ObjectId, ref: 'Vehicle', required: true},
+    clientId: {type: mongoose.Types.ObjectId, ref: 'Client'},
+    vehicleId: {type: mongoose.Types.ObjectId, ref: 'Vehicle'},
     mileage: {type: Number},
     orderNumber: {type: Number},
     status: {type: String, required: true},
