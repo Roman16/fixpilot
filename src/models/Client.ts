@@ -4,7 +4,7 @@ import {BaseSchema} from "@/lib/BaseSchema";
 const ClientSchema = new BaseSchema({
     userId: {type: mongoose.Types.ObjectId, ref: 'User', required: true},
     name: {type: String},
-    phone: {type: String, required: true, unique: true},
+    phone: {type: String, unique: true},
     comment: {type: String},
     visitAt: {type: Date, default: null},
 });
