@@ -52,12 +52,14 @@ export async function PATCH(req: Request, context: any) {
             return NextResponse.json({ message: "ID і дані обов’язкові" }, { status: 400 });
         }
 
+        const normalizedMileage = body.mileage ? Number(body.mileage) : undefined;
+
         const updatedOrder = await Order.findOneAndUpdate(
             { _id: id, userId: session.id },
             {
                 $set: {
                     status: body.status,
-                    mileage: body.mileage,
+                    mileage: normalizedMileage,
                     works: body.works,
                     materials: body.materials,
                     closedAt: body.closedAt,

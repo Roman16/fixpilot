@@ -109,7 +109,12 @@ export async function POST(req: Request) {
         }
         const body = await req.json();
         const {clientId, vehicleId, mileage, works, materials} = body;
-        const normalizedMileage = Number(mileage);
+        const normalizedMileage = mileage ? Number(mileage) : undefined;
+
+        const normalizedWorks = works.map((work: any) => ({
+            ...work,
+            employeeId: work.employeeId || undefined,
+        }));
 
         const lastOrder = await Order.findOne().sort({createdAt: -1});
         const nextOrderNumber = lastOrder ? lastOrder.orderNumber + 1 : 1;
@@ -118,7 +123,7 @@ export async function POST(req: Request) {
             clientId,
             vehicleId,
             mileage: normalizedMileage,
-            works,
+            works: normalizedWorks,
             materials,
             status: "new",
             userId: session.id,

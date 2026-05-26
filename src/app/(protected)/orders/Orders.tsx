@@ -132,7 +132,7 @@ export const Orders = () => {
             width: '200px',
             minWidth: '130px',
             align: 'center',
-            render: mileage => `${mileage} км`
+            render: mileage => mileage && `${mileage} км`
         },
         {
             key: 'status',
