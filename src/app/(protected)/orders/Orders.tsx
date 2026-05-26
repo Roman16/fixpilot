@@ -84,7 +84,7 @@ export const Orders = () => {
             />
         ).toBlob();
 
-        const fileName = `Наряд-замовлення_${order.vehicle?.brand || ""}_${order.vehicle?.plate || ""}.pdf`;
+        const fileName = `Замовлення_№${order.orderNumber}_${order.vehicle?.brand || ""}-${order.vehicle?.model || ""}_${order.vehicle?.plate || ""}.pdf`;
 
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
