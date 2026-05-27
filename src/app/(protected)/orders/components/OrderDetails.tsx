@@ -21,7 +21,7 @@ export const OrderDetails = ({order}: { order: IOrder }) => {
                 </div>)}
 
                 <div className={styles.totalRow}>
-                    <div>Всього роботи:</div>
+                    <div>Всього за роботи:</div>
                     <div>{order.works.reduce((acc, work) => acc + (work?.price || 0), 0)} ₴</div>
                 </div>
             </div>
@@ -44,7 +44,7 @@ export const OrderDetails = ({order}: { order: IOrder }) => {
                 </div>)}
 
                 <div className={styles.totalRow}>
-                    <div>Всього матеріали:</div>
+                    <div>Всього за матеріали:</div>
                     <div>{order.materials.reduce((acc, work) => acc + ((work?.price || 0) * (work?.count || 1)), 0)} ₴</div>
                 </div>
             </div>
