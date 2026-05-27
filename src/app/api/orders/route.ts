@@ -5,6 +5,7 @@ import Order from "@/models/Order";
 import Vehicle from "@/models/Vehicle";
 import Client from "@/models/Client";
 import mongoose from "mongoose";
+import ServiceTemplate from "@/models/ServiceTemplate";
 
 export async function GET(req: Request) {
     try {
@@ -107,6 +108,7 @@ export async function POST(req: Request) {
         if (!session || !session.id) {
             return NextResponse.json({message: "Неавторизовано"}, {status: 401});
         }
+
         const body = await req.json();
         const {clientId, vehicleId, mileage, works, materials} = body;
         const normalizedMileage = mileage ? Number(mileage) : undefined;
@@ -131,24 +133,44 @@ export async function POST(req: Request) {
         });
 
         await Client.findOneAndUpdate(
-            {_id: clientId, userId: session.id},
-            {$set: {visitAt: new Date() }}
+          {_id: clientId, userId: session.id},
+          {$set: {visitAt: new Date()}}
         );
 
         await Vehicle.findOneAndUpdate(
-            {
-                _id: vehicleId,
-                userId: session.id,
-                $or: [
-                    { mileage: { $exists: false } },
-                    { mileage: null },
-                    { $expr: { $lt: ['$mileage', normalizedMileage] } }
-                ]
-            },
-            {
-                $set: { mileage: normalizedMileage }
-            }
+          {
+              _id: vehicleId,
+              userId: session.id,
+              $or: [
+                  {mileage: {$exists: false}},
+                  {mileage: null},
+                  {$expr: {$lt: ['$mileage', normalizedMileage]}}
+              ]
+          },
+          {$set: {mileage: normalizedMileage}}
         );
+
+        if (normalizedWorks.length > 0) {
+            const existingTemplate = await ServiceTemplate.findOne({
+                userId: new mongoose.Types.ObjectId(session.id)
+            });
+
+            const existingNames: Set<string> = new Set(
+              (existingTemplate?.works ?? []).map((w: any) => w.name?.trim()).filter(Boolean)
+            );
+
+            const newTemplateWorks = normalizedWorks
+              .filter((w: any) => w.name?.trim() && !existingNames.has(w.name.trim()))
+              .map((w: any) => ({name: w.name.trim(), price: w.price || 0}));
+
+            if (newTemplateWorks.length > 0) {
+                await ServiceTemplate.findOneAndUpdate(
+                  {userId: new mongoose.Types.ObjectId(session.id)},
+                  {$push: {works: {$each: newTemplateWorks}}},
+                  {upsert: true}
+                );
+            }
+        }
 
         const client = await Client.findById(clientId);
         const vehicle = await Vehicle.findById(vehicleId);
