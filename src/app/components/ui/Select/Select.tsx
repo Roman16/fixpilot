@@ -26,6 +26,8 @@ interface SelectProps<T> {
     optionRender?: (option: Option<T>) => React.ReactNode;
     onInputChange?: (text: string) => void;
     disabled?: boolean;
+    clearable?: boolean;
+    onClear?: () => void;
 }
 
 export function Select<T = unknown>({
@@ -36,10 +38,11 @@ export function Select<T = unknown>({
                                         className,
                                         value,
                                         disabled,
-
                                         onChange,
                                         optionRender,
-                                        onInputChange
+                                        onInputChange,
+                                        clearable,
+                                        onClear,
                                     }: SelectProps<T>) {
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -59,9 +62,14 @@ export function Select<T = unknown>({
         if (!open) setOpen(true);
     };
 
+    const handleClear = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setInputValue('');
+        onClear?.();
+    };
+
     const handleClickOutside = useCallback((e: MouseEvent) => {
         if (!wrapperRef.current) return;
-
         if (!wrapperRef.current.contains(e.target as Node)) {
             setOpen(false);
         }
@@ -73,39 +81,52 @@ export function Select<T = unknown>({
     }, [handleClickOutside]);
 
     useEffect(() => {
-        const activeOption = options.find(i => i.value === value)
+        const activeOption = options.find(i => i.value === value);
 
         if (activeOption) {
-            setInputValue(activeOption.label)
+            setInputValue(activeOption.label);
         } else {
             if (value === null || value === undefined) {
-                setInputValue('')
+                setInputValue('');
             } else {
-                setInputValue(value)
+                setInputValue(value);
             }
         }
     }, [value, options]);
 
     return (
-        <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
-            {label && <label className={styles.label}>{label}</label>}
+      <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
+          {label && <label className={styles.label}>{label}</label>}
 
-            <div className={styles.fieldContainer}>
-                <Input
-                    autoComplete="off"
-                    value={inputValue}
-                    placeholder={placeholder}
-                    readOnly={!searchable}
-                    onClick={() => setOpen(prev => !prev)}
-                    onChange={e => handleInputChange(e.target.value)}
-                    disabled={disabled}
-                />
-                <ul className={clsx(styles.dropdown, {[styles.open]: open})}>
-                    {options.map((opt: Option<T>) => (<li key={opt.value} onClick={() => handleSelect(opt.value, opt)}>
+          <div className={styles.fieldContainer}>
+              <Input
+                autoComplete="off"
+                value={inputValue}
+                placeholder={placeholder}
+                readOnly={!searchable}
+                onClick={() => !disabled && setOpen(prev => !prev)}
+                onChange={e => handleInputChange(e.target.value)}
+                disabled={disabled}
+              />
+
+              {clearable && inputValue && !disabled && (
+                <button
+                  type="button"
+                  className={styles.clearBtn}
+                  onClick={handleClear}
+                >
+                    ✕
+                </button>
+              )}
+
+              <ul className={clsx(styles.dropdown, {[styles.open]: open})}>
+                  {options.map((opt: Option<T>) => (
+                    <li key={opt.value} onClick={() => handleSelect(opt.value, opt)}>
                         {optionRender ? optionRender(opt) : opt.label}
-                    </li>))}
-                </ul>
-            </div>
-        </div>
+                    </li>
+                  ))}
+              </ul>
+          </div>
+      </div>
     );
 }

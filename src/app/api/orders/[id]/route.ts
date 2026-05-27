@@ -60,7 +60,11 @@ export async function PATCH(req: Request, context: any) {
                 $set: {
                     status: body.status,
                     mileage: normalizedMileage,
-                    works: body.works,
+                    works: body.works?.map((work: any) => ({
+                        ...work,
+                        employeeId: work.employeeId || undefined,
+                        price: work.price || undefined,
+                    })),
                     materials: body.materials,
                     closedAt: body.closedAt,
                 }

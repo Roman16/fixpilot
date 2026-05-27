@@ -131,6 +131,8 @@ export const Works: FC<WorksProps> = ({register, setValue, watched, control, app
                             setValue && setValue(`works.${index}.employeeId`, id);
                         }}
                         placeholder="Майстер"
+                        clearable
+                        onClear={() => setValue && setValue(`works.${index}.employeeId`, '')}
                     />
 
                     <div className={styles.priceContainer}>

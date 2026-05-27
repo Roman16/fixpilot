@@ -47,7 +47,7 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
             vehicle: order?.vehicle ?? null,
             mileage: order?.mileage ?? null,
             works: order?.works ?? [{}],
-            materials: order?.materials ?? [],
+            materials: order?.materials ?? [{}],
         },
     });
 
