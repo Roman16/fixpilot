@@ -38,81 +38,84 @@ export const ServiceTemplatesSettingsForm: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <div>
-                        <h3>Стандартні роботи</h3>
-                        <p className={styles.hint}>
-                            Підказки при введенні назви роботи. Якщо вказати ціну — вона підставиться автоматично.
-                        </p>
+            <div className={styles.row}>
+                <section className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                        <div>
+                            <h3>Стандартні роботи</h3>
+                            <p className={styles.hint}>
+                                Підказки при введенні назви роботи. Якщо вказати ціну — вона підставиться автоматично.
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-                <div className={styles.itemList}>
-                    {workFields.map((field, index) => (
-                        <div key={field.id} className={styles.itemRow}>
-                            <Input
+                    <div className={styles.itemList}>
+                        {workFields.map((field, index) => (
+                          <div key={field.id} className={styles.itemRow}>
+                              <Input
                                 {...register(`works.${index}.name`)}
                                 placeholder="Назва роботи (напр. Заміна масла)"
-                            />
-                            <Input
+                              />
+                              <Input
                                 {...register(`works.${index}.price`, {valueAsNumber: true})}
                                 placeholder="Дефолтна ціна"
                                 type="number"
                                 suffix="₴"
                                 className={styles.priceInput}
-                            />
-                            <Button type="button" iconType="delete" onClick={() => removeWork(index)} />
-                        </div>
-                    ))}
-                </div>
-
-                <Button
-                    type="button"
-                    iconType="plus"
-                    onClick={() => appendWork({name: '', price: undefined})}
-                >
-                    Додати роботу
-                </Button>
-            </section>
-
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <div>
-                        <h3>Стандартні матеріали</h3>
-                        <p className={styles.hint}>
-                            Підказки при введенні назви матеріалу. Ціна підставиться при виборі.
-                        </p>
+                              />
+                              <Button type="button" iconType="delete" onClick={() => removeWork(index)} />
+                          </div>
+                        ))}
                     </div>
-                </div>
 
-                <div className={styles.itemList}>
-                    {materialFields.map((field, index) => (
-                        <div key={field.id} className={styles.itemRow}>
-                            <Input
+                    <Button
+                      type="button"
+                      iconType="plus"
+                      onClick={() => appendWork({name: '', price: undefined})}
+                    >
+                        Додати роботу
+                    </Button>
+                </section>
+
+                <section className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                        <div>
+                            <h3>Стандартні матеріали</h3>
+                            <p className={styles.hint}>
+                                Підказки при введенні назви матеріалу. Ціна підставиться при виборі.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className={styles.itemList}>
+                        {materialFields.map((field, index) => (
+                          <div key={field.id} className={styles.itemRow}>
+                              <Input
                                 {...register(`materials.${index}.name`)}
                                 placeholder="Назва матеріалу (напр. Моторна олія 1л)"
-                            />
-                            <Input
+                              />
+                              <Input
                                 {...register(`materials.${index}.price`, {valueAsNumber: true})}
                                 placeholder="Дефолтна ціна"
                                 type="number"
                                 suffix="₴"
                                 className={styles.priceInput}
-                            />
-                            <Button type="button" iconType="delete" onClick={() => removeMaterial(index)} />
-                        </div>
-                    ))}
-                </div>
+                              />
+                              <Button type="button" iconType="delete" onClick={() => removeMaterial(index)} />
+                          </div>
+                        ))}
+                    </div>
 
-                <Button
-                    type="button"
-                    iconType="plus"
-                    onClick={() => appendMaterial({name: '', price: undefined})}
-                >
-                    Додати матеріал
-                </Button>
-            </section>
+                    <Button
+                      type="button"
+                      iconType="plus"
+                      onClick={() => appendMaterial({name: '', price: undefined})}
+                    >
+                        Додати матеріал
+                    </Button>
+                </section>
+            </div>
+
 
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
@@ -178,14 +181,16 @@ export const ServiceTemplatesSettingsForm: React.FC = () => {
                 </Button>
             </section>
 
-            <Button
-                type="submit"
-                variant="primary"
-                isLoading={updateMutation.isPending}
-                className={styles.saveBtn}
-            >
-                Зберегти шаблони
-            </Button>
+            <div className={styles.formActions}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  isLoading={updateMutation.isPending}
+                  className={styles.saveBtn}
+                >
+                    Зберегти шаблони
+                </Button>
+            </div>
         </form>
     );
 };
