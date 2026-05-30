@@ -18,238 +18,236 @@ import {Price} from "@/app/components/ui/Price/Price";
 import {useFieldArray} from "react-hook-form";
 
 interface OrderFormProps {
-    onSubmit: (data: any) => void;
-    onClose: () => void;
-    order?: IOrder | null;
-    loading: boolean;
+  onSubmit: (data: any) => void;
+  onClose: () => void;
+  order?: IOrder | null;
+  loading: boolean;
 }
 
 interface FormValues {
-    clientId: string | null;
-    client: IClient | null;
-    vehicleId: string | null;
-    vehicle: IVehicle | null;
-    mileage?: number | null;
-    works: IWork[];
-    materials: IMaterial[];
+  clientId: string | null;
+  client: IClient | null;
+  vehicleId: string | null;
+  vehicle: IVehicle | null;
+  mileage?: number | null;
+  works: IWork[];
+  materials: IMaterial[];
 }
 
 export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading}) => {
-    const openModal = useModalStore((state) => state.openModal);
-    const {data: profile} = useProfile();
-    const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+  const openModal = useModalStore((state) => state.openModal);
+  const {data: profile} = useProfile();
+  const [vehicles, setVehicles] = useState<IVehicle[]>([]);
 
-    const {register, handleSubmit, setValue, watch, control} = useForm<FormValues>({
-        defaultValues: {
-            clientId: order?.clientId ?? null,
-            client: order?.client ?? null,
-            vehicleId: order?.vehicleId ?? null,
-            vehicle: order?.vehicle ?? null,
-            mileage: order?.mileage ?? null,
-            works: order?.works ?? [{}],
-            materials: order?.materials ?? [{}],
-        },
-    });
+  const {register, handleSubmit, setValue, watch, control} = useForm<FormValues>({
+    defaultValues: {
+      clientId: order?.clientId ?? null,
+      client: order?.client ?? null,
+      vehicleId: order?.vehicleId ?? null,
+      vehicle: order?.vehicle ?? null,
+      mileage: order?.mileage ?? null,
+      works: order?.works ?? [{}],
+      materials: order?.materials ?? [{}],
+    },
+  });
 
-    const {
-        fields: materialFields,
-        append: appendMaterial,
-        remove: removeMaterial
-    } = useFieldArray({control, name: "materials"});
-
-
-    const selectedClientId = watch("clientId");
-    const selectedVehicleId = watch("vehicleId");
-
-    const watchedWorks = watch("works");
-    const watchedMaterials = watch("materials");
-
-    const vehicleOptions = vehicles.map((v: IVehicle) => ({
-        ...v,
-        label: `${v.brand} ${v.model} ${v?.plate && `(${v.plate})`}`,
-        value: v.id
-    }));
-
-    const generatePdfBlob = async () => {
-        const formValues = watch();
-
-        const blob = await pdf(
-            <PdfTemplate
-                order={{
-                    ...formValues,
-                    createdAt: order?.createdAt || dayjs().toString(),
-                    orderNumber: order?.orderNumber || 666
-                }}
-                profile={profile}
-            />
-        ).toBlob();
-
-        return { blob, formValues };
-    };
-
-    const downloadPdfHandler = async () => {
-        const { blob, formValues } = await generatePdfBlob();
-
-        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        URL.revokeObjectURL(url);
-    };
-
-    const shareViaTelegramHandler = async () => {
-        const { blob, formValues } = await generatePdfBlob();
-
-        const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        URL.revokeObjectURL(url);
-
-        const clientName = formValues.client?.name || '';
-        const vehicle = `${formValues.vehicle?.brand || ''} ${formValues.vehicle?.model || ''}`.trim();
-        const total = watchedMaterials.reduce((s, i) => s + Number(i.price || 0), 0)
-            + watchedWorks.reduce((s, i) => s + Number(i.price || 0), 0);
-
-        const message =
-            `Вітаємо, ${clientName}!\n` +
-            `Наряд-замовлення №${order?.orderNumber} на ${vehicle}.\n` +
-            `Сума до сплати: ${total} ₴`;
-
-        await navigator.clipboard.writeText(message);
-
-        const phone = formValues.client?.phone?.replace(/\D/g, '');
-        window.open(`https://t.me/+${phone}`, '_blank');
-    };
-
-    return (
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-            <div className={styles.generalInfo}>
-                <div className={styles.clientRow}>
-                    <ClientAutocomplete
-                        disabled={!!order?.id}
-                        value={selectedClientId}
-                        onChange={(client) => {
-                            const vehicle = client?.vehicles?.[0] || null;
-                            setValue("clientId", client?.id || '')
-                            setValue("client", client || null)
-                            setValue("vehicleId", vehicle?.id ?? null)
-                            setValue("mileage", vehicle?.mileage ?? null)
-                            setVehicles(client?.vehicles || [])
-                        }}
-                        onSetVehicles={(arr = []) => setVehicles(arr)}
-                    />
-
-                    <Button
-                        type={'button'}
-                        iconType={'addUser'}
-                        onClick={() => openModal('clientModal')}
-                    />
-                </div>
-
-                <div className={styles.clientRow}>
-                    <Select<IVehicle>
-                        label="Транспортний засіб"
-                        options={vehicleOptions}
-                        disabled={!selectedClientId || !!order?.id}
-                        value={order?.id ? `${order.vehicle?.brand} ${order.vehicle?.model} ${order.vehicle?.plate && `(${order.vehicle.plate})`}` : selectedVehicleId}
-                        onChange={(id, vehicle) => {
-                            setValue("vehicleId", id)
-                            setValue("mileage", vehicle.mileage)
-                            setValue("vehicle", vehicle)
-                        }}
-                    />
-                    <Button
-                        disabled={!selectedClientId || !!order?.id}
-                        type={'button'}
-                        iconType={'addVehicle'}
-                        onClick={() => openModal('vehiclesModal', {id: selectedClientId})}
-                    />
-                </div>
+  const {
+    fields: materialFields,
+    append: appendMaterial,
+    remove: removeMaterial
+  } = useFieldArray({control, name: "materials"});
 
 
-                <Input
-                    label="Пробіг"
-                    {...register("mileage", {
-                        valueAsNumber: true
-                    })}
-                    suffix={'км'}
-                    disabled={!selectedVehicleId}
-                />
-            </div>
+  const selectedClientId = watch("clientId");
+  const selectedVehicleId = watch("vehicleId");
 
-            <div className={styles.col}>
-                <Works
-                    control={control}
-                    register={register}
-                    watched={watchedWorks}
-                    setValue={setValue}
-                    appendMaterial={appendMaterial}
-                />
+  const watchedWorks = watch("works");
+  const watchedMaterials = watch("materials");
 
-                <Materials
-                    control={control}
-                    register={register}
-                    watched={watchedMaterials}
-                    fields={materialFields}
-                    append={appendMaterial}
-                    remove={removeMaterial}
-                    setValue={setValue}
-                />
-            </div>
+  const vehicleOptions = vehicles.map((v: IVehicle) => ({
+    ...v,
+    label: `${v.brand} ${v.model} ${v?.plate && `(${v.plate})`}`,
+    value: v.id
+  }));
 
-            <div className={styles.actions}>
-                <h3>
-                    Разом до
-                    сплати: <Price
-                    value={watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
-                </h3>
+  const generatePdfBlob = async () => {
+    const formValues = watch();
 
-                <Button
-                    type="button"
-                    iconType={'print'}
-                    onClick={downloadPdfHandler}
-                />
+    const blob = await pdf(
+      <PdfTemplate
+        order={{
+          ...formValues,
+          createdAt: order?.createdAt || dayjs().toString(),
+          orderNumber: order?.orderNumber || 666
+        }}
+        profile={profile}
+      />
+    ).toBlob();
 
-                <Button
-                    type="button"
-                    onClick={shareViaTelegramHandler}
-                    disabled={loading}
-                >
-                    Надіслати клієнту
-                </Button>
+    return {blob, formValues};
+  };
 
-                {order?.status !== 'completed' && order?.status !== 'archived' && <>
-                  <Button
-                    type="button"
-                    onClick={onClose}
-                    disabled={loading}
-                  >
-                    Скасувати
-                  </Button>
+  const downloadPdfHandler = async () => {
+    const {blob, formValues} = await generatePdfBlob();
 
-                    {order?.id && <Button
-                      type={'button'}
-                      variant="primary"
-                      isLoading={loading}
-                      onClick={() => onSubmit({...order, status: 'completed'})}
-                    >
-                      Виконано
-                    </Button>}
+    const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    isLoading={loading}
-                  >
-                    Зберегти
-                  </Button>
-                </>}
-            </div>
-        </form>
-    );
+  const shareViaTelegramHandler = async () => {
+    const {blob, formValues} = await generatePdfBlob();
+
+    const fileName = `Наряд-замовлення_${formValues.vehicle?.brand || ""}_${formValues.vehicle?.plate || ""}.pdf`;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    const clientName = formValues.client?.name || '';
+    const vehicle = `${formValues.vehicle?.brand || ''} ${formValues.vehicle?.model || ''}`.trim();
+    const total = watchedMaterials.reduce((s, i) => s + Number(i.price || 0), 0)
+      + watchedWorks.reduce((s, i) => s + Number(i.price || 0), 0);
+
+    const message =
+      `Вітаємо, ${clientName}!\n` +
+      `Наряд-замовлення №${order?.orderNumber} на ${vehicle}.\n` +
+      `Сума до сплати: ${total} ₴`;
+
+    await navigator.clipboard.writeText(message);
+
+    const phone = formValues.client?.phone?.replace(/\D/g, '');
+    window.open(`https://t.me/+${phone}`, '_blank');
+  };
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+      <div className={styles.generalInfo}>
+        <div className={styles.clientRow}>
+          <ClientAutocomplete
+            disabled={!!order?.id}
+            value={selectedClientId}
+            onChange={(client) => {
+              const vehicle = client?.vehicles?.[0] || null;
+              setValue("clientId", client?.id || '')
+              setValue("client", client || null)
+              setValue("vehicleId", vehicle?.id ?? null)
+              setValue("mileage", vehicle?.mileage ?? null)
+              setVehicles(client?.vehicles || [])
+            }}
+            onSetVehicles={(arr = []) => setVehicles(arr)}
+          />
+
+          <Button
+            type={'button'}
+            iconType={'addUser'}
+            onClick={() => openModal('clientModal')}
+          />
+        </div>
+
+        <div className={styles.clientRow}>
+          <Select<IVehicle>
+            label="Транспортний засіб"
+            options={vehicleOptions}
+            disabled={!selectedClientId || !!order?.id}
+            value={order?.id ? `${order.vehicle?.brand} ${order.vehicle?.model} ${order.vehicle?.plate && `(${order.vehicle.plate})`}` : selectedVehicleId}
+            onChange={(id, vehicle) => {
+              setValue("vehicleId", id)
+              setValue("mileage", vehicle.mileage)
+              setValue("vehicle", vehicle)
+            }}
+          />
+          <Button
+            disabled={!selectedClientId || !!order?.id}
+            type={'button'}
+            iconType={'addVehicle'}
+            onClick={() => openModal('vehiclesModal', {id: selectedClientId})}
+          />
+        </div>
+
+
+        <Input
+          label="Пробіг"
+          {...register("mileage", {
+            valueAsNumber: true
+          })}
+          suffix={'км'}
+          disabled={!selectedVehicleId}
+        />
+      </div>
+
+      <div className={styles.col}>
+        <Works
+          control={control}
+          register={register}
+          watched={watchedWorks}
+          setValue={setValue}
+          appendMaterial={appendMaterial}
+        />
+
+        <Materials
+          control={control}
+          register={register}
+          watched={watchedMaterials}
+          fields={materialFields}
+          append={appendMaterial}
+          remove={removeMaterial}
+          setValue={setValue}
+        />
+      </div>
+
+      <div className={styles.actions}>
+        <h3>
+          Разом до
+          сплати: <Price
+          value={watchedMaterials.reduce((sum, item) => sum + Number(item.price || 0), 0) + watchedWorks.reduce((sum, item) => sum + Number(item.price || 0), 0)}/>
+        </h3>
+
+        <Button
+          type="button"
+          iconType={'print'}
+          onClick={downloadPdfHandler}
+        />
+
+        <Button
+          type="button"
+          onClick={shareViaTelegramHandler}
+          disabled={loading}
+        >
+          Надіслати клієнту
+        </Button>
+
+        {order?.status !== 'completed' && order?.status !== 'archived' && order?.id && <Button
+          type={'button'}
+          variant="primary"
+          isLoading={loading}
+          onClick={() => onSubmit({...order, status: 'completed'})}
+        >
+          Виконано
+        </Button>}
+
+        <Button
+          type="button"
+          onClick={onClose}
+          disabled={loading}
+        >
+          Скасувати
+        </Button>
+
+        <Button
+          type="submit"
+          variant="primary"
+          isLoading={loading}
+        >
+          Зберегти
+        </Button>
+      </div>
+    </form>
+  );
 };
