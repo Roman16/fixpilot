@@ -5,11 +5,12 @@ import { IOrdersResponse } from '@/types/order';
 export const useOrdersList = (
     page?: number,
     limit?: number,
-    search: string = ""
+    search: string = "",
+    vehicleId?: string,
 ) => {
     return useQuery<IOrdersResponse>({
-        queryKey: ['orders', page, limit, search],
-        queryFn: () => ordersService.getOrders(page, limit, search),
+        queryKey: ['orders', page, limit, search, vehicleId],
+        queryFn: () => ordersService.getOrders(page, limit, search, vehicleId),
         placeholderData: prev => prev,
     });
 };

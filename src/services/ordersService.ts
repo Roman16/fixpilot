@@ -3,9 +3,9 @@ import {IOrdersResponse, IOrder} from "@/types/order";
 
 
 class ordersService extends baseService {
-    getOrders(page: number = 1, limit: number = 20, search: string = "") {
+    getOrders(page: number = 1, limit: number = 20, search: string = "", vehicleId: string = "") {
         return this.get<IOrdersResponse>('/orders', {
-            params: { page, limit, search }
+            params: { page, limit, search, vehicleId }
         });
     }
 

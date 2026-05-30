@@ -286,6 +286,25 @@ select {
   }
 }
 
+.loader {
+  color: var(--loader-color);
+
+  .spinning-cog4417 {
+    animation: spinning-cog4417 2s infinite ease;
+    transform-origin: 50% 50%;
+  }
+
+  @keyframes spinning-cog4417 {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #6c6c6c transparent;

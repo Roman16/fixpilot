@@ -19,6 +19,7 @@ export async function GET(req: Request) {
         const page = parseInt(searchParams.get("page") || "1");
         const limit = parseInt(searchParams.get("limit") || "20");
         const search = searchParams.get("search")?.trim() || "";
+        const vehicleId = searchParams.get("vehicleId")?.trim() || "";
 
         const skip = (page - 1) * limit;
 
@@ -28,27 +29,33 @@ export async function GET(req: Request) {
             userId
         };
 
+        const orConditions: any[] = [];
+
         if (search) {
             const regex = new RegExp(search, "i");
 
-            matchStage.$or = [
-                {"client.name": regex},
-                {"client.phone": regex},
-                {"vehicle.brand": regex},
-                {"vehicle.model": regex},
-                {"vehicle.plate": regex},
-            ];
+            orConditions.push(
+              {"client.name": regex},
+              {"client.phone": regex},
+              {"vehicle.brand": regex},
+              {"vehicle.model": regex},
+              {"vehicle.plate": regex},
+            );
+        }
 
-            if (mongoose.Types.ObjectId.isValid(search)) {
-                matchStage.$or.push({
-                    "vehicle._id": new mongoose.Types.ObjectId(search)
-                });
-            }
+        if (vehicleId && mongoose.Types.ObjectId.isValid(vehicleId)) {
+            orConditions.push({
+                "vehicle._id": new mongoose.Types.ObjectId(vehicleId)
+            });
+        }
+
+        if (orConditions.length) {
+            matchStage.$or = orConditions;
         }
 
         const result = await Order.aggregate([
-            // user orders only
             {$match: {userId}},
+
             {
                 $lookup: {
                     from: "clients",
@@ -57,7 +64,9 @@ export async function GET(req: Request) {
                     as: "client"
                 }
             },
+
             {$unwind: "$client"},
+
             {
                 $lookup: {
                     from: "vehicles",
@@ -66,20 +75,26 @@ export async function GET(req: Request) {
                     as: "vehicle"
                 }
             },
+
             {$unwind: "$vehicle"},
-            search ? {$match: matchStage} : {$match: {}},
+
+            ...(orConditions.length ? [{$match: matchStage}] : []),
+
             {$sort: {createdAt: -1}},
+
             {
                 $addFields: {
                     id: {$toString: "$_id"}
                 }
             },
+
             {
                 $facet: {
                     data: [
                         {$skip: skip},
                         {$limit: limit}
                     ],
+
                     total: [
                         {$count: "count"}
                     ]

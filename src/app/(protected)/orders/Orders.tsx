@@ -21,12 +21,9 @@ import {useSearchParams} from 'next/navigation';
 
 
 export const Orders = () => {
-    const searchParams = useSearchParams();
-    const vehicleId = searchParams.get('vehicleId');
-
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(20);
-    const [search, setSearch] = useState(vehicleId || '');
+    const [search, setSearch] = useState('');
 
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -34,8 +31,11 @@ export const Orders = () => {
     const openModal = useModalStore(state => state.openModal);
     const openConfirm = useModalStore(state => state.openConfirm);
 
+    const searchParams = useSearchParams();
+    const vehicleId = searchParams.get('vehicleId') || '';
+
     const {deleteOrder, updateOrder} = useOrdersMutations();
-    const {data, isLoading, isFetching} = useOrdersList(page, limit, search);
+    const {data, isLoading, isFetching} = useOrdersList(page, limit, search, vehicleId);
     const {data: profile} = useProfile();
 
 
