@@ -24,6 +24,7 @@ interface TableProps<T> {
     searchPlaceholder?: string;
     isLoading?: boolean;
     searchable?: boolean;
+    searchValue?: string;
     onSearch?: (value: string) => void;
     pagination?: {
         currentPage: number;
@@ -46,6 +47,7 @@ export function Table<T>({
                              isLoading = false,
                              pagination,
                              searchable = false,
+                             searchValue='',
                              searchPlaceholder,
                              onSearch,
                              expandable
@@ -92,6 +94,7 @@ export function Table<T>({
                 className={styles.field}
                 placeholder={searchPlaceholder}
                 onChange={(e) => handleSearch(e.target.value)}
+                defaultValue={searchValue}
               />
             </div>}
 

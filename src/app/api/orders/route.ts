@@ -38,6 +38,12 @@ export async function GET(req: Request) {
                 {"vehicle.model": regex},
                 {"vehicle.plate": regex},
             ];
+
+            if (mongoose.Types.ObjectId.isValid(search)) {
+                matchStage.$or.push({
+                    "vehicle._id": new mongoose.Types.ObjectId(search)
+                });
+            }
         }
 
         const result = await Order.aggregate([

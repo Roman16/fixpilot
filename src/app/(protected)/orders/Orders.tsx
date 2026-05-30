@@ -17,12 +17,16 @@ import {Price} from "@/app/components/ui/Price/Price";
 import {useProfile} from "@/hooks/profile/useProfile";
 import {pdf} from "@react-pdf/renderer";
 import {PdfTemplate} from "@/utils/pdf/PdfTemplate";
+import {useSearchParams} from 'next/navigation';
 
 
 export const Orders = () => {
+    const searchParams = useSearchParams();
+    const vehicleId = searchParams.get('vehicleId');
+
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(20);
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(vehicleId || '');
 
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -209,6 +213,7 @@ export const Orders = () => {
             rowKey={row => row.id ?? ''}
             isLoading={isLoading || isFetching}
             searchable
+            searchValue={search}
             onSearch={handleSearch}
             searchPlaceholder={'Пошук замовлень (клієнт, транспортний засіб)'}
 

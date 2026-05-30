@@ -1,56 +1,74 @@
+'use client';
+
 import {IVehicle} from "@/types/vehicles";
 import {Button} from "@/app/components/ui";
 import styles from '../clients.module.scss'
 import {Loader} from "@/app/components/ui/Loader/Loader";
 import {useModalStore} from "@/store/modalStore";
 import {IClient} from "@/types/client";
+import {useRouter} from 'next/navigation';
+import ROUTES from "@/config/routes";
 
 interface VehiclesTableProps {
-    vehicles: IVehicle[];
-    onDelete: (vehicleId: string) => void;
-    deletingId: string | null;
-    client: IClient | undefined;
+  vehicles: IVehicle[];
+  onDelete: (vehicleId: string) => void;
+  deletingId: string | null;
+  client: IClient | undefined;
 }
 
 export const Vehicles = ({vehicles, onDelete, deletingId, client}: VehiclesTableProps) => {
-    const openModal = useModalStore(state => state.openModal);
+  const openModal = useModalStore(state => state.openModal);
+  const router = useRouter();
 
-    return (<div className={styles.vehiclesBlock}>
-            <h3>
-                {vehicles.length ? 'Гараж' : 'Немає транспортних засобів'}
-                <Button iconType={'plus'} onClick={() => openModal('vehiclesModal', {id: client?.id ?? ''})}>
-                    Додати
-                </Button>
-            </h3>
+  const handleRedirect = (id: string) => {
+    router.push(`${ROUTES.ORDERS}?vehicleId=${id}`)
+  }
 
-            <div className={styles.list}>
-                {vehicles.map((vehicle: IVehicle) => (<div className={styles.vehicleItem}>
-                    <div className={styles.name}>
-                        <h4>{vehicle.brand} {vehicle.model}</h4>
-                        <span>{vehicle.plate}</span>
-                    </div>
+  return (<div className={styles.vehiclesBlock}>
+      <h3>
+        {vehicles.length ? 'Гараж' : 'Немає транспортних засобів'}
+        <Button iconType={'plus'} onClick={() => openModal('vehiclesModal', {id: client?.id ?? ''})}>
+          Додати
+        </Button>
+      </h3>
 
-                    <div className={styles.details}>
-                        <p>Рік: {vehicle.year}</p>
-                        <p>Пробіг: {vehicle.mileage} км</p>
-                        <p>VIN: {vehicle.vin}</p>
-                    </div>
+      <div className={styles.list}>
+        {vehicles.map((vehicle: IVehicle) => (<div
+          onClick={() => handleRedirect(vehicle.id)}
+          className={styles.vehicleItem}
+        >
+          <div className={styles.name}>
+            <h4>{vehicle.brand} {vehicle.model}</h4>
+            <span>{vehicle.plate}</span>
+          </div>
 
-                    <div className={styles.vehicleActions}>
-                        <Button
-                            iconType={'edit'}
-                            onClick={() => openModal('vehiclesModal', {vehicle})}
-                        />
+          <div className={styles.details}>
+            <p>Рік: {vehicle.year}</p>
+            <p>Пробіг: {vehicle.mileage} км</p>
+            <p>VIN: {vehicle.vin}</p>
+          </div>
 
-                        <Button
-                            iconType={'delete'}
-                            onClick={() => onDelete(vehicle.id)}
-                        />
-                    </div>
+          <div className={styles.vehicleActions}>
+            <Button
+              iconType={'edit'}
+              onClick={(e) => {
+                e.stopPropagation();
+                openModal('vehiclesModal', {vehicle})
+              }}
+            />
 
-                    {deletingId === vehicle.id && <Loader className={styles.vehicleLoader}/>}
-                </div>))}
-            </div>
-        </div>
-    );
+            <Button
+              iconType={'delete'}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(vehicle.id)
+              }}
+            />
+          </div>
+
+          {deletingId === vehicle.id && <Loader className={styles.vehicleLoader}/>}
+        </div>))}
+      </div>
+    </div>
+  );
 };
