@@ -232,6 +232,8 @@ export const OrderForm: FC<OrderFormProps> = ({order, onSubmit, onClose, loading
           Виконано
         </Button>}
 
+        <div className={styles.space}/>
+
         <Button
           type="button"
           onClick={onClose}
