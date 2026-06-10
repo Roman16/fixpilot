@@ -84,9 +84,9 @@ export async function PATCH(req: Request, context: any) {
             {_id: id, userId: session.id},
             {
                 $set: {
-                    name: body.client.name,
-                    phone: body.client.phone,
-                    comment: body.client.comment,
+                    name: body.name,
+                    phone: body.phone,
+                    comment: body.comment,
                 }
             },
             {new: true}
