@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {generateShareToken} from "@/lib/shareToken";
 import {BaseSchema} from "@/lib/BaseSchema";
 
 const VehicleSchema = new BaseSchema({
@@ -10,6 +11,7 @@ const VehicleSchema = new BaseSchema({
     mileage: {type: Number},
     plate: {type: String},
     vin: {type: String},
+    shareToken: {type: String, unique: true, sparse: true, default: generateShareToken},
 });
 
 export default mongoose.models.Vehicle || mongoose.model("Vehicle", VehicleSchema);

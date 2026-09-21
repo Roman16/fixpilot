@@ -30,6 +30,10 @@ class clientsService extends baseService {
         return this.patch(`/vehicles/${data.vehicle.id}`, data.vehicle);
     }
 
+    shareVehicle(vehicleId: string) {
+        return this.post<{token: string}>(`/vehicles/${vehicleId}/share`);
+    }
+
     deleteVehicle(data: {clientId: string, vehicleId: string}) {
         return this.delete(`/clients/${data.clientId}/vehicles/${data.vehicleId}`);
     }

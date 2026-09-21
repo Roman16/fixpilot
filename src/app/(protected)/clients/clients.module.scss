@@ -26,24 +26,27 @@
 
   .list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 16px;
 
     .vehicleItem {
-      padding: 10px 10px;
-      border-radius: 10px;
+      padding: 16px;
+      border-radius: 14px;
       border: 1px solid var(--color-border);
+      background: var(--color-block-bg);
       display: flex;
       flex-direction: column;
       gap: 10px;
       position: relative;
+      overflow: hidden;
       color: var(--color-muted-text);
       font-size: 12px;
       cursor: pointer;
-      transition: all .1s;
+      transition: box-shadow .15s, transform .15s, border-color .15s;
 
       &:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        border-color: var(--color-field-hover-border);
         transform: translateY(-1px);
       }
 
@@ -51,60 +54,125 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 12px;
         color: var(--color-text);
 
         h4 {
-          font-size: 14px;
+          font-size: 16px;
+          font-weight: 600;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
-        span {
-          padding: 5px 10px;
-          border: 3px solid var(--color-block-bg);
-          border-radius: 10px;
-          font-weight: 600;
+        .plate {
+          flex-shrink: 0;
+          padding: 3px 10px;
+          border: 2px solid var(--color-field-border);
+          border-radius: 8px;
+          background: var(--color-main-bg);
+          font-size: 13px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
       }
 
       .details {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-      }
+        gap: 12px;
 
-      .vehicleLoader {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 20px;
+        .param {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          min-width: 0;
 
-        svg {
-          height: 60%;
+          b {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text);
+            overflow-wrap: anywhere;
+          }
+
+          &.vin {
+            grid-column: 1 / -1;
+
+            b {
+              font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+              font-size: 13px;
+              letter-spacing: 0.04em;
+            }
+          }
+        }
+
+        .paramLabel {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          svg {
+            width: 13px;
+            height: 13px;
+          }
         }
       }
 
       .vehicleActions {
         display: flex;
-        gap: 10px;
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-        border: 0;
-        opacity: 0;
-        transition: opacity .2s;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--color-border);
+
+        .shareActions,
+        .manageActions {
+          display: flex;
+          gap: 8px;
+        }
 
         button {
-          width: 30px;
-          height: 30px;
+          height: 32px;
+          font-size: 12px;
+
+          svg {
+            width: 15px;
+            height: 15px;
+          }
+        }
+
+        .shareActions button {
+          padding: 0 12px;
+          gap: 6px;
+        }
+
+        .manageActions button {
+          width: 32px;
+          padding: 0;
+        }
+
+        .danger:not(:disabled):hover {
+          color: var(--color-error);
+          border-color: var(--color-error);
+          background: rgba(231, 76, 60, 0.08);
         }
       }
 
-      &:hover .vehicleActions {
-        opacity: 1;
+      .vehicleLoader {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.2);
+
+        svg {
+          height: 60%;
+        }
       }
     }
   }
