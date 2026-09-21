@@ -1,6 +1,6 @@
 import type {Metadata} from "next";
 import {notFound} from "next/navigation";
-import {Wrench, Package, MapPin, Phone, Gauge} from "lucide-react";
+import {Wrench, Package, MapPin, Phone, Gauge, ChevronDown} from "lucide-react";
 import {getPublicVehicleHistory} from "@/lib/getPublicVehicleHistory";
 import {Price} from "@/app/components/ui/Price/Price";
 import styles from "./share.module.scss";
@@ -61,53 +61,61 @@ export default async function SharePage({params}: PageProps) {
 
                 <ol className={styles.timeline}>
                     {orders.map((order) => (
-                        <li key={order.id} className={styles.order}>
-                            <div className={styles.orderHeader}>
-                                <time>{formatDate(order.date)}</time>
-                                {order.mileage != null && <span><Gauge size={14}/> {formatKm(order.mileage)}</span>}
-                            </div>
+                        <li key={order.id}>
+                            <details className={styles.order}>
+                                <summary>
+                                    <div className={styles.orderInfo}>
+                                        <time>{formatDate(order.date)}</time>
+                                        {order.mileage != null && <span><Gauge size={14}/> {formatKm(order.mileage)}</span>}
+                                    </div>
 
-                            {order.works.length > 0 && (
-                                <div className={styles.group}>
-                                    <h3><Wrench size={16}/> Виконані роботи</h3>
-                                    <ul>
-                                        {order.works.map((work, i) => (
-                                            <li key={i}>
-                                                {work.name}
-                                                <span className={styles.price}><Price value={work.price}/></span>
-                                            </li>
-                                        ))}
-                                        <li className={styles.total}>
-                                            Всього за роботи
-                                            <span className={styles.price}><Price value={order.worksTotal}/></span>
-                                        </li>
-                                    </ul>
+                                    <b className={styles.orderTotal}><Price value={order.worksTotal + order.materialsTotal}/></b>
+                                    <ChevronDown size={18} className={styles.chevron}/>
+                                </summary>
+
+                                <div className={styles.orderBody}>
+                                    {order.works.length === 0 && order.materials.length === 0 && (
+                                        <p className={styles.empty}>Деталі не вказані</p>
+                                    )}
+
+                                    {order.works.length > 0 && (
+                                        <div className={styles.group}>
+                                            <h3><Wrench size={16}/> Виконані роботи</h3>
+                                            <ul>
+                                                {order.works.map((work, i) => (
+                                                    <li key={i}>
+                                                        {work.name}
+                                                        <span className={styles.price}><Price value={work.price}/></span>
+                                                    </li>
+                                                ))}
+                                                <li className={styles.total}>
+                                                    Всього за роботи
+                                                    <span className={styles.price}><Price value={order.worksTotal}/></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {order.materials.length > 0 && (
+                                        <div className={styles.group}>
+                                            <h3><Package size={16}/> Матеріали</h3>
+                                            <ul>
+                                                {order.materials.map((m, i) => (
+                                                    <li key={i}>
+                                                        {m.name}
+                                                        <span className={styles.count}>× {m.count}</span>
+                                                        <span className={styles.price}><Price value={m.price * m.count}/></span>
+                                                    </li>
+                                                ))}
+                                                <li className={styles.total}>
+                                                    Всього за матеріали
+                                                    <span className={styles.price}><Price value={order.materialsTotal}/></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-
-                            {order.materials.length > 0 && (
-                                <div className={styles.group}>
-                                    <h3><Package size={16}/> Матеріали</h3>
-                                    <ul>
-                                        {order.materials.map((m, i) => (
-                                            <li key={i}>
-                                                {m.name}
-                                                <span className={styles.count}>× {m.count}</span>
-                                                <span className={styles.price}><Price value={m.price * m.count}/></span>
-                                            </li>
-                                        ))}
-                                        <li className={styles.total}>
-                                            Всього за матеріали
-                                            <span className={styles.price}><Price value={order.materialsTotal}/></span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            )}
-
-                            <div className={styles.orderTotal}>
-                                Разом
-                                <Price value={order.worksTotal + order.materialsTotal}/>
-                            </div>
+                            </details>
                         </li>
                     ))}
                 </ol>
